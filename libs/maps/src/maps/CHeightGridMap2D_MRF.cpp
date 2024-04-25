@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -66,12 +66,13 @@ void CHeightGridMap2D_MRF::TMapDefinition::dumpToTextStream_map_specific(
 	this->insertionOpts.dumpToTextStream(out);
 }
 
-mrpt::maps::CMetricMap* CHeightGridMap2D_MRF::internal_CreateFromMapDefinition(
-	const mrpt::maps::TMetricMapInitializer& _def)
+mrpt::maps::CMetricMap::Ptr
+	CHeightGridMap2D_MRF::internal_CreateFromMapDefinition(
+		const mrpt::maps::TMetricMapInitializer& _def)
 {
 	const CHeightGridMap2D_MRF::TMapDefinition& def =
 		*dynamic_cast<const CHeightGridMap2D_MRF::TMapDefinition*>(&_def);
-	auto* obj = new CHeightGridMap2D_MRF(
+	auto obj = CHeightGridMap2D_MRF::Create(
 		def.mapType, def.min_x, def.max_x, def.min_y, def.max_y, def.resolution,
 		def.run_map_estimation_at_ctor);
 	obj->insertionOptions = def.insertionOpts;

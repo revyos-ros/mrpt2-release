@@ -78,6 +78,8 @@ Python examples are `here <python_examples.html>`_.
   page_maps_observer_pattern_example.rst
   page_maps_octomap_simple.rst
   page_maps_ransac_data_association.rst
+  page_maps_voxelmap_simple.rst
+  page_maps_voxelmap_from_tum_dataset.rst
   page_math_csparse_example.rst
   page_math_kmeans_example.rst
   page_math_leastsquares_example.rst
@@ -138,6 +140,5 @@ Python examples are `here <python_examples.html>`_.
   page_vision_create_video_file_example.rst
   page_vision_feature_extraction.rst
   page_vision_keypoint_matching_example.rst
-  page_vision_multiple_checkerboards.rst
   page_vision_stereo_calib_example.rst
   page_vision_stereo_rectify.rst

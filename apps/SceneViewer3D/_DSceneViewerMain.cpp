@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -221,7 +221,8 @@ void CMyGLCanvas::OnPostRenderSwapBuffers(double At, wxPaintDC& dc)
 		string fileName(format(
 			"%s/screenshot_%07i.png", capturingDir.c_str(), captureCount++));
 
-		frame.saveToFile(fileName);
+		bool savedOk = frame.saveToFile(fileName);
+		ASSERT_(savedOk);
 	}
 
 	// Estimate FPS:
@@ -264,7 +265,7 @@ void CMyGLCanvas::OnCharCustom(wxKeyEvent& event)
 			// First, build a list of files in the directory:
 			static CDirectoryExplorer::TFileInfoList lstFiles;
 			static TTimeStamp lastUpdateOfList = INVALID_TIMESTAMP;
-			TTimeStamp curTime = getCurrentTime();
+			TTimeStamp curTime = mrpt::Clock::now();
 
 			if (lastUpdateOfList == INVALID_TIMESTAMP ||
 				timeDifference(lastUpdateOfList, curTime) > 2)
@@ -1423,7 +1424,8 @@ void _DSceneViewerFrame::OnMenuItem14Selected(wxCommandEvent& event)
 
 	if (dialog.ShowModal() != wxID_OK) return;
 
-	frame.saveToFile(std::string(dialog.GetPath().mb_str()));
+	bool savedOk = frame.saveToFile(std::string(dialog.GetPath().mb_str()));
+	ASSERT_(savedOk);
 }
 
 void _DSceneViewerFrame::OnMenuCameraTrackingArbitrary(wxCommandEvent& event)
@@ -1698,12 +1700,12 @@ void _DSceneViewerFrame::OnMenuItemImportPLYPointCloud(wxCommandEvent& event)
 		if (!res)
 		{
 			wxMessageBox(
-				_("Error loading or parsing the PLY file"), _("Exception"),
-				wxOK, this);
+				ply_obj->getLoadPLYErrorString(),
+				"Error loading or parsing the PLY file", wxOK, this);
 		}
 		else
 		{
-			auto openGLSceneRef = m_canvas->getOpenGLSceneRef();
+			auto& openGLSceneRef = m_canvas->getOpenGLSceneRef();
 			// Set the point cloud as the only object in scene:
 			openGLSceneRef = std::make_shared<opengl::Scene>();
 
@@ -1894,7 +1896,8 @@ void _DSceneViewerFrame::OnMenuItemHighResRender(wxCommandEvent& event)
 			// render the scene
 			render.render_RGB(*m_canvas->getOpenGLSceneRef(), frame);
 
-			frame.saveToFile(sTargetFil);
+			bool savedOk = frame.saveToFile(sTargetFil);
+			ASSERT_(savedOk);
 		}
 	}
 	catch (const std::exception& e)

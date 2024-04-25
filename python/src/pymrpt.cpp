@@ -41,6 +41,7 @@ void bind_mrpt_rtti_CObject(std::function< pybind11::module &(std::string const 
 void bind_mrpt_rtti_CObject_1(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_rtti_CObject_2(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_rtti_CObject_3(std::function< pybind11::module &(std::string const &namespace_) > &M);
+void bind_mrpt_rtti_CObject_4(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_serialization_CSerializable(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_std_stl_multimap(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_std_stl_map(std::function< pybind11::module &(std::string const &namespace_) > &M);
@@ -51,6 +52,7 @@ void bind_mrpt_typemeta_TEnumType_3(std::function< pybind11::module &(std::strin
 void bind_mrpt_typemeta_TEnumType_4(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_typemeta_TEnumType_5(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_typemeta_TEnumType_6(std::function< pybind11::module &(std::string const &namespace_) > &M);
+void bind_mrpt_typemeta_TEnumType_7(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_serialization_CArchive(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_serialization_CArchive_1(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_serialization_CArchive_2(std::function< pybind11::module &(std::string const &namespace_) > &M);
@@ -85,6 +87,7 @@ void bind_mrpt_obs_CObservation(std::function< pybind11::module &(std::string co
 void bind_mrpt_system_mrptEvent(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_maps_CMetricMapEvents(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_maps_metric_map_types(std::function< pybind11::module &(std::string const &namespace_) > &M);
+void bind_mrpt_math_TBoundingBox(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_opengl_Visualizable(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_system_CObservable(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_tfest_TMatchingPair(std::function< pybind11::module &(std::string const &namespace_) > &M);
@@ -104,12 +107,14 @@ void bind_mrpt_apps_MonteCarloLocalization_App(std::function< pybind11::module &
 void bind_mrpt_img_TColor(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_img_CCanvas(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_maps_CMultiMetricMap(std::function< pybind11::module &(std::string const &namespace_) > &M);
+void bind_mrpt_math_TTwist3D(std::function< pybind11::module &(std::string const &namespace_) > &M);
+void bind_mrpt_maps_CSimpleMap(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_bayes_CProbabilityParticle(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_bayes_CParticleFilterData(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_bayes_CParticleFilterData_1(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_poses_CPose3DPDFParticles(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_img_color_maps(std::function< pybind11::module &(std::string const &namespace_) > &M);
-void bind_mrpt_math_TBoundingBox(std::function< pybind11::module &(std::string const &namespace_) > &M);
+void bind_mrpt_maps_NearestNeighborsCapable(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_obs_T2DScanProperties(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_opengl_PLY_import_export(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_maps_CPointsMap(std::function< pybind11::module &(std::string const &namespace_) > &M);
@@ -175,11 +180,12 @@ void bind_mrpt_obs_CObservationStereoImages(std::function< pybind11::module &(st
 void bind_mrpt_vision_CStereoRectifyMap(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_hwdrivers_CDUO3DCamera(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_math_CMatrixDynamic(std::function< pybind11::module &(std::string const &namespace_) > &M);
+void bind_mrpt_math_CMatrixDynamic_1(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_math_CMatrixFixed(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_math_CMatrixFixed_1(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_math_CMatrixFixed_2(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_math_CMatrixFixed_3(std::function< pybind11::module &(std::string const &namespace_) > &M);
-void bind_mrpt_math_CMatrixFixed_4(std::function< pybind11::module &(std::string const &namespace_) > &M);
+void bind_mrpt_math_MatrixVectorBase(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_math_math_frwds(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_bayes_CProbabilityParticle_1(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_math_CMatrixF(std::function< pybind11::module &(std::string const &namespace_) > &M);
@@ -202,7 +208,6 @@ void bind_unknown_unknown_4(std::function< pybind11::module &(std::string const 
 void bind_unknown_unknown_5(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_unknown_unknown_6(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_unknown_unknown_7(std::function< pybind11::module &(std::string const &namespace_) > &M);
-void bind_unknown_unknown_8(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_obs_CObservationGPS(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_hwdrivers_CGPSInterface(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_containers_MT_buffer(std::function< pybind11::module &(std::string const &namespace_) > &M);
@@ -231,7 +236,7 @@ void bind_mrpt_kinematics_CKinematicChain(std::function< pybind11::module &(std:
 void bind_mrpt_kinematics_CVehicleVelCmd(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_kinematics_CVehicleVelCmd_DiffDriven(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_poses_CPointPDF(std::function< pybind11::module &(std::string const &namespace_) > &M);
-void bind_mrpt_math_CMatrixDynamic_1(std::function< pybind11::module &(std::string const &namespace_) > &M);
+void bind_mrpt_math_CMatrixDynamic_2(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_poses_CPointPDFSOG(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_maps_CBeacon(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_opengl_COctoMapVoxels(std::function< pybind11::module &(std::string const &namespace_) > &M);
@@ -266,6 +271,11 @@ void bind_mrpt_maps_CRandomFieldGridMap3D(std::function< pybind11::module &(std:
 void bind_mrpt_maps_CReflectivityGridMap2D(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_maps_CWeightedPointsMap(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_maps_CWirelessPowerGridMap2D(std::function< pybind11::module &(std::string const &namespace_) > &M);
+void bind_mrpt_maps_CVoxelMapBase(std::function< pybind11::module &(std::string const &namespace_) > &M);
+void bind_mrpt_maps_CVoxelMapOccupancyBase(std::function< pybind11::module &(std::string const &namespace_) > &M);
+void bind_mrpt_maps_CVoxelMapOccupancyBase_1(std::function< pybind11::module &(std::string const &namespace_) > &M);
+void bind_mrpt_maps_CVoxelMapOccupancyBase_2(std::function< pybind11::module &(std::string const &namespace_) > &M);
+void bind_mrpt_maps_CVoxelMap(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_obs_CObservationPointCloud(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_opengl_CBox(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_opengl_COctreePointRenderer(std::function< pybind11::module &(std::string const &namespace_) > &M);
@@ -280,7 +290,6 @@ void bind_mrpt_opengl_CSetOfTriangles(std::function< pybind11::module &(std::str
 void bind_mrpt_opengl_CPlanarLaserScan(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_math_CAtan2LookUpTable(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_math_ops_containers(std::function< pybind11::module &(std::string const &namespace_) > &M);
-void bind_mrpt_math_TTwist3D(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_math_data_utils(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_math_fresnel(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_nav_holonomic_ClearanceDiagram(std::function< pybind11::module &(std::string const &namespace_) > &M);
@@ -304,9 +313,9 @@ void bind_mrpt_nav_reactive_CReactiveNavigationSystem3D(std::function< pybind11:
 void bind_mrpt_nav_tpspace_CPTG_DiffDrive_C(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_nav_tpspace_CPTG_DiffDrive_alpha(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_obs_CActionRobotMovement3D(std::function< pybind11::module &(std::string const &namespace_) > &M);
-void bind_mrpt_obs_CObservationBatteryState(std::function< pybind11::module &(std::string const &namespace_) > &M);
-void bind_mrpt_obs_CObservationOdometry(std::function< pybind11::module &(std::string const &namespace_) > &M);
-void bind_mrpt_obs_CRawlog(std::function< pybind11::module &(std::string const &namespace_) > &M);
+void bind_mrpt_obs_CObservation3DScene(std::function< pybind11::module &(std::string const &namespace_) > &M);
+void bind_mrpt_obs_CObservationBearingRange(std::function< pybind11::module &(std::string const &namespace_) > &M);
+void bind_mrpt_obs_CObservationRobotPose(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_obs_format_externals_filename(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_obs_stock_observations(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_mrpt_opengl_CArrow(std::function< pybind11::module &(std::string const &namespace_) > &M);
@@ -463,6 +472,7 @@ PYBIND11_MODULE(pymrpt, root_module) {
 	bind_mrpt_rtti_CObject_1(M);
 	bind_mrpt_rtti_CObject_2(M);
 	bind_mrpt_rtti_CObject_3(M);
+	bind_mrpt_rtti_CObject_4(M);
 	bind_mrpt_serialization_CSerializable(M);
 	bind_std_stl_multimap(M);
 	bind_std_stl_map(M);
@@ -473,6 +483,7 @@ PYBIND11_MODULE(pymrpt, root_module) {
 	bind_mrpt_typemeta_TEnumType_4(M);
 	bind_mrpt_typemeta_TEnumType_5(M);
 	bind_mrpt_typemeta_TEnumType_6(M);
+	bind_mrpt_typemeta_TEnumType_7(M);
 	bind_mrpt_serialization_CArchive(M);
 	bind_mrpt_serialization_CArchive_1(M);
 	bind_mrpt_serialization_CArchive_2(M);
@@ -507,6 +518,7 @@ PYBIND11_MODULE(pymrpt, root_module) {
 	bind_mrpt_system_mrptEvent(M);
 	bind_mrpt_maps_CMetricMapEvents(M);
 	bind_mrpt_maps_metric_map_types(M);
+	bind_mrpt_math_TBoundingBox(M);
 	bind_mrpt_opengl_Visualizable(M);
 	bind_mrpt_system_CObservable(M);
 	bind_mrpt_tfest_TMatchingPair(M);
@@ -526,12 +538,14 @@ PYBIND11_MODULE(pymrpt, root_module) {
 	bind_mrpt_img_TColor(M);
 	bind_mrpt_img_CCanvas(M);
 	bind_mrpt_maps_CMultiMetricMap(M);
+	bind_mrpt_math_TTwist3D(M);
+	bind_mrpt_maps_CSimpleMap(M);
 	bind_mrpt_bayes_CProbabilityParticle(M);
 	bind_mrpt_bayes_CParticleFilterData(M);
 	bind_mrpt_bayes_CParticleFilterData_1(M);
 	bind_mrpt_poses_CPose3DPDFParticles(M);
 	bind_mrpt_img_color_maps(M);
-	bind_mrpt_math_TBoundingBox(M);
+	bind_mrpt_maps_NearestNeighborsCapable(M);
 	bind_mrpt_obs_T2DScanProperties(M);
 	bind_mrpt_opengl_PLY_import_export(M);
 	bind_mrpt_maps_CPointsMap(M);
@@ -597,11 +611,12 @@ PYBIND11_MODULE(pymrpt, root_module) {
 	bind_mrpt_vision_CStereoRectifyMap(M);
 	bind_mrpt_hwdrivers_CDUO3DCamera(M);
 	bind_mrpt_math_CMatrixDynamic(M);
+	bind_mrpt_math_CMatrixDynamic_1(M);
 	bind_mrpt_math_CMatrixFixed(M);
 	bind_mrpt_math_CMatrixFixed_1(M);
 	bind_mrpt_math_CMatrixFixed_2(M);
 	bind_mrpt_math_CMatrixFixed_3(M);
-	bind_mrpt_math_CMatrixFixed_4(M);
+	bind_mrpt_math_MatrixVectorBase(M);
 	bind_mrpt_math_math_frwds(M);
 	bind_mrpt_bayes_CProbabilityParticle_1(M);
 	bind_mrpt_math_CMatrixF(M);
@@ -624,7 +639,6 @@ PYBIND11_MODULE(pymrpt, root_module) {
 	bind_unknown_unknown_5(M);
 	bind_unknown_unknown_6(M);
 	bind_unknown_unknown_7(M);
-	bind_unknown_unknown_8(M);
 	bind_mrpt_obs_CObservationGPS(M);
 	bind_mrpt_hwdrivers_CGPSInterface(M);
 	bind_mrpt_containers_MT_buffer(M);
@@ -653,7 +667,7 @@ PYBIND11_MODULE(pymrpt, root_module) {
 	bind_mrpt_kinematics_CVehicleVelCmd(M);
 	bind_mrpt_kinematics_CVehicleVelCmd_DiffDriven(M);
 	bind_mrpt_poses_CPointPDF(M);
-	bind_mrpt_math_CMatrixDynamic_1(M);
+	bind_mrpt_math_CMatrixDynamic_2(M);
 	bind_mrpt_poses_CPointPDFSOG(M);
 	bind_mrpt_maps_CBeacon(M);
 	bind_mrpt_opengl_COctoMapVoxels(M);
@@ -688,6 +702,11 @@ PYBIND11_MODULE(pymrpt, root_module) {
 	bind_mrpt_maps_CReflectivityGridMap2D(M);
 	bind_mrpt_maps_CWeightedPointsMap(M);
 	bind_mrpt_maps_CWirelessPowerGridMap2D(M);
+	bind_mrpt_maps_CVoxelMapBase(M);
+	bind_mrpt_maps_CVoxelMapOccupancyBase(M);
+	bind_mrpt_maps_CVoxelMapOccupancyBase_1(M);
+	bind_mrpt_maps_CVoxelMapOccupancyBase_2(M);
+	bind_mrpt_maps_CVoxelMap(M);
 	bind_mrpt_obs_CObservationPointCloud(M);
 	bind_mrpt_opengl_CBox(M);
 	bind_mrpt_opengl_COctreePointRenderer(M);
@@ -702,7 +721,6 @@ PYBIND11_MODULE(pymrpt, root_module) {
 	bind_mrpt_opengl_CPlanarLaserScan(M);
 	bind_mrpt_math_CAtan2LookUpTable(M);
 	bind_mrpt_math_ops_containers(M);
-	bind_mrpt_math_TTwist3D(M);
 	bind_mrpt_math_data_utils(M);
 	bind_mrpt_math_fresnel(M);
 	bind_mrpt_nav_holonomic_ClearanceDiagram(M);
@@ -726,9 +744,9 @@ PYBIND11_MODULE(pymrpt, root_module) {
 	bind_mrpt_nav_tpspace_CPTG_DiffDrive_C(M);
 	bind_mrpt_nav_tpspace_CPTG_DiffDrive_alpha(M);
 	bind_mrpt_obs_CActionRobotMovement3D(M);
-	bind_mrpt_obs_CObservationBatteryState(M);
-	bind_mrpt_obs_CObservationOdometry(M);
-	bind_mrpt_obs_CRawlog(M);
+	bind_mrpt_obs_CObservation3DScene(M);
+	bind_mrpt_obs_CObservationBearingRange(M);
+	bind_mrpt_obs_CObservationRobotPose(M);
 	bind_mrpt_obs_format_externals_filename(M);
 	bind_mrpt_obs_stock_observations(M);
 	bind_mrpt_opengl_CArrow(M);

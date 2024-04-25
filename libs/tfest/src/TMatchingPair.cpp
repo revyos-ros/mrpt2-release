@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -145,7 +145,11 @@ void TMatchingPairListTempl<T>::squareErrorVector(
 	out_sqErrs.reserve(base_t::size());
 
 	for (const auto& c : *this)
-		out_sqErrs.push_back(c.global.sqrDistanceTo(q.composePoint(c.local)));
+	{
+		const auto p = q.composePoint(mrpt::math::TPoint3D(c.local));
+		out_sqErrs.push_back(
+			c.global.sqrDistanceTo(mrpt::math::TPoint3D_<T>(p.x, p.y, p.z)));
+	}
 }
 
 template <typename T>

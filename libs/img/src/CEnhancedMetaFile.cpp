@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -72,7 +72,10 @@ CEnhancedMetaFile::~CEnhancedMetaFile()
 	// Finish EMF:
 	DeleteEnhMetaFile(CloseEnhMetaFile((HDC)m_hdc.get()));
 #else
-	((CImage*)m_hdc.get())->saveToFile(m_targetFile + ".png");
+	bool ok = ((CImage*)m_hdc.get())->saveToFile(m_targetFile + ".png");
+	if (!ok)
+		std::cerr << "Error saving image to file: " << m_targetFile
+				  << std::endl;
 
 	// Free objects:
 	delete ((CImage*)m_hdc.get());

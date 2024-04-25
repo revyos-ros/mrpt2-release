@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -312,7 +312,7 @@ void CAbstractNavigator::processNavigateCommand(const TNavigationParams* params)
 
 	// Reset the bad navigation alarm:
 	m_badNavAlarm_minDistTarget = std::numeric_limits<double>::max();
-	m_badNavAlarm_lastMinDistTime = mrpt::system::getCurrentTime();
+	m_badNavAlarm_lastMinDistTime = mrpt::Clock::now();
 
 	MRPT_END
 }
@@ -587,14 +587,13 @@ void CAbstractNavigator::performNavigationStepNavigating(
 			if (targetDist < m_badNavAlarm_minDistTarget)
 			{
 				m_badNavAlarm_minDistTarget = targetDist;
-				m_badNavAlarm_lastMinDistTime = mrpt::system::getCurrentTime();
+				m_badNavAlarm_lastMinDistTime = mrpt::Clock::now();
 			}
 			else
 			{
 				// Too much time have passed?
 				if (mrpt::system::timeDifference(
-						m_badNavAlarm_lastMinDistTime,
-						mrpt::system::getCurrentTime()) >
+						m_badNavAlarm_lastMinDistTime, mrpt::Clock::now()) >
 					params_abstract_navigator
 						.alarm_seems_not_approaching_target_timeout)
 				{

@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -105,9 +105,9 @@ void CMyGLCanvas_DisplayWindow3D::display3D_processKeyEvent(
 		if (ev.AltDown() && ev.GetKeyCode() == MRPTK_RETURN)
 		{
 			if (mrpt::system::timeDifference(
-					m_win3D->m_lastFullScreen, mrpt::system::now()) > 0.2)
+					m_win3D->m_lastFullScreen, mrpt::Clock::now()) > 0.2)
 			{
-				m_win3D->m_lastFullScreen = mrpt::system::now();
+				m_win3D->m_lastFullScreen = mrpt::Clock::now();
 				auto* win = (C3DWindowDialog*)m_win3D->m_hwnd.get();
 				if (win) { win->ShowFullScreen(!win->IsFullScreen()); }
 			}
@@ -232,7 +232,12 @@ void CMyGLCanvas_DisplayWindow3D::OnPostRenderSwapBuffers(
 
 		if (!grabFile.empty())
 		{
-			frame->saveToFile(grabFile);
+			bool savedOk = frame->saveToFile(grabFile);
+			if (!savedOk)
+				std::cerr << "[CMyGLCanvas_DisplayWindow3D] Error saving "
+							 "screenshot to "
+						  << grabFile << std::endl;
+
 			m_win3D->internal_emitGrabImageEvent(grabFile);
 		}
 
@@ -376,7 +381,7 @@ CDisplayWindow3D::CDisplayWindow3D(
 	const std::string& windowCaption, unsigned int initialWindowWidth,
 	unsigned int initialWindowHeight)
 	: CBaseGUIWindow(static_cast<void*>(this), 300, 399, windowCaption),
-	  m_lastFullScreen(mrpt::system::now())
+	  m_lastFullScreen(mrpt::Clock::now())
 {
 	m_3Dscene = Scene::Create();
 	CBaseGUIWindow::createWxWindow(initialWindowWidth, initialWindowHeight);

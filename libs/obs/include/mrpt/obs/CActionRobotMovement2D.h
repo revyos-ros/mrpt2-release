@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -246,4 +246,9 @@ class CActionRobotMovement2D : public CAction
 MRPT_ENUM_TYPE_BEGIN(mrpt::obs::CActionRobotMovement2D::TEstimationMethod)
 MRPT_FILL_ENUM_MEMBER(mrpt::obs::CActionRobotMovement2D, emOdometry);
 MRPT_FILL_ENUM_MEMBER(mrpt::obs::CActionRobotMovement2D, emScan2DMatching);
+MRPT_ENUM_TYPE_END()
+
+MRPT_ENUM_TYPE_BEGIN(mrpt::obs::CActionRobotMovement2D::TDrawSampleMotionModel)
+MRPT_FILL_ENUM_MEMBER(mrpt::obs::CActionRobotMovement2D, mmGaussian);
+MRPT_FILL_ENUM_MEMBER(mrpt::obs::CActionRobotMovement2D, mmThrun);
 MRPT_ENUM_TYPE_END()

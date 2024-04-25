@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -140,32 +140,7 @@ bool CHeightGridMap2D_Base::dem_internal_insertObservation(
 
 	// Points to insert:
 	CSimplePointsMap thePointsMoved;
-
-	if (IS_CLASS(obs, CObservation2DRangeScan))
-	{
-		/********************************************************************
-					OBSERVATION TYPE: CObservation2DRangeScan
-		********************************************************************/
-		const auto& o = static_cast<const CObservation2DRangeScan&>(obs);
-
-		// Create points map, if not created yet:
-		CPointsMap::TInsertionOptions opts;
-		const auto* thePoints =
-			o.buildAuxPointsMap<mrpt::maps::CPointsMap>(&opts);
-
-		// And rotate to the robot pose:
-		thePointsMoved.changeCoordinatesReference(*thePoints, robotPose3D);
-	}
-	else if (IS_CLASS(obs, CObservationVelodyneScan))
-	{
-		/********************************************************************
-					OBSERVATION TYPE: CObservationVelodyneScan
-		********************************************************************/
-		const auto& o = static_cast<const CObservationVelodyneScan&>(obs);
-
-		// Create points map, if not created yet:
-		thePointsMoved.loadFromVelodyneScan(o, robotPose3D);
-	}
+	thePointsMoved.insertObservation(obs, robotPose);
 
 	// Factorized insertion of points, for different observation classes:
 	if (!thePointsMoved.empty())

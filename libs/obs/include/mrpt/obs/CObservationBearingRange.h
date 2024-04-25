@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -104,6 +104,11 @@ class CObservationBearingRange : public CObservation
 		sensorLocationOnRobot = newSensorPose;
 	}
 	void getDescriptionAsText(std::ostream& o) const override;
+
+	// See base class docs:
+	bool exportTxtSupported() const override { return true; }
+	std::string exportTxtHeader() const override;
+	std::string exportTxtDataRow() const override;
 
 };	// End of class def.
 

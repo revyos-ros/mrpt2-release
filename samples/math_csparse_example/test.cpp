@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -35,14 +35,16 @@ void ExampleCSparse()
 	cout << "M (as dense):\n" << M;
 
 	cout << "Saving to sparse_demo1.txt...\n";
-	SM.saveToTextFile_sparse("sparse_demo1.txt");
+	bool savedOk = SM.saveToTextFile_sparse("sparse_demo1.txt");
+	ASSERT_(savedOk);
 
 	// Compress from the triplet to the column-compressed form:
 	cout << "Compressing as CCS...\n";
 	SM.compressFromTriplet();
 
 	cout << "Saving to sparse_demo2.txt...\n";
-	SM.saveToTextFile_sparse("sparse_demo2.txt");
+	savedOk = SM.saveToTextFile_sparse("sparse_demo2.txt");
+	ASSERT_(savedOk);
 
 	// Compute the Cholesky decomposition:
 	CSparseMatrix::CholeskyDecomp Chol(SM);

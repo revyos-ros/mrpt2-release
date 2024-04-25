@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -25,14 +25,14 @@ IMPLEMENTS_VIRTUAL_SERIALIZABLE(CPose3DQuatPDF, CSerializable, mrpt::poses)
 /*---------------------------------------------------------------
 					copyFrom2D
   ---------------------------------------------------------------*/
-CPose3DQuatPDF* CPose3DQuatPDF::createFrom2D(const CPosePDF& o)
+CPose3DQuatPDF::Ptr CPose3DQuatPDF::createFrom2D(const CPosePDF& o)
 {
 	MRPT_START
 
 	CPose3DPDFGaussian q;
 	q.copyFrom(o);
 
-	return new CPose3DQuatPDFGaussian(q);
+	return std::make_shared<CPose3DQuatPDFGaussian>(q);
 
 	MRPT_END
 }
@@ -62,7 +62,7 @@ void CPose3DQuatPDF::jacobiansPoseComposition(
 	const double q2y = u.quat().y();
 	const double q2z = u.quat().z();
 
-	CPose3DQuat x_plus_u = x + u;  // needed for the normalization Jacobian:
+	const CPose3DQuat x_plus_u = x + u;	 // for the normalization Jacobian
 	CMatrixDouble44 norm_jacob(UNINITIALIZED_MATRIX);
 	x_plus_u.quat().normalizationJacobian(norm_jacob);
 

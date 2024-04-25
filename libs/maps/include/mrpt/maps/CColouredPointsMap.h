@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -12,6 +12,7 @@
 #include <mrpt/math/CMatrixF.h>
 #include <mrpt/obs/CObservationImage.h>
 #include <mrpt/obs/obs_frwds.h>
+#include <mrpt/opengl/pointcloud_adapters.h>
 #include <mrpt/serialization/CSerializable.h>
 #include <mrpt/typemeta/TEnumType.h>
 
@@ -36,7 +37,7 @@ class CColouredPointsMap : public CPointsMap
 	CColouredPointsMap(const CPointsMap& o) { CPointsMap::operator=(o); }
 	CColouredPointsMap(const CColouredPointsMap& o) : CPointsMap()
 	{
-		impl_copyFrom(o);
+		CColouredPointsMap::impl_copyFrom(o);
 	}
 	CColouredPointsMap& operator=(const CPointsMap& o)
 	{
@@ -226,6 +227,20 @@ class CColouredPointsMap : public CPointsMap
 	 * predefined value */
 	void resetPointsMinDist(float defValue = 2000.0f);
 
+	// clang-format off
+	auto getPointsBufferRef_color_R() const    -> const mrpt::aligned_std_vector<float>* override { return &m_color_R;}
+	auto getPointsBufferRef_color_G() const    -> const mrpt::aligned_std_vector<float>* override { return &m_color_G; }
+	auto getPointsBufferRef_color_B() const    -> const mrpt::aligned_std_vector<float>* override { return &m_color_B; }
+
+	auto getPointsBufferRef_color_R()          -> mrpt::aligned_std_vector<float>* override { return &m_color_R; }
+	auto getPointsBufferRef_color_G()          -> mrpt::aligned_std_vector<float>* override { return &m_color_G; }
+	auto getPointsBufferRef_color_B()          -> mrpt::aligned_std_vector<float>* override { return &m_color_B; }
+
+	void insertPointField_color_R(float v) override { m_color_R.push_back(v); }
+	void insertPointField_color_G(float v) override { m_color_G.push_back(v); }
+	void insertPointField_color_B(float v) override { m_color_B.push_back(v); }
+	/// clang-format on
+
 	/** @name PCL library support
 		@{ */
 
@@ -337,6 +352,14 @@ class CColouredPointsMap : public CPointsMap
 	/** In a base class, reserve memory to prepare subsequent calls to
 	 * PLY_import_set_vertex */
 	void PLY_import_set_vertex_count(size_t N) override;
+
+	void PLY_import_set_vertex_timestamp(
+		[[maybe_unused]] size_t idx,
+		[[maybe_unused]] const double unixTimestamp) override
+	{
+		// do nothing, this class ignores timestamps
+	}
+
 	/** @} */
 
 	/** @name Redefinition of PLY Export virtual methods from CPointsMap
@@ -356,7 +379,6 @@ class CColouredPointsMap : public CPointsMap
 
 }  // namespace maps
 
-#include <mrpt/opengl/pointcloud_adapters.h>
 namespace opengl
 {
 /** Specialization

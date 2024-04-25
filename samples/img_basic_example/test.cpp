@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -116,10 +116,12 @@ void TestImageConversion()
 	win4.waitForKey();
 
 	tictac.Tic();
-	imgGray.saveToFile("frame_out.jpg");
+	bool savedOk = imgGray.saveToFile("frame_out.jpg");
+	ASSERT_(savedOk);
 	printf("jpeg file saved in %.03fms\n", 1000.0 * tictac.Tac());
 
-	imgSmall2.saveToFile("frame_out_small.png");
+	savedOk = imgSmall2.saveToFile("frame_out_small.png");
+	ASSERT_(savedOk);
 
 	return;
 }

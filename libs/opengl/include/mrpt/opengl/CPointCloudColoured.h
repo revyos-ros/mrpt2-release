@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -248,6 +248,12 @@ class CPointCloudColoured : public CRenderizableShaderPoints,
 	/** In a base class, reserve memory to prepare subsequent calls to
 	 * PLY_import_set_face */
 	void PLY_import_set_face_count([[maybe_unused]] size_t N) override {}
+	void PLY_import_set_vertex_timestamp(
+		[[maybe_unused]] size_t idx,
+		[[maybe_unused]] const double unixTimestamp) override
+	{
+		// do nothing, this class ignores timestamps
+	}
 	/** In a base class, will be called after PLY_import_set_vertex_count() once
 	 * for each loaded point.
 	 *  \param pt_color Will be nullptr if the loaded file does not provide

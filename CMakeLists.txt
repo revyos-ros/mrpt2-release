@@ -8,7 +8,7 @@
 #  For compiling instructions for all compilers and platforms, see
 #   https://docs.mrpt.org/reference/latest/compiling.html
 #
-#  2007-2021, Jose Luis Blanco <jlblanco@ual.es>
+#  2007-2023, Jose Luis Blanco <jlblanco@ual.es>
 # ----------------------------------------------------------------------------
 
 # -------------------------
@@ -46,7 +46,7 @@ endif()
 
 
 if ((NOT IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/nanogui/include")
-    OR (NOT IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/rplidar_sdk/sdk/sdk")
+    OR (NOT IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/rplidar_sdk/sdk/src")
    )
   message(FATAL_ERROR "git submodules missing! "
     "You probably did not clone the project with --recursive. It is possible to recover "
@@ -405,6 +405,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 	add_compile_options(-Wall  -Wno-long-long -Wno-variadic-macros -Wshadow)
 	add_compile_options(-Wreturn-local-addr   -Werror=return-local-addr)
 	add_compile_options(-Wno-psabi)
+	add_compile_options("$<$<COMPILE_LANGUAGE:C>:-Werror=implicit-function-declaration>")
 
 	# Workaround: Eigen <3.4 produces *tons* of warnings in GCC >=6. See http://eigen.tuxfamily.org/bz/show_bug.cgi?id=1221
 	if (NOT ${CMAKE_CXX_COMPILER_VERSION} LESS "6.0" AND "${MRPT_EIGEN_VERSION}" VERSION_LESS "3.4")

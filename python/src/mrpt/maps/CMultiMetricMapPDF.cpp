@@ -18,11 +18,13 @@
 #include <mrpt/math/CMatrixFixed.h>
 #include <mrpt/math/CQuaternion.h>
 #include <mrpt/math/CVectorDynamic.h>
+#include <mrpt/math/TBoundingBox.h>
 #include <mrpt/math/TPoint2D.h>
 #include <mrpt/math/TPoint3D.h>
 #include <mrpt/math/TPose2D.h>
 #include <mrpt/math/TPose3D.h>
 #include <mrpt/math/TPose3DQuat.h>
+#include <mrpt/math/TTwist3D.h>
 #include <mrpt/math/math_frwds.h>
 #include <mrpt/math/matrix_size_t.h>
 #include <mrpt/obs/CAction.h>

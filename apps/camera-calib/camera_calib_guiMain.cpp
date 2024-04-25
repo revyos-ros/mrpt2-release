@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -268,13 +268,6 @@ camera_calib_guiDialog::camera_calib_guiDialog(wxWindow* parent, wxWindowID id)
 	StaticBoxSizer4->Add(FlexGridSizer17, 1, wxEXPAND, 0);
 	FlexGridSizer6->Add(
 		StaticBoxSizer4, 1, wxALL | wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL, 2);
-	wxString __wxRadioBoxChoices_1[2] = {
-		_("OpenCV\'s default"), _("Scaramuzza et al.\'s")};
-	rbMethod = new wxRadioBox(
-		this, ID_RADIOBOX1, _(" Detector method: "), wxDefaultPosition,
-		wxDefaultSize, 2, __wxRadioBoxChoices_1, 0, 0, wxDefaultValidator,
-		_T("ID_RADIOBOX1"));
-	FlexGridSizer6->Add(rbMethod, 1, wxEXPAND, 2);
 	StaticBoxSizer5 =
 		new wxStaticBoxSizer(wxHORIZONTAL, this, _(" Size of quads (in mm): "));
 	FlexGridSizer18 = new wxFlexGridSizer(1, 4, 0, 0);
@@ -604,16 +597,13 @@ void camera_calib_guiDialog::OnbtnRunCalibClick(wxCommandEvent& event)
 
 		const bool normalize_image = cbNormalize->GetValue();
 
-		const bool useScaramuzzaAlternativeDetector =
-			rbMethod->GetSelection() == 1;
-
 		wxBusyCursor waitcur;
 
 		bool res = mrpt::vision::checkerBoardCameraCalibration(
 			lst_images, check_size_x, check_size_y,
 			check_squares_length_X_meters, check_squares_length_Y_meters,
 			camera_params, normalize_image, nullptr /* MSE */,
-			false /* skip draw */, useScaramuzzaAlternativeDetector);
+			false /* skip draw */);
 
 		refreshDisplayedImage();
 
@@ -1009,8 +999,11 @@ void camera_calib_guiDialog::OnbtnSaveImagesClick(wxCommandEvent& event)
 			string dir = string(dlg.GetPath().mb_str());
 
 			for (auto& lst_image : lst_images)
-				lst_image.second.img_original.saveToFile(
+			{
+				bool savedOk = lst_image.second.img_original.saveToFile(
 					dir + string("/") + lst_image.first + string(".png"));
+				ASSERT_(savedOk);
+			}
 		}
 	}
 	catch (const std::exception& e)

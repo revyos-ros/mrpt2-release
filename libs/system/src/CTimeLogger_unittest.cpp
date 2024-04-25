@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -14,13 +14,16 @@
 #include <mutex>
 #include <thread>
 
-static void doTimLogEntry(
+namespace
+{
+void doTimLogEntry(
 	mrpt::system::CTimeLogger& tl, const char* name, const int ms)
 {
 	tl.enter(name);
 	std::this_thread::sleep_for(std::chrono::milliseconds(ms));
 	tl.leave(name);
 }
+}  // namespace
 
 TEST(CTimeLogger, getLastTime)
 {

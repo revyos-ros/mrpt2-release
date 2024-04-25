@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -204,7 +204,9 @@ using TMyMemPool = mrpt::system::CGenericMemoryPool<
 
 // Auxiliary function for loadTextureInOpenGL(): reserve memory and return
 // 16byte aligned starting point within it:
-static unsigned char* reserveDataBuffer(size_t len, std::vector<uint8_t>& data)
+namespace
+{
+unsigned char* reserveDataBuffer(size_t len, std::vector<uint8_t>& data)
 {
 #ifdef TEXTUREOBJ_USE_MEMPOOL
 	TMyMemPool* pool = TMyMemPool::getInstance();
@@ -229,6 +231,7 @@ static unsigned char* reserveDataBuffer(size_t len, std::vector<uint8_t>& data)
 	return reinterpret_cast<unsigned char*>(
 		std::align(16, 1 /*dummy size*/, ptr, space));
 }
+}  // namespace
 
 void Texture::internalAssignImage_2D(
 	const mrpt::img::CImage* in_rgb, const mrpt::img::CImage* in_alpha,

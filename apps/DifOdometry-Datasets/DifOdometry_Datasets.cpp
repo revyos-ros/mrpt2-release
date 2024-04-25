@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -268,7 +268,9 @@ void CDifodoDatasets::initializeScene()
 
 	// User-interface information
 	CImage img_legend;
-	img_legend.loadFromXPM(legend_xpm);
+	bool loadOk = img_legend.loadFromXPM(legend_xpm);
+	ASSERT_(loadOk);
+
 	Viewport::Ptr legend = scene->createViewport("legend");
 	legend->setViewportPosition(20, 20, 332, 164);
 	legend->setImageView(img_legend);
@@ -379,7 +381,7 @@ void CDifodoDatasets::loadFrame()
 		}
 
 	double timestamp_gt;
-	timestamp_obs = mrpt::system::timestampTotime_t(obs3D->timestamp);
+	timestamp_obs = mrpt::Clock::toDouble(obs3D->timestamp);
 
 	// Exit if there is no groundtruth at this time
 	if (last_groundtruth > timestamp_obs)

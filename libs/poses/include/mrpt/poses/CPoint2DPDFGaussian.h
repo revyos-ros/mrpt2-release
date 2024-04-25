@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -26,7 +26,7 @@ class CPoint2DPDFGaussian : public CPoint2DPDF
 	/** Default constructor */
 	CPoint2DPDFGaussian();
 	/** Constructor */
-	CPoint2DPDFGaussian(const CPoint2D& init_Mean);
+	explicit CPoint2DPDFGaussian(const CPoint2D& init_Mean);
 	/** Constructor */
 	CPoint2DPDFGaussian(
 		const CPoint2D& init_Mean, const mrpt::math::CMatrixDouble22& init_Cov);

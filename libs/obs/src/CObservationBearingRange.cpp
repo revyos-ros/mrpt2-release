@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -200,4 +200,33 @@ void CObservationBearingRange::getDescriptionAsText(std::ostream& o) const
 		else
 			o << "  (N/A)\n";
 	}
+}
+
+std::string CObservationBearingRange::exportTxtHeader() const
+{
+	return "[LANDMARK_ID  RANGE  YAW  PITCH  "
+		   "SENSOR_XYZ_YAWPITCH_ROLL_ON_ROBOT] x N \n";
+}
+
+std::string CObservationBearingRange::exportTxtDataRow() const
+{
+	std::stringstream o;
+
+	for (size_t i = 0; i < sensedData.size(); i++)
+	{
+		const auto& d = sensedData[i];
+		if (i != 0)	 // to fit the format for rawlog-edit --export-txt
+			o << mrpt::format("%16.6f ", mrpt::Clock::toDouble(timestamp));
+
+		o << format(
+			"   %i      %.04f       %.04f       %.04f    %.03f %.03f %.03f "
+			"%.03f %.03f %.03f",
+			(int)d.landmarkID, d.range, d.yaw, d.pitch,
+			sensorLocationOnRobot.x(), sensorLocationOnRobot.y(),
+			sensorLocationOnRobot.z(), sensorLocationOnRobot.yaw(),
+			sensorLocationOnRobot.pitch(), sensorLocationOnRobot.roll());
+
+		if (i + 1 != sensedData.size()) o << "\n";
+	}
+	return o.str();
 }

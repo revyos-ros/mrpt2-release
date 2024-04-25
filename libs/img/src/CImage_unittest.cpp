@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -29,7 +29,9 @@ const auto tstImgFileColor =
 	mrpt::UNITTEST_BASEDIR() + "/samples/img_basic_example/frame_color.jpg"s;
 
 // Generate random img:
-static void fillImagePseudoRandom(uint32_t seed, mrpt::img::CImage& img)
+namespace
+{
+void fillImagePseudoRandom(uint32_t seed, mrpt::img::CImage& img)
 {
 	mrpt::random::Randomize(seed);
 	auto& rnd = mrpt::random::getRandomGenerator();
@@ -45,7 +47,7 @@ static void fillImagePseudoRandom(uint32_t seed, mrpt::img::CImage& img)
 }
 
 // Expect images to be identical:
-static bool expect_identical(
+bool expect_identical(
 	const mrpt::img::CImage& a, const mrpt::img::CImage& b,
 	const std::string& s = std::string())
 {
@@ -59,20 +61,27 @@ static bool expect_identical(
 		}
 	return true;
 }
+}  // namespace
 
 TEST(CImage, CtorDefault)
 {
 	mrpt::img::CImage img;
 	EXPECT_TRUE(img.isEmpty());
-	EXPECT_THROW(img.isColor(), std::exception);
-	EXPECT_THROW(img.getWidth(), std::exception);
-	EXPECT_THROW(img.getHeight(), std::exception);
+
+	// clang-format off
+	EXPECT_THROW([&img]() { auto b = img.isColor();  ((void)b); }(), std::exception);
+	EXPECT_THROW([&img]() { auto b = img.getWidth(); ((void)b); }(), std::exception);
+	EXPECT_THROW([&img]() { auto b = img.getHeight(); ((void)b);}(), std::exception);
+	// clang-format on
+
 	EXPECT_THROW(img.getPixelDepth(), std::exception);
 }
 
 #if MRPT_HAS_OPENCV
 
-static void CtorSized_gray(unsigned int w, unsigned int h)
+namespace
+{
+void CtorSized_gray(unsigned int w, unsigned int h)
 {
 	using namespace mrpt::img;
 	CImage img(w, h, CH_GRAY);
@@ -82,6 +91,7 @@ static void CtorSized_gray(unsigned int w, unsigned int h)
 	EXPECT_EQ(img.getPixelDepth(), PixelDepth::D8U);
 	EXPECT_FALSE(img.isColor());
 }
+}  // namespace
 
 TEST(CImage, CtorSized)
 {
@@ -223,7 +233,12 @@ TEST(CImage, ExternalImage)
 		CImage a;
 		a.setExternalStorage("./foo_61717181.png");
 		// Test exception on not found
-		EXPECT_THROW(a.getWidth(), mrpt::img::CExceptionExternalImageNotFound);
+		EXPECT_THROW(
+			[&a] {
+				bool w = a.getWidth();
+				((void)w);
+			}(),
+			mrpt::img::CExceptionExternalImageNotFound);
 	}
 }
 

@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -13,6 +13,7 @@
 #include <mrpt/obs/CObservation3DRangeScan.h>
 #include <mrpt/obs/CObservationImage.h>
 #include <mrpt/obs/CObservationPointCloud.h>
+#include <mrpt/obs/CObservationRotatingScan.h>
 #include <mrpt/obs/CObservationStereoImages.h>
 
 #include "rawlog-edit-declarations.h"
@@ -93,8 +94,10 @@ DECLARE_OP_FUNCTION(op_externalize)
 			using namespace std::string_literals;
 
 			const string label_time = format(
-				"%s_%.09f", obs->sensorLabel.c_str(),
-				timestampTotime_t(obs->timestamp));
+				"%s_%.09f",
+				mrpt::system::fileNameStripInvalidChars(obs->sensorLabel)
+					.c_str(),
+				mrpt::Clock::toDouble(obs->timestamp));
 			if (IS_CLASS(*obs, CObservationStereoImages))
 			{
 				CObservationStereoImages::Ptr obsSt =
@@ -104,7 +107,10 @@ DECLARE_OP_FUNCTION(op_externalize)
 				{
 					const string fileName =
 						"img_"s + label_time + "_left."s + imgFileExtension;
-					obsSt->imageLeft.saveToFile(outDir + fileName);
+					bool savedOk =
+						obsSt->imageLeft.saveToFile(outDir + fileName);
+					ASSERT_(savedOk);
+
 					obsSt->imageLeft.setExternalStorage(fileName);
 					entries_converted++;
 				}
@@ -115,7 +121,10 @@ DECLARE_OP_FUNCTION(op_externalize)
 				{
 					const string fileName =
 						"img_"s + label_time + "_right."s + imgFileExtension;
-					obsSt->imageRight.saveToFile(outDir + fileName);
+					bool savedOk =
+						obsSt->imageRight.saveToFile(outDir + fileName);
+					ASSERT_(savedOk);
+
 					obsSt->imageRight.setExternalStorage(fileName);
 					entries_converted++;
 				}
@@ -131,7 +140,9 @@ DECLARE_OP_FUNCTION(op_externalize)
 				{
 					const string fileName =
 						"img_"s + label_time + "."s + imgFileExtension;
-					obsIm->image.saveToFile(outDir + fileName);
+					bool savedOk = obsIm->image.saveToFile(outDir + fileName);
+					ASSERT_(savedOk);
+
 					obsIm->image.setExternalStorage(fileName);
 					entries_converted++;
 				}
@@ -161,6 +172,29 @@ DECLARE_OP_FUNCTION(op_externalize)
 				else
 					entries_skipped++;
 			}
+			else if (IS_CLASS(*obs, CObservationRotatingScan))
+			{
+				auto o =
+					std::dynamic_pointer_cast<CObservationRotatingScan>(obs);
+
+				if (!o->organizedPoints.empty() && !o->isExternallyStored())
+				{
+					const string fileName = "scan_"s + label_time +
+						(m_external_txt ? ".txt"s : ".bin"s);
+					o->setAsExternalStorage(
+						fileName,
+						m_external_txt
+							? CObservationRotatingScan::ExternalStorageFormat::
+								  PlainTextFile
+							: CObservationRotatingScan::ExternalStorageFormat::
+								  MRPT_Serialization);
+
+					o->unload();  // this actually saves the data to disk
+					entries_converted++;
+				}
+				else
+					entries_skipped++;
+			}
 			else if (IS_CLASS(*obs, CObservation3DRangeScan))
 			{
 				CObservation3DRangeScan::Ptr obs3D =
@@ -173,7 +207,10 @@ DECLARE_OP_FUNCTION(op_externalize)
 				{
 					const string fileName =
 						"3DCAM_"s + label_time + "_INT."s + imgFileExtension;
-					obs3D->intensityImage.saveToFile(outDir + fileName);
+					bool savedOk =
+						obs3D->intensityImage.saveToFile(outDir + fileName);
+					ASSERT_(savedOk);
+
 					obs3D->intensityImage.setExternalStorage(fileName);
 					entries_converted++;
 				}
@@ -186,7 +223,10 @@ DECLARE_OP_FUNCTION(op_externalize)
 				{
 					const string fileName =
 						"3DCAM_"s + label_time + "_CONF."s + imgFileExtension;
-					obs3D->confidenceImage.saveToFile(outDir + fileName);
+					bool savedOk =
+						obs3D->confidenceImage.saveToFile(outDir + fileName);
+					ASSERT_(savedOk);
+
 					obs3D->confidenceImage.setExternalStorage(fileName);
 					entries_converted++;
 				}

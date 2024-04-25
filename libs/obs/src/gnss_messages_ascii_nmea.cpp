@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -148,7 +148,7 @@ mrpt::system::TTimeStamp Message_NMEA_RMC::getDateAsTimestamp() const
 	uint16_t years_century;
 	{
 		TTimeParts dec_parts;
-		timestampToParts(now(), dec_parts);
+		timestampToParts(mrpt::Clock::now(), dec_parts);
 		years_century = (dec_parts.year / 100) * 100;
 	}
 

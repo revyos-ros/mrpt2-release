@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -135,13 +135,6 @@ CDlgCalibWizardOnline::CDlgCalibWizardOnline(
 	StaticBoxSizer4->Add(FlexGridSizer17, 1, wxEXPAND, 0);
 	FlexGridSizer6->Add(
 		StaticBoxSizer4, 1, wxALL | wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL, 2);
-	wxString __wxRadioBoxChoices_1[2] = {
-		_("OpenCV\'s default"), _("Scaramuzza et al.\'s")};
-	rbMethod = new wxRadioBox(
-		this, ID_RADIOBOX1, _(" Detector method: "), wxDefaultPosition,
-		wxDefaultSize, 2, __wxRadioBoxChoices_1, 1, 0, wxDefaultValidator,
-		_T("ID_RADIOBOX1"));
-	FlexGridSizer6->Add(rbMethod, 1, wxEXPAND, 2);
 	StaticBoxSizer5 =
 		new wxStaticBoxSizer(wxHORIZONTAL, this, _(" Size of quads (in mm): "));
 	FlexGridSizer18 = new wxFlexGridSizer(1, 4, 0, 0);
@@ -352,8 +345,6 @@ void CDlgCalibWizardOnline::OntimCaptureTrigger(wxTimerEvent& event)
 		m_check_size_x = this->edSizeX->GetValue();
 		m_check_size_y = this->edSizeY->GetValue();
 		m_normalize_image = this->cbNormalize->GetValue();
-		m_useScaramuzzaAlternativeDetector =
-			this->rbMethod->GetSelection() == 1;
 
 		CObservation::Ptr obs = m_video->getNextFrame();
 		ASSERT_(obs);
@@ -385,7 +376,7 @@ void CDlgCalibWizardOnline::OntimCaptureTrigger(wxTimerEvent& event)
 
 		// Is there a detection??
 		bool blankTime = (last_valid != INVALID_TIMESTAMP) &&
-			mrpt::system::timeDifference(last_valid, mrpt::system::now()) < 2.0;
+			mrpt::system::timeDifference(last_valid, mrpt::Clock::now()) < 2.0;
 
 		if (!blankTime && m_threadResultsComputed && !m_threadResults.empty())
 		{
@@ -401,7 +392,7 @@ void CDlgCalibWizardOnline::OntimCaptureTrigger(wxTimerEvent& event)
 			lbProgress->SetLabel(
 				format("%u", (unsigned int)m_calibFrames.size()).c_str());
 
-			last_valid = mrpt::system::now();
+			last_valid = mrpt::Clock::now();
 
 			// Display now:
 			m_threadImgToProcess->image.colorImage(img_to_show);
@@ -439,7 +430,8 @@ void CDlgCalibWizardOnline::OntimCaptureTrigger(wxTimerEvent& event)
 
 		// Resize the display area, if needed:
 		if (std::abs(
-				(int)(this->m_realtimeview->GetClientSize().GetWidth()) -
+				(int)(mrpt::gui::GetScaledClientSize(m_realtimeview)
+						  .GetWidth()) -
 				int(img_to_show.getWidth())) > 30)
 		{
 			this->m_realtimeview->SetSize(
@@ -523,8 +515,7 @@ void CDlgCalibWizardOnline::threadProcessCorners()
 					bool foundCorners = mrpt::vision::findChessboardCorners(
 						obj->m_threadImgToProcess->image, obj->m_threadResults,
 						obj->m_check_size_x, obj->m_check_size_y,
-						obj->m_normalize_image,
-						obj->m_useScaramuzzaAlternativeDetector);
+						obj->m_normalize_image);
 
 					// cout << "corners: " << obj->m_threadResults.size() <<
 					// endl;

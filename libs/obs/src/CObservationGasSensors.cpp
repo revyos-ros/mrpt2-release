@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -328,7 +328,7 @@ void CObservationGasSensors::CMOSmodel::save_log_map(
 	// function to save in a log file the information of the generated gas
 	// distribution estimation
 
-	double time = mrpt::system::timestampTotime_t(timestamp);
+	double time = mrpt::Clock::toDouble(timestamp);
 	char buffer[50];
 	sprintf(buffer, "./log_MOSmodel_GasDistribution.txt");
 

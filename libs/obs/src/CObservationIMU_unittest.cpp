@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -15,7 +15,9 @@
 #include <mrpt/serialization/CArchive.h>
 #include <test_mrpt_common.h>
 
-static void checkExpectedValues(const mrpt::obs::CObservationIMU& o)
+namespace
+{
+void checkExpectedValues(const mrpt::obs::CObservationIMU& o)
 {
 	EXPECT_FALSE(o.has(mrpt::obs::IMU_X));
 
@@ -27,6 +29,7 @@ static void checkExpectedValues(const mrpt::obs::CObservationIMU& o)
 	EXPECT_NEAR(o.get(mrpt::obs::IMU_WY), 0.0, 1e-4);
 	EXPECT_NEAR(o.get(mrpt::obs::IMU_WZ), 0.00222222, 1e-4);
 }
+}  // namespace
 
 TEST(CObservationIMU, Deserialize_v3)
 {

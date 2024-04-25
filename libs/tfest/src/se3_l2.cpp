@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -67,7 +67,9 @@ using namespace std;
 /*---------------------------------------------------------------
 					se3_l2  (old "HornMethod()")
   ---------------------------------------------------------------*/
-static bool se3_l2_internal(
+namespace
+{
+bool se3_l2_internal(
 	std::vector<mrpt::math::TPoint3D>&
 		points_this,  // IN/OUT: It gets modified!
 	std::vector<mrpt::math::TPoint3D>&
@@ -201,6 +203,7 @@ static bool se3_l2_internal(
 
 	MRPT_END
 }  // end se3_l2_internal()
+}  // namespace
 
 bool tfest::se3_l2(
 	const std::vector<mrpt::math::TPoint3D>& in_points_this,

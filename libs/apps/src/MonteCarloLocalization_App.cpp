@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -299,7 +299,7 @@ void MonteCarloLocalization_Base::do_pf_localization()
 			// Build metric map:
 			// ------------------------------
 			MRPT_LOG_INFO("Building metric map(s) from '.simplemap'...");
-			metricMap->loadFromProbabilisticPosesAndObservations(simpleMap);
+			metricMap->loadFromSimpleMap(simpleMap);
 			MRPT_LOG_INFO("Done.");
 		}
 		else if (!mapExt.compare("gridmap"))
@@ -1158,7 +1158,7 @@ void MonteCarloLocalization_Base::getGroundTruth(
 				/*
 				cerr << format(
 					"GT time not found: %f\n",
-					mrpt::system::timestampTotime_t(cur_time));
+					mrpt::Clock::toDouble(cur_time));
 					*/
 			}
 		}

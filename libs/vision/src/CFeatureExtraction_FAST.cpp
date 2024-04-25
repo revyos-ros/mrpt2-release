@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -39,7 +39,7 @@ void CFeatureExtraction::extractFeaturesFAST(
 	const CImage inImg_gray(inImg, FAST_REF_OR_CONVERT_TO_GRAY);
 	const Mat theImg = inImg_gray.asCvMat<cv::Mat>(SHALLOW_COPY);
 
-#if MRPT_OPENCV_VERSION_NUM < 0x300
+#if MRPT_OPENCV_VERSION_NUM < 0x030000
 	FastFeatureDetector fastDetector(
 		options.FASTOptions.threshold, options.FASTOptions.nonmax_suppression);
 	fastDetector.detect(theImg, cv_feats);

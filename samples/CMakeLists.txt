@@ -256,7 +256,6 @@ if(MRPT_BUILD_EXAMPLES)
 		vision_checkerboard_detectors
 		vision_feature_extraction
 		vision_keypoint_matching_example
-		vision_multiple_checkerboards
 		vision_stereo_calib_example
 		)
 	set(CMAKE_EXAMPLE_DEPS mrpt::vision mrpt::gui)
@@ -287,6 +286,8 @@ if(MRPT_BUILD_EXAMPLES)
 		maps_gridmap3D_simple
 		maps_observer_pattern_example
 		maps_octomap_simple
+		maps_voxelmap_simple
+		maps_voxelmap_from_tum_dataset
 		maps_gmrf_map_example
 		maps_ransac_data_association
 		)

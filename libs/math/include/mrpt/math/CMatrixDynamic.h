@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -150,7 +150,10 @@ class CMatrixDynamic : public MatrixBase<T, CMatrixDynamic<T>>
 	/** Constructors */
 	CMatrixDynamic(const CMatrixDynamic& m) { (*this) = m; }
 
-	CMatrixDynamic(size_t row = 0, size_t col = 0) { realloc(row, col); }
+	explicit CMatrixDynamic(size_t row = 0, size_t col = 0)
+	{
+		realloc(row, col);
+	}
 
 	/** Copy (casting from if needed) from another matrix  */
 	template <typename U>

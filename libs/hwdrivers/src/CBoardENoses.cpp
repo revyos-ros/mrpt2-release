@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -309,13 +309,11 @@ bool CBoardENoses::getObservation(mrpt::obs::CObservationGasSensors& obs)
 			// from frame
 			// (always last 2
 			// words)
-			obs.timestamp =
-				mrpt::system::time_tToTimestamp(((double)*p) / 1000);
+			obs.timestamp = mrpt::Clock::fromDouble(((double)*p) / 1000);
 
 			if (first_reading)
 			{
-				initial_timestamp =
-					mrpt::system::getCurrentTime() - obs.timestamp;
+				initial_timestamp = mrpt::Clock::now() - obs.timestamp;
 				first_reading = false;
 			}
 			obs.timestamp = obs.timestamp + initial_timestamp;

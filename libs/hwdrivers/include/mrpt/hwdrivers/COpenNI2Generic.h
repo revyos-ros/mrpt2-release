@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -13,7 +13,7 @@
 namespace mrpt::hwdrivers
 {
 /** An abstract class for accessing OpenNI2 compatible sensors.
- * This class permits to access several sensors simultaneously. The same
+ * This class permits one to access several sensors simultaneously. The same
  *options (resolution, fps, etc.) are used for every sensor.
  *
  *  More references to read:

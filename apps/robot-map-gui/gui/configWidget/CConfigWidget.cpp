@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)               |
    |                          https://www.mrpt.org/                            |
    |                                                                           |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file        |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file        |
    | See: https://www.mrpt.org/Authors - All rights reserved.                  |
    | Released under BSD License. See details in https://www.mrpt.org/License   |
    +---------------------------------------------------------------------------+
@@ -211,11 +211,11 @@ TSetOfMetricMapInitializers CConfigWidget::config()
 		for (auto& map : it.second)
 		{
 			const std::string sMapName = map->getName().toStdString();
-			TMetricMapInitializer* mi = mmr.factoryMapDefinition(sMapName);
+			auto mi = mmr.factoryMapDefinition(sMapName);
 			ASSERT_(mi);
 
-			map->updateConfiguration(mi);
-			mapCfg.push_back(TMetricMapInitializer::Ptr(mi));
+			map->updateConfiguration(mi.get());
+			mapCfg.push_back(mi);
 			++index;
 		}
 	}

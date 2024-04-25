@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -90,14 +90,17 @@ void xRawLogViewerFrame::OnGenerateSeqImgs(wxCommandEvent& event)
 						{
 							auto obsSt = SF->getObservationByIndexAs<
 								CObservationStereoImages::Ptr>(k);
-							obsSt->imageLeft.saveToFile(format(
+							bool savedOk = obsSt->imageLeft.saveToFile(format(
 								"%s/img_stereo_%u_left_%05u.%s", outDir.c_str(),
 								k, imgSaved, imgFileExtension.c_str()));
+							ASSERT_(savedOk);
 
-							obsSt->imageRight.saveToFile(format(
+							savedOk = obsSt->imageRight.saveToFile(format(
 								"%s/img_stereo_%u_right_%05u.%s",
 								outDir.c_str(), k, imgSaved,
 								imgFileExtension.c_str()));
+							ASSERT_(savedOk);
+
 							imgSaved++;
 						}
 						if (SF->getObservationByIndex(k)->GetRuntimeClass() ==
@@ -105,9 +108,10 @@ void xRawLogViewerFrame::OnGenerateSeqImgs(wxCommandEvent& event)
 						{
 							auto obsIm = SF->getObservationByIndexAs<
 								CObservationImage::Ptr>(k);
-							obsIm->image.saveToFile(format(
+							bool savedOk = obsIm->image.saveToFile(format(
 								"%s/img_monocular_%u_%05u.%s", outDir.c_str(),
 								k, imgSaved, imgFileExtension.c_str()));
+							ASSERT_(savedOk);
 							imgSaved++;
 						}
 					}
@@ -123,25 +127,28 @@ void xRawLogViewerFrame::OnGenerateSeqImgs(wxCommandEvent& event)
 						CObservationStereoImages::Ptr obsSt =
 							std::dynamic_pointer_cast<CObservationStereoImages>(
 								o);
-						obsSt->imageLeft.saveToFile(format(
+						bool savedOk = obsSt->imageLeft.saveToFile(format(
 							"%s/img_stereo_%s_left_%05u.%s", outDir.c_str(),
 							obsSt->sensorLabel.c_str(), imgSaved,
 							imgFileExtension.c_str()));
+						ASSERT_(savedOk);
 
-						obsSt->imageRight.saveToFile(format(
+						savedOk = obsSt->imageRight.saveToFile(format(
 							"%s/img_stereo_%s_right_%05u.%s", outDir.c_str(),
 							obsSt->sensorLabel.c_str(), imgSaved,
 							imgFileExtension.c_str()));
+						ASSERT_(savedOk);
 						imgSaved++;
 					}
 					else if (IS_CLASS(*o, CObservationImage))
 					{
 						CObservationImage::Ptr obsIm =
 							std::dynamic_pointer_cast<CObservationImage>(o);
-						obsIm->image.saveToFile(format(
+						bool savedOk = obsIm->image.saveToFile(format(
 							"%s/img_monocular_%s_%05u.%s", outDir.c_str(),
 							obsIm->sensorLabel.c_str(), imgSaved,
 							imgFileExtension.c_str()));
+						ASSERT_(savedOk);
 						imgSaved++;
 					}
 				}
@@ -356,7 +363,9 @@ void xRawLogViewerFrame::OnMenuRectifyImages(wxCommandEvent& event)
 								// Save image to file and free memory
 								if (obsIm->image.isExternallyStored())
 								{
-									obsIm->image.saveToFile(p);
+									bool savedOk = obsIm->image.saveToFile(p);
+									ASSERT_(savedOk);
+
 									obsIm->image.unload();
 								}  // end if
 							}  // end if image is not undistorted
@@ -394,7 +403,9 @@ void xRawLogViewerFrame::OnMenuRectifyImages(wxCommandEvent& event)
 							// Save image to file and free memory
 							if (obsIm->image.isExternallyStored())
 							{
-								obsIm->image.saveToFile(p);
+								bool savedOk = obsIm->image.saveToFile(p);
+								ASSERT_(savedOk);
+
 								obsIm->image.unload();
 							}
 						}  // end if image is not undistorted
@@ -436,7 +447,7 @@ void renameExternalImageFile(CObservationImage::Ptr o)
 	bool imgFileExistsNow = mrpt::system::fileExists(img_file);
 
 	string new_img_file = o->sensorLabel +
-		format("_%.06f.%s", (double)timestampTotime_t(o->timestamp),
+		format("_%.06f.%s", (double)mrpt::Clock::toDouble(o->timestamp),
 			   mrpt::system::extractFileExtension(img_file).c_str());
 	string new_img_fullpath =
 		mrpt::system::extractFileDirectory(img_file) + "/" + new_img_file;
@@ -462,7 +473,7 @@ void renameExternalStereoImageFile(CObservationStereoImages::Ptr o)
 		bool imgFileExistsNow = mrpt::system::fileExists(img_file);
 
 		string new_img_file = o->sensorLabel +
-			format("_L_%.06f.%s", (double)timestampTotime_t(o->timestamp),
+			format("_L_%.06f.%s", (double)mrpt::Clock::toDouble(o->timestamp),
 				   mrpt::system::extractFileExtension(img_file).c_str());
 		string new_img_fullpath =
 			mrpt::system::extractFileDirectory(img_file) + "/" + new_img_file;
@@ -486,7 +497,7 @@ void renameExternalStereoImageFile(CObservationStereoImages::Ptr o)
 		bool imgFileExistsNow = mrpt::system::fileExists(img_file);
 
 		string new_img_file = o->sensorLabel +
-			format("_R_%.06f.%s", (double)timestampTotime_t(o->timestamp),
+			format("_R_%.06f.%s", (double)mrpt::Clock::toDouble(o->timestamp),
 				   mrpt::system::extractFileExtension(img_file).c_str());
 		string new_img_fullpath =
 			mrpt::system::extractFileDirectory(img_file) + "/" + new_img_file;

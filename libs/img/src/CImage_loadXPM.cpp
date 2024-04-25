@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -367,7 +367,9 @@ static const rgbRecord theRGBRecords[] = {
 	{nullptr, myRGB(0, 0, 0)}};
 static const int numTheRGBRecords = 235;
 
-static unsigned char ParseHexadecimal(char digit1, char digit2)
+namespace
+{
+unsigned char ParseHexadecimal(char digit1, char digit2)
 {
 	unsigned char i1, i2;
 
@@ -384,7 +386,7 @@ static unsigned char ParseHexadecimal(char digit1, char digit2)
 	return (unsigned char)(0x10 * i1 + i2);
 }
 
-static bool GetRGBFromName(
+bool GetRGBFromName(
 	const char* inname, bool* isNone, unsigned char* r, unsigned char* g,
 	unsigned char* b)
 {
@@ -475,6 +477,7 @@ static bool GetRGBFromName(
 
 	return found;
 }
+}  // namespace
 #endif
 
 /** Loads the image from an XPM array, as included from a ".xpm" file.

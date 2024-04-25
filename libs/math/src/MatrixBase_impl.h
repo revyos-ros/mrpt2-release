@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -43,6 +43,10 @@ void MatrixBase<Scalar, Derived>::removeColumns(
 	std::sort(idxs.begin(), idxs.end());
 	auto itEnd = std::unique(idxs.begin(), idxs.end());
 	idxs.resize(itEnd - idxs.begin());
+	for (const auto idx : idxs)
+	{
+		ASSERT_LT_(idx, static_cast<std::size_t>(mbDerived().cols()));
+	}
 	unsafeRemoveColumns(idxs);
 }
 
@@ -70,6 +74,10 @@ void MatrixBase<Scalar, Derived>::removeRows(
 	std::sort(idxs.begin(), idxs.end());
 	auto itEnd = std::unique(idxs.begin(), idxs.end());
 	idxs.resize(itEnd - idxs.begin());
+	for (const auto idx : idxs)
+	{
+		ASSERT_LT_(idx, static_cast<std::size_t>(mbDerived().rows()));
+	}
 	unsafeRemoveRows(idxs);
 }
 

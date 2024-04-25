@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -74,7 +74,7 @@ void CSickLaserUSB::doProcessSimple(
 	if (m_timeStartUI == 0)
 	{
 		m_timeStartUI = board_timestamp;
-		m_timeStartTT = mrpt::system::now();
+		m_timeStartTT = mrpt::Clock::now();
 	}
 	else
 		AtUI = board_timestamp - m_timeStartUI;

@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -191,16 +191,20 @@ void rgbd2rawlog(const string& src_path, const string& out_name)
 				// OK, we accept this RGB-DEPTH pair:
 				const double avrg_time =
 					.5 * (it_list_rgb->first + it_list_depth->first);
-				obs.timestamp = mrpt::system::time_tToTimestamp(avrg_time);
+				obs.timestamp = mrpt::Clock::fromDouble(avrg_time);
 
 				// RGB img:
 				obs.hasIntensityImage = true;
-				obs.intensityImage.loadFromFile(
+				bool loadOk = obs.intensityImage.loadFromFile(
 					src_path + string("/") + it_list_rgb->second);
+				ASSERT_(loadOk);
+
 				const string sRGBfile =
 					mrpt::format("%.06f_rgb.png", avrg_time);
-				obs.intensityImage.saveToFile(
+				bool savedOk = obs.intensityImage.saveToFile(
 					out_img_dir + string("/") + sRGBfile);
+				ASSERT_(savedOk);
+
 				obs.intensityImage.setExternalStorage(sRGBfile);
 
 				// Depth:
@@ -239,8 +243,7 @@ void rgbd2rawlog(const string& src_path, const string& out_name)
 					std::abs(it_list_rgb->first - it_list_acc->first);
 				if (At_acc < 1e-2)
 				{
-					obs_imu.timestamp =
-						mrpt::system::time_tToTimestamp(avrg_time);
+					obs_imu.timestamp = mrpt::Clock::fromDouble(avrg_time);
 
 					obs_imu.rawMeasurements[IMU_X_ACC] = it_list_acc->second[0];
 					obs_imu.rawMeasurements[IMU_Y_ACC] = it_list_acc->second[1];
@@ -262,8 +265,7 @@ void rgbd2rawlog(const string& src_path, const string& out_name)
 			counter++;
 
 			const double avrg_time = it_list_depth->first;
-			obs.timestamp =
-				mrpt::system::time_tToTimestamp(it_list_depth->first);
+			obs.timestamp = mrpt::Clock::fromDouble(it_list_depth->first);
 
 			// Depth:
 			obs.hasRangeImage = true;
@@ -305,14 +307,18 @@ void rgbd2rawlog(const string& src_path, const string& out_name)
 			counter++;
 
 			const double avrg_time = it_list_rgb->first;
-			obs.timestamp = mrpt::system::time_tToTimestamp(it_list_rgb->first);
+			obs.timestamp = mrpt::Clock::fromDouble(it_list_rgb->first);
 
 			// RGB img:
 			obs.hasIntensityImage = true;
-			obs.intensityImage.loadFromFile(
+			bool loadOk = obs.intensityImage.loadFromFile(
 				src_path + string("/") + it_list_rgb->second);
+			ASSERT_(loadOk);
+
 			const string sRGBfile = mrpt::format("%.06f_rgb.png", avrg_time);
-			obs.intensityImage.saveToFile(out_img_dir + string("/") + sRGBfile);
+			bool savedOk = obs.intensityImage.saveToFile(
+				out_img_dir + string("/") + sRGBfile);
+			ASSERT_(savedOk);
 			obs.intensityImage.setExternalStorage(sRGBfile);
 
 			// save:

@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -297,7 +297,8 @@ CPosePDF::Ptr CGridMapAligner::AlignPDF_robustMatch(
 						10 + FEAT_W, 5 + j * (FEAT_H + 5), im2);
 				}
 				fil += ".png";
-				img_compose.saveToFile(fil);
+				bool savedOk = img_compose.saveToFile(fil);
+				ASSERT_(savedOk);
 			}  // end for map
 		}
 

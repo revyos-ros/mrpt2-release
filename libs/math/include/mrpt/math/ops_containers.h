@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -255,8 +255,9 @@ inline double mean(const CONTAINER& v)
 }
 
 /** Return the maximum and minimum values of a std::vector */
-template <typename T>
-inline void minimum_maximum(const std::vector<T>& V, T& curMin, T& curMax)
+template <typename T, typename Alloc>
+inline void minimum_maximum(
+	const std::vector<T, Alloc>& V, T& curMin, T& curMax)
 {
 	ASSERT_(V.size() != 0);
 	const size_t N = V.size();

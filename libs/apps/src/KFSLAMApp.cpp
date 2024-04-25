@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -166,7 +166,9 @@ struct kfslam_traits<CRangeBearingKFSLAM>
 			CMatrixF H2(H);
 			CImage imgF;
 			imgF.setFromMatrix(H2, false /*it's not normalized*/);
-			imgF.saveToFile(OUT_DIR + string("/information_matrix_final.png"));
+			bool savedOk = imgF.saveToFile(
+				OUT_DIR + string("/information_matrix_final.png"));
+			ASSERT_(savedOk);
 
 			// ----------------------------------------
 			// Compute the "approximation error factor" E:
@@ -458,8 +460,7 @@ void KFSLAMApp::Run_KF_SLAM()
 				if (obs)
 				{
 					const CObservationBearingRange* obsRB = obs.get();
-					const double tim =
-						mrpt::system::timestampToDouble(obsRB->timestamp);
+					const double tim = mrpt::Clock::toDouble(obsRB->timestamp);
 
 					for (size_t i = 0; i < obsRB->sensedData.size(); i++)
 					{
@@ -498,8 +499,7 @@ void KFSLAMApp::Run_KF_SLAM()
 				if (obs)
 				{
 					const CObservationBearingRange* obsRB = obs.get();
-					const double tim =
-						mrpt::system::timestampToDouble(obsRB->timestamp);
+					const double tim = mrpt::Clock::toDouble(obsRB->timestamp);
 
 					auto itDA = GT_DA.find(tim);
 

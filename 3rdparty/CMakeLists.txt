@@ -60,6 +60,12 @@ if(CMAKE_MRPT_HAS_FREENECT AND NOT CMAKE_MRPT_HAS_FREENECT_SYSTEM)
 			-Wno-unused-function
 			-Wno-unused-const-variable
 		)
+		# Needed for usleep
+		target_compile_definitions(mrpt_freenect PRIVATE 
+			_GNU_SOURCE
+			_BSD_SOURCE
+			_DEFAULT_SOURCE
+			)
 	endif()
 
 	# Embedded version:
@@ -83,10 +89,12 @@ endif()
 # Build RPLIDAR?
 # ----------------------------------
 if(CMAKE_MRPT_HAS_ROBOPEAK_LIDAR)
-	set(RPLIDAR_ROOT ${MRPT_SOURCE_DIR}/3rdparty/rplidar_sdk/sdk/sdk/)
+	set(RPLIDAR_ROOT ${MRPT_SOURCE_DIR}/3rdparty/rplidar_sdk/sdk/)
 	set(SRCS_LIST
 		${RPLIDAR_ROOT}/src/*.cpp
 		${RPLIDAR_ROOT}/src/hal/*.cpp
+		${RPLIDAR_ROOT}/src/dataunpacker/*.cpp
+		${RPLIDAR_ROOT}/src/dataunpacker/unpacker/*.cpp
 		${RPLIDAR_ROOT}/include/*.h
 	)
 	if (WIN32)
@@ -187,7 +195,15 @@ if(CMAKE_MRPT_HAS_xSENS)
 
 	if (MSVC)
 		target_compile_definitions(mrpt_xsens PRIVATE XDA_STATIC_LIB)
+	else()
+		# Needed for <time.h> to define timegm()
+		target_compile_definitions(mrpt_xsens PRIVATE 
+			_GNU_SOURCE
+			_BSD_SOURCE
+			_DEFAULT_SOURCE
+			)
 	endif()
+	
 
 	# needs to be exported, even if private, to make cmake happy since it wants
 	# libraries to be statically-linkable:

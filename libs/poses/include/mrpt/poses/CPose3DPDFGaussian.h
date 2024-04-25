@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -29,10 +29,8 @@ class CPose3DQuatPDFGaussian;
  *  Uncertainty of pose composition operations (\f$ y = x \oplus u \f$) is
  * implemented in the method "CPose3DPDFGaussian::operator+=".
  *
- *  For further details on implemented methods and the theory behind them,
- *  see <a
- * href="http://www.mrpt.org/6D_poses:equivalences_compositions_and_uncertainty"
- * >this report</a>.
+ * \note Read also: "A tutorial on SE(3) transformation parameterizations and
+ * on-manifold optimization", in \cite blanco_se3_tutorial
  *
  * \sa CPose3D, CPose3DPDF, CPose3DPDFParticles
  * \ingroup poses_pdf_grp

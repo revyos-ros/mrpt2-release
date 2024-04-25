@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -59,7 +59,7 @@ class CPose3DQuatPDF
 	 * anymore.
 	 *  \sa copyFrom
 	 */
-	static CPose3DQuatPDF* createFrom2D(const CPosePDF& o);
+	static CPose3DQuatPDF::Ptr createFrom2D(const CPosePDF& o);
 
 	/** Returns a new PDF such as: NEW_PDF = (0,0,0) - THIS_PDF */
 	virtual void inverse(CPose3DQuatPDF& o) const = 0;

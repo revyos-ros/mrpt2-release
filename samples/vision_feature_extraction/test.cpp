@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -257,8 +257,11 @@ void TestMatchingComparative()
 		string("imgs/imR_p01.jpg");	 // Right image
 
 	CImage im1, im2;
-	im1.loadFromFile(imgL);
-	im2.loadFromFile(imgR);
+	bool loadOk = im1.loadFromFile(imgL);
+	ASSERT_(loadOk);
+
+	loadOk = im2.loadFromFile(imgR);
+	ASSERT_(loadOk);
 
 	size_t imW = im1.getWidth();
 	size_t imH = im1.getHeight();

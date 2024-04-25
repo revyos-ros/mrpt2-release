@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -97,5 +97,10 @@ class CFFMPEG_InputStream
 	 *  \sa openURL, close, isOpen
 	 */
 	bool retrieveFrame(mrpt::img::CImage& out_img);
+
+	/** \overload also returning the frame PTS (frame presentation timestamp).
+	 *  Refer to docs for ffmpeg AVFrame::pts
+	 */
+	bool retrieveFrame(mrpt::img::CImage& out_img, int64_t& outPTS);
 };
 }  // namespace mrpt::hwdrivers

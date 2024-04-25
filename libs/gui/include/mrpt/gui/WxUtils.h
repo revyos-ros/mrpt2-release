@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -64,9 +64,13 @@ namespace gui
 /** \addtogroup mrpt_gui_wxutils Utilities for MRPT-wxWidgets interfacing (in
   #include <mrpt/gui/WxUtils.h>)
   * \ingroup mrpt_gui_grp
-
 	* @{ */
 #if MRPT_HAS_WXWIDGETS
+
+/** Returns the size of a window, including the optional magnification scale set
+ * by users in Display->Appearance.
+ */
+wxSize GetScaledClientSize(const wxWindow* w);
 
 #ifndef WX_START_TRY
 

@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -19,18 +19,14 @@
 #include <stdexcept>
 
 // Include CSparse lib headers, either from the system or embedded:
-extern "C"
-{
 #if MRPT_HAS_SUITESPARSE
-#define NCOMPLEX  // In MRPT we don't need complex numbers, so avoid the
-// annoying warning: 'cs_ci_house' has C-linkage specified,
-// but returns UDT 'std::complex<double>' which is
-// incompatible with C
 #include "cs.h"
 #else
+extern "C"
+{
 #include <mrpt/3rdparty/CSparse/cs.h>
-#endif
 }
+#endif
 
 namespace mrpt::math
 {
@@ -374,7 +370,7 @@ class CSparseMatrix
 	 *   \endcode
 	 * \return False on any error.
 	 */
-	bool saveToTextFile_sparse(const std::string& filName);
+	[[nodiscard]] bool saveToTextFile_sparse(const std::string& filName);
 
 	// Very basic, standard methods that MRPT methods expect for any matrix:
 	inline size_t rows() const { return sparse_matrix.m; }

@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -142,7 +142,7 @@ DECLARE_OP_FUNCTION(op_export_rawdaq_txt)
 			else
 				f_this = it->second;
 
-			const double tim0 = mrpt::system::timestampTotime_t(obs->timestamp);
+			const double tim0 = mrpt::Clock::toDouble(obs->timestamp);
 			const double At =
 				obs->sample_rate != 0.0 ? 1.0 / obs->sample_rate : 0.0;
 			double tim;

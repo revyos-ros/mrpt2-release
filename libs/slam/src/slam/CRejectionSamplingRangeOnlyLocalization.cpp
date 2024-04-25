@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -106,7 +106,8 @@ double CRejectionSamplingRangeOnlyLocalization::RS_observationLikelihood(
 				exp(-0.5 *
 					square(
 						m_dataPerBeacon[i].radiusAtRobotPlane -
-						P.distanceTo(m_dataPerBeacon[i].beaconPosition)) /
+						P.distanceTo(mrpt::math::TPoint3D(
+							m_dataPerBeacon[i].beaconPosition))) /
 					m_sigmaRanges2);
 	}
 

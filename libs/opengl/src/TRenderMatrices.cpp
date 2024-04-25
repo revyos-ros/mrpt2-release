@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -139,7 +139,9 @@ void TRenderMatrices::computeProjectionMatrix(float znear, float zfar)
 	}
 }
 
-static void azimuthElevationFromDirection(
+namespace
+{
+void azimuthElevationFromDirection(
 	const mrpt::math::TVector3Df& v, float& elevation, float& azimuth)
 {
 	// Compute the elevation angle
@@ -150,6 +152,7 @@ static void azimuthElevationFromDirection(
 	else
 		azimuth = atan2(v.y, v.x);
 }
+}  // namespace
 
 void TRenderMatrices::computeLightProjectionMatrix(
 	float zmin, float zmax, const TLightParameters& lp)

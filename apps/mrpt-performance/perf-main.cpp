@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -225,7 +225,7 @@ int main(int argc, char** argv)
 			fo.printf(
 				"<hr><small>Automated test run at %s with %s using program "
 				"'mrpt-performance'.<br>Overall run took %s</small>\n",
-				mrpt::system::dateTimeLocalToString(now()).c_str(),
+				mrpt::system::dateTimeLocalToString(mrpt::Clock::now()).c_str(),
 				MRPT_getVersion().c_str(),
 				mrpt::system::intervalFormat(globalTime.Tac()).c_str());
 
@@ -269,9 +269,9 @@ int main(int argc, char** argv)
 
 			const string fil_name = PERF_DATA_DIR +
 				mrpt::format("/perf-results-%i.%i.%i%s-%s-%ibit.dat",
-							 int((MRPT_VERSION >> 8) & 0x0F),
-							 int((MRPT_VERSION >> 4) & 0x0F),
-							 int((MRPT_VERSION >> 0) & 0x0F), version_postfix,
+							 int((MRPT_VERSION >> 16) & 0xFF),
+							 int((MRPT_VERSION >> 8) & 0xFF),
+							 int((MRPT_VERSION >> 0) & 0xFF), version_postfix,
 							 compiler_name, int(MRPT_WORD_SIZE));
 			cout << "Saving perf-data to: " << fil_name << endl;
 			CFileOutputStream f(fil_name);

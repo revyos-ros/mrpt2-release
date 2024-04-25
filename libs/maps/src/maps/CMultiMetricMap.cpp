@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -123,7 +123,7 @@ void CMultiMetricMap::setListOfMaps(const TSetOfMetricMapInitializers& inits)
 	for (const auto& i : inits)
 	{
 		// Create map from the list of all params:
-		auto* theMap = mmr.factoryMapObjectFromDefinition(*i.get());
+		auto theMap = mmr.factoryMapObjectFromDefinition(*i.get());
 		ASSERT_(theMap);
 		// Add to the list of maps:
 		this->maps.emplace_back(theMap);
@@ -313,6 +313,16 @@ const CSimplePointsMap* CMultiMetricMap::getAsSimplePointsMap() const
 	else
 		return this->mapByClass<CSimplePointsMap>(0).get();
 	MRPT_END
+}
+
+std::string CMultiMetricMap::asString() const
+{
+	std::stringstream ss;
+	ss << "Multi-map with " << maps.size() << " children maps: ";
+	for (size_t i = 0; i < maps.size(); i++)
+		ss << "[" << i << "] " << maps[i]->asString() << ", ";
+
+	return ss.str();
 }
 
 mrpt::maps::CMetricMap::Ptr CMultiMetricMap::mapByIndex(size_t idx) const

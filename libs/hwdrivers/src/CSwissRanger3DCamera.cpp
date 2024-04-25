@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -446,7 +446,7 @@ void CSwissRanger3DCamera::getNextObservation(
 						const string filName = fileNameStripInvalidChars(
 												   trim(m_sensorLabel)) +
 							format("_INT_%f.%s",
-								   (double)timestampTotime_t(obs.timestamp),
+								   (double)mrpt::Clock::toDouble(obs.timestamp),
 								   m_external_images_format.c_str());
 						obs.intensityImage.saveToFile(
 							m_path_for_external_images + string("/") + filName,
@@ -483,7 +483,7 @@ void CSwissRanger3DCamera::getNextObservation(
 						const string filName = fileNameStripInvalidChars(
 												   trim(m_sensorLabel)) +
 							format("_CONF_%f.%s",
-								   (double)timestampTotime_t(obs.timestamp),
+								   (double)mrpt::Clock::toDouble(obs.timestamp),
 								   m_external_images_format.c_str());
 						obs.confidenceImage.saveToFile(
 							m_path_for_external_images + string("/") + filName,

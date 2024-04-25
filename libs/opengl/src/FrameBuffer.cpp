@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -17,7 +17,9 @@
 using namespace mrpt::opengl;
 
 #if MRPT_HAS_OPENGL_GLUT || MRPT_HAS_EGL
-static bool isExtensionSupported([[maybe_unused]] const std::string& extension)
+namespace
+{
+bool isExtensionSupported(const std::string& extension)
 {
 	MRPT_START
 	for (int index = 0;; index++)
@@ -31,6 +33,7 @@ static bool isExtensionSupported([[maybe_unused]] const std::string& extension)
 	MRPT_END
 	return false;
 }
+}  // namespace
 #endif
 
 void FrameBuffer::RAII_Impl::create(

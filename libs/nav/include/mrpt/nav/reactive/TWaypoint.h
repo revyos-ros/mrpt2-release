@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -91,9 +91,9 @@ struct TWaypointsRenderingParams
 {
 	TWaypointsRenderingParams();
 
-	double outter_radius{.3}, inner_radius{.2};
-	double outter_radius_non_skippable{.3}, inner_radius_non_skippable{.0};
-	double outter_radius_reached{.2}, inner_radius_reached{.1};
+	double outer_radius{.3}, inner_radius{.2};
+	double outer_radius_non_skippable{.3}, inner_radius_non_skippable{.0};
+	double outer_radius_reached{.2}, inner_radius_reached{.1};
 	double heading_arrow_len{1.0};
 	mrpt::img::TColor color_regular, color_current_goal, color_reached;
 	bool show_labels{true};

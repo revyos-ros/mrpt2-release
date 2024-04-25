@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -50,6 +50,7 @@ TEST_CLASS_MOVE_COPY_CTORS(CObservationCANBusJ1939);
 TEST_CLASS_MOVE_COPY_CTORS(CObservationRawDAQ);
 TEST_CLASS_MOVE_COPY_CTORS(CObservation6DFeatures);
 TEST_CLASS_MOVE_COPY_CTORS(CObservationVelodyneScan);
+TEST_CLASS_MOVE_COPY_CTORS(CObservationRotatingScan);
 TEST_CLASS_MOVE_COPY_CTORS(CActionRobotMovement2D);
 TEST_CLASS_MOVE_COPY_CTORS(CActionRobotMovement3D);
 
@@ -69,6 +70,7 @@ const mrpt::rtti::TRuntimeClassId* lstClasses[] = {
 #endif
 	CLASS_ID(CObservationCANBusJ1939), CLASS_ID(CObservationRawDAQ),
 	CLASS_ID(CObservation6DFeatures), CLASS_ID(CObservationVelodyneScan),
+	CLASS_ID(CObservationRotatingScan),
 	// Actions:
 	CLASS_ID(CActionRobotMovement2D), CLASS_ID(CActionRobotMovement3D)};
 
@@ -129,25 +131,28 @@ TEST(Observations, WriteReadToOctectVectors)
 	}
 }
 
-static bool aux_get_sample_data(mrpt::obs::CObservation&) { return false; }
-static bool aux_get_sample_data(mrpt::obs::CAction&) { return false; }
+namespace
+{
+bool aux_get_sample_data(mrpt::obs::CObservation&) { return false; }
+bool aux_get_sample_data(mrpt::obs::CAction&) { return false; }
 
-static bool aux_get_sample_data(mrpt::obs::CObservation2DRangeScan& o)
+bool aux_get_sample_data(mrpt::obs::CObservation2DRangeScan& o)
 {
 	mrpt::obs::stock_observations::example2DRangeScan(o);
 	return true;
 }
-static bool aux_get_sample_data(mrpt::obs::CObservationImage& o)
+bool aux_get_sample_data(mrpt::obs::CObservationImage& o)
 {
 	mrpt::obs::stock_observations::exampleImage(o.image);
 	return true;
 }
-static bool aux_get_sample_data(mrpt::obs::CObservationStereoImages& o)
+bool aux_get_sample_data(mrpt::obs::CObservationStereoImages& o)
 {
 	mrpt::obs::stock_observations::exampleImage(o.imageLeft, 0);
 	mrpt::obs::stock_observations::exampleImage(o.imageRight, 1);
 	return true;
 }
+}  // namespace
 
 // Try to invoke a copy ctor and = operator:
 template <class T>

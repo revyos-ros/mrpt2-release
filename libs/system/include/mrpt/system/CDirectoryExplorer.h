@@ -2,12 +2,13 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
 #pragma once
 
+#include <mrpt/core/Clock.h>
 #include <mrpt/system/os.h>
 
 #include <deque>
@@ -36,7 +37,8 @@ class CDirectoryExplorer
 	{
 		std::string name;  //!< The file name part only, without path.
 		std::string wholePath;	//!< Full, absolute path of the file
-		time_t accessTime, modTime;	 //!< Access and modification times.
+		/// Access and modification times.
+		mrpt::Clock::time_point accessTime, modTime;
 		bool isDir = false, isSymLink = false;
 		uint64_t fileSize = 0;	//!< File size [bytes]
 	};

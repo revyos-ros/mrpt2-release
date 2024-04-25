@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -22,6 +22,7 @@
 #include <mrpt/maps/COccupancyGridMap2D.h>
 #include <mrpt/maps/CSimpleMap.h>
 #include <mrpt/serialization/CArchive.h>
+#include <mrpt/system/filesystem.h>
 #include <mrpt/system/os.h>
 
 using namespace mrpt;
@@ -61,8 +62,7 @@ int main(int argc, char** argv)
 			cout << "  Default: INI_FILE_SECTION_NAME = MappingApplication"
 				 << endl;
 			cout << "Push any key to exit..." << endl;
-			os::getch();
-			return -1;
+			return 1;
 		}
 
 		string configFile = std::string(argv[1]);
@@ -79,17 +79,20 @@ int main(int argc, char** argv)
 		cout << "done: " << simplemap.size() << " observations." << endl;
 
 		// Create metric maps:
+		CConfigFile cfg(configFile);
+
+		ASSERT_(cfg.sectionExists(METRIC_MAP_CONFIG_SECTION));
+
 		TSetOfMetricMapInitializers mapCfg;
-		mapCfg.loadFromConfigFile(
-			CConfigFile(configFile), METRIC_MAP_CONFIG_SECTION);
+		mapCfg.loadFromConfigFile(cfg, METRIC_MAP_CONFIG_SECTION);
 
 		CMultiMetricMap metricMap;
 		metricMap.setListOfMaps(mapCfg);
 
 		// Build metric maps:
-		cout << "Building metric maps...";
+		cout << "Building metric maps..." << std::endl;
 
-		metricMap.loadFromProbabilisticPosesAndObservations(simplemap);
+		metricMap.loadFromSimpleMap(simplemap);
 
 		cout << "done." << endl;
 
@@ -97,20 +100,25 @@ int main(int argc, char** argv)
 		// ---------------------------
 		metricMap.saveMetricMapRepresentationToFile(outprefix);
 
-		// grid maps:
-		for (unsigned int i = 0;
-			 i < metricMap.countMapsByClass<COccupancyGridMap2D>(); i++)
+		// And as binary serialized files:
+		// -------------------------------------
+		for (unsigned int i = 0; i < metricMap.maps.size(); i++)
 		{
 			using namespace std::string_literals;
-			const auto str = outprefix + "_gridmap_no"s +
-				mrpt::format("%02u", i) + ".gridmap"s;
-			cout << "Saving gridmap #" << i << " to " << str << endl;
+
+			const auto& m = metricMap.maps.at(i);
+
+			const auto str = outprefix + mrpt::format("_%02u_", i) +
+				mrpt::system::fileNameStripInvalidChars(
+								 m->GetRuntimeClass()->className) +
+				".bin"s;
+
+			std::cout << "Saving map #" << i << " to " << str << std::endl;
 
 			CFileGZOutputStream fo(str);
-			mrpt::serialization::archiveFrom(fo)
-				<< *metricMap.mapByClass<COccupancyGridMap2D>(i);
+			mrpt::serialization::archiveFrom(fo) << m;
 
-			cout << "done." << endl;
+			cout << "Done." << endl;
 		}
 
 		return 0;

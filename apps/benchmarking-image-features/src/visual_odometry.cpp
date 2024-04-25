@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -240,7 +240,7 @@ VisualOdometry::VisualOdometry()
  *					    Generate VO main funciton *
  ************************************************************************************************/
 Mat VisualOdometry::generateVO(
-	CFeatureExtraction fext, int numFeats,
+	CFeatureExtraction fExt, int NumFeats,
 	std::array<std::string, 3> file_paths, int feat_type)
 {
 	string dataset = file_paths[0];
@@ -248,8 +248,8 @@ Mat VisualOdometry::generateVO(
 	string calibration_file = file_paths[2];
 	cnt.setValue(0);
 	// this->detector_selected = detector_selected;
-	this->fext = fext;
-	this->numFeats = numFeats;
+	this->fext = fExt;
+	this->numFeats = NumFeats;
 	Mat img_1, img_2;
 	Mat R_f, t_f;  // the final rotation and tranlation vectors containing the
 	// transform
@@ -292,9 +292,11 @@ Mat VisualOdometry::generateVO(
 	cvtColor(img_2_c, img_2, COLOR_BGR2GRAY);
 
 	CImage img1, img2;
-	img1.loadFromFile(filename1);
+	bool loadOk = img1.loadFromFile(filename1);
+	ASSERT_(loadOk);
 
-	img2.loadFromFile(filename2);
+	loadOk = img2.loadFromFile(filename2);
+	ASSERT_(loadOk);
 
 	// feature detection, tracking
 	vector<Point2f> points1,
@@ -318,9 +320,9 @@ Mat VisualOdometry::generateVO(
 	// double focal = 718.8560;
 	// cv::Point2d pp(607.1928, 185.2157);
 	// recovering the pose and the essential matrix
-	Mat E, R, t, mask;
-	E = findEssentialMat(points2, points1, focal, pp, RANSAC, 0.999, 1.0, mask);
-	recoverPose(E, points2, points1, R, t, focal, pp, mask);
+	Mat E, R, t;
+	E = findEssentialMat(points2, points1, focal, pp);
+	cv::recoverPose(E, points2, points1, R, t, focal, pp);
 
 	Mat prevImage = img_2;
 	Mat currImage;
@@ -351,16 +353,16 @@ Mat VisualOdometry::generateVO(
 
 		Mat currImage_c = imread(filename);
 		CImage img3;
-		img3.loadFromFile(filename);
+		loadOk = img3.loadFromFile(filename);
+		ASSERT_(loadOk);
 
 		cvtColor(currImage_c, currImage, COLOR_BGR2GRAY);
-		vector<uchar> status;
+		vector<uchar> Status;
 		featureTracking(
-			prevImage, currImage, prevFeatures, currFeatures, status);
+			prevImage, currImage, prevFeatures, currFeatures, Status);
 
-		E = findEssentialMat(
-			currFeatures, prevFeatures, focal, pp, RANSAC, 0.999, 1.0, mask);
-		recoverPose(E, currFeatures, prevFeatures, R, t, focal, pp, mask);
+		E = findEssentialMat(currFeatures, prevFeatures, focal, pp, RANSAC);
+		recoverPose(E, currFeatures, prevFeatures, R, t, focal, pp);
 
 		Mat prevPts(2, prevFeatures.size(), CV_64F),
 			currPts(2, currFeatures.size(), CV_64F);
@@ -394,7 +396,7 @@ Mat VisualOdometry::generateVO(
 		{
 			featureDetection(img3, prevFeatures, feat_type);
 			featureTracking(
-				prevImage, currImage, prevFeatures, currFeatures, status);
+				prevImage, currImage, prevFeatures, currFeatures, Status);
 		}
 
 		prevImage = currImage.clone();

@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -15,6 +15,7 @@
 #include <mrpt/core/safe_pointers.h>
 #include <mrpt/img/color_maps.h>
 #include <mrpt/maps/CMetricMap.h>
+#include <mrpt/maps/NearestNeighborsCapable.h>
 #include <mrpt/math/CMatrixFixed.h>
 #include <mrpt/math/KDTreeCapable.h>
 #include <mrpt/math/TBoundingBox.h>
@@ -70,7 +71,8 @@ struct pointmap_traits;
 class CPointsMap : public CMetricMap,
 				   public mrpt::math::KDTreeCapable<CPointsMap>,
 				   public mrpt::opengl::PLY_Importer,
-				   public mrpt::opengl::PLY_Exporter
+				   public mrpt::opengl::PLY_Exporter,
+				   public mrpt::maps::NearestNeighborsCapable
 {
 	DEFINE_VIRTUAL_SERIALIZABLE(CPointsMap)
 	// This must be added for declaration of MEX-related functions
@@ -573,6 +575,36 @@ class CPointsMap : public CMetricMap,
 	{
 		return m_z;
 	}
+	// clang-format off
+	virtual auto getPointsBufferRef_intensity() const  -> const mrpt::aligned_std_vector<float>* { return nullptr; }
+	virtual auto getPointsBufferRef_ring() const       -> const mrpt::aligned_std_vector<uint16_t>* { return nullptr; }
+	virtual auto getPointsBufferRef_timestamp() const  -> const mrpt::aligned_std_vector<float>* { return nullptr; }
+	virtual auto getPointsBufferRef_color_R() const    -> const mrpt::aligned_std_vector<float>* { return nullptr;}
+	virtual auto getPointsBufferRef_color_G() const    -> const mrpt::aligned_std_vector<float>* { return nullptr; }
+	virtual auto getPointsBufferRef_color_B() const    -> const mrpt::aligned_std_vector<float>* { return nullptr; }
+
+	virtual auto getPointsBufferRef_intensity()        -> mrpt::aligned_std_vector<float>* { return nullptr; }
+	virtual auto getPointsBufferRef_ring()             -> mrpt::aligned_std_vector<uint16_t>* { return nullptr; }
+	virtual auto getPointsBufferRef_timestamp()        -> mrpt::aligned_std_vector<float>* { return nullptr; }
+	virtual auto getPointsBufferRef_color_R()          -> mrpt::aligned_std_vector<float>* { return nullptr; }
+	virtual auto getPointsBufferRef_color_G()          -> mrpt::aligned_std_vector<float>* { return nullptr; }
+	virtual auto getPointsBufferRef_color_B()          -> mrpt::aligned_std_vector<float>* { return nullptr; }
+	
+	bool hasField_Intensity() const  { return getPointsBufferRef_intensity() != nullptr; }
+	bool hasField_Ring() const       { return getPointsBufferRef_ring() != nullptr; }
+	bool hasField_Timestamp() const  { return getPointsBufferRef_timestamp() != nullptr; }
+	bool hasField_color_R() const    { return getPointsBufferRef_color_R() != nullptr; }
+	bool hasField_color_G() const    { return getPointsBufferRef_color_G() != nullptr; }
+	bool hasField_color_B() const    { return getPointsBufferRef_color_B() != nullptr; }
+	
+	virtual void insertPointField_Intensity([[maybe_unused]] float i) { /* default: none*/ }
+	virtual void insertPointField_Ring([[maybe_unused]] uint16_t r)   { /* default: none*/ }
+	virtual void insertPointField_Timestamp([[maybe_unused]] float t) { /* default: none*/ }
+	virtual void insertPointField_color_R([[maybe_unused]] float v)   { /* default: none*/ }
+	virtual void insertPointField_color_G([[maybe_unused]] float v)   { /* default: none*/ }
+	virtual void insertPointField_color_B([[maybe_unused]] float v)   { /* default: none*/ }
+	/// clang-format on
+
 	/** Returns a copy of the 2D/3D points as a std::vector of float
 	 * coordinates.
 	 * If decimation is greater than 1, only 1 point out of that number will be
@@ -667,6 +699,37 @@ class CPointsMap : public CMetricMap,
 		[[maybe_unused]] float G, [[maybe_unused]] float B)
 	{
 		insertPoint(x, y, z);
+	}
+
+	/** Generic method to copy *all* applicable point properties from
+	 *  one map to another, e.g. timestamp, intensity, etc.
+	 */
+	void insertPointFrom(
+		const mrpt::maps::CPointsMap& source, size_t sourcePointIndex)
+	{
+		const auto i = sourcePointIndex;  // shortcut
+		// mandatory fields:
+		const auto& xs = source.getPointsBufferRef_x();
+		const auto& ys = source.getPointsBufferRef_y();
+		const auto& zs = source.getPointsBufferRef_z();
+		// optional fields:
+		const auto* Is = source.getPointsBufferRef_intensity();
+		const auto* Rs = source.getPointsBufferRef_ring();
+		const auto* Ts = source.getPointsBufferRef_timestamp();
+		const auto* cR = source.getPointsBufferRef_color_R();
+		const auto* cG = source.getPointsBufferRef_color_G();
+		const auto* cB = source.getPointsBufferRef_color_B();
+
+		// XYZ:
+		insertPointFast(xs[i], ys[i], zs[i]);
+		if (Is && hasField_Intensity()) insertPointField_Intensity((*Is)[i]);
+		if (Rs && hasField_Ring()) insertPointField_Ring((*Rs)[i]);
+		if (Ts && hasField_Timestamp()) insertPointField_Timestamp((*Ts)[i]);
+		if (cR && hasField_color_R()) insertPointField_color_R((*cR)[i]);
+		if (cG && hasField_color_G()) insertPointField_color_G((*cG)[i]);
+		if (cB && hasField_color_B()) insertPointField_color_B((*cB)[i]);
+
+		mark_as_modified();
 	}
 
 	/** Set all the points at once from vectors with X,Y and Z coordinates (if Z
@@ -929,7 +992,7 @@ class CPointsMap : public CMetricMap,
 	 *  Results are cached unless the map is somehow modified to avoid repeated
 	 * calculations.
 	 */
-	mrpt::math::TBoundingBoxf boundingBox() const;
+	mrpt::math::TBoundingBoxf boundingBox() const override;
 
 	/** Extracts the points in the map within a cylinder in 3D defined the
 	 * provided radius and zmin/zmax values.
@@ -1124,6 +1187,42 @@ class CPointsMap : public CMetricMap,
 			boundingBox().asString().c_str());
 	}
 
+	/** @name API of the NearestNeighborsCapable virtual interface
+		@{ */
+	void nn_prepare_for_2d_queries() const override;
+	void nn_prepare_for_3d_queries() const override;
+	[[nodiscard]] bool nn_has_indices_or_ids() const override { return true; }
+	[[nodiscard]] size_t nn_index_count() const override { return size(); }
+	[[nodiscard]] bool nn_single_search(
+		const mrpt::math::TPoint3Df& query, mrpt::math::TPoint3Df& result,
+		float& out_dist_sqr, uint64_t& resultIndexOrID) const override;
+	[[nodiscard]] bool nn_single_search(
+		const mrpt::math::TPoint2Df& query, mrpt::math::TPoint2Df& result,
+		float& out_dist_sqr, uint64_t& resultIndexOrID) const override;
+	void nn_multiple_search(
+		const mrpt::math::TPoint3Df& query, const size_t N,
+		std::vector<mrpt::math::TPoint3Df>& results,
+		std::vector<float>& out_dists_sqr,
+		std::vector<uint64_t>& resultIndicesOrIDs) const override;
+	void nn_multiple_search(
+		const mrpt::math::TPoint2Df& query, const size_t N,
+		std::vector<mrpt::math::TPoint2Df>& results,
+		std::vector<float>& out_dists_sqr,
+		std::vector<uint64_t>& resultIndicesOrIDs) const override;
+	void nn_radius_search(
+		const mrpt::math::TPoint3Df& query, const float search_radius_sqr,
+		std::vector<mrpt::math::TPoint3Df>& results,
+		std::vector<float>& out_dists_sqr,
+		std::vector<uint64_t>& resultIndicesOrIDs,
+		size_t maxPoints) const override;
+	void nn_radius_search(
+		const mrpt::math::TPoint2Df& query, const float search_radius_sqr,
+		std::vector<mrpt::math::TPoint2Df>& results,
+		std::vector<float>& out_dists_sqr,
+		std::vector<uint64_t>& resultIndicesOrIDs,
+		size_t maxPoints) const override;
+	/** @} */
+
    protected:
 	/** The point coordinates */
 	mrpt::aligned_std_vector<float> m_x, m_y, m_z;
@@ -1172,6 +1271,12 @@ class CPointsMap : public CMetricMap,
 	void PLY_import_set_vertex(
 		size_t idx, const mrpt::math::TPoint3Df& pt,
 		const mrpt::img::TColorf* pt_color = nullptr) override;
+	void PLY_import_set_vertex_timestamp(
+		[[maybe_unused]] size_t idx,
+		[[maybe_unused]] const double unixTimestamp) override
+	{
+		// do nothing, this class ignores timestamps
+	}
 	/** @} */
 
 	/** @name PLY Export virtual methods to implement in base classes

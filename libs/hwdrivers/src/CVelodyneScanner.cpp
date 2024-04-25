@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -177,7 +177,11 @@ void CVelodyneScanner::loadConfig_sensorSpecific(
 
 	std::string calibration_file;
 	MRPT_LOAD_CONFIG_VAR(calibration_file, string, cfg, sect);
-	if (!calibration_file.empty()) this->loadCalibrationFile(calibration_file);
+	if (!calibration_file.empty())
+	{
+		bool calibLoadOk = loadCalibrationFile(calibration_file);
+		ASSERT_(calibLoadOk);
+	}
 
 	// Check validity:
 	const model_properties_list_t& lstModels = TModelPropertiesFactory::get();
@@ -662,7 +666,7 @@ bool CVelodyneScanner::receivePackets(
 		char errbuf[PCAP_ERRBUF_SIZE];
 
 		mrpt::system::TTimeParts parts;
-		mrpt::system::timestampToParts(mrpt::system::now(), parts, true);
+		mrpt::system::timestampToParts(mrpt::Clock::now(), parts, true);
 		string sFilePostfix = "_";
 		sFilePostfix += format(
 			"%04u-%02u-%02u_%02uh%02um%02us", (unsigned int)parts.year,
@@ -776,7 +780,7 @@ mrpt::system::TTimeStamp CVelodyneScanner::internal_receive_UDP_packet(
 	if (!filter_only_from_IP.empty())
 		devip_addr = inet_addr(filter_only_from_IP.c_str());
 
-	const mrpt::system::TTimeStamp time1 = mrpt::system::now();
+	const mrpt::system::TTimeStamp time1 = mrpt::Clock::now();
 
 	struct pollfd fds[1];
 	fds[0].fd = hSocket;
@@ -864,7 +868,7 @@ mrpt::system::TTimeStamp CVelodyneScanner::internal_receive_UDP_packet(
 
 	// Average the times at which we begin and end reading.  Use that to
 	// estimate when the scan occurred.
-	const mrpt::system::TTimeStamp time2 = mrpt::system::now();
+	const mrpt::system::TTimeStamp time2 = mrpt::Clock::now();
 
 	return mrpt::Clock::time_point(mrpt::Clock::duration(
 		time1.time_since_epoch().count() / 2 +
@@ -908,7 +912,7 @@ bool CVelodyneScanner::internal_read_PCAP_packet(
 
 			// Determine whether it is a DATA or POSITION packet:
 			m_pcap_file_empty = false;
-			const mrpt::system::TTimeStamp tim = mrpt::system::now();
+			const mrpt::system::TTimeStamp tim = mrpt::Clock::now();
 			const uint16_t udp_dst_port =
 				ntohs(*reinterpret_cast<const uint16_t*>(pkt_data + 0x24));
 

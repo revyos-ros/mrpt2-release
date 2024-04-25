@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -53,7 +53,7 @@ class CRawlogProcessor
 		: m_in_rawlog(_in_rawlog),
 		  m_cmdline(_cmdline),
 		  verbose(_verbose),
-		  m_last_console_update(mrpt::system::now()),
+		  m_last_console_update(mrpt::Clock::now()),
 		  m_rawlogEntry(0)
 	{
 		m_filSize = _in_rawlog.getTotalBytesCount();
@@ -87,7 +87,7 @@ class CRawlogProcessor
 				}
 
 			// Update status to the console?
-			const mrpt::system::TTimeStamp tNow = mrpt::system::now();
+			const mrpt::system::TTimeStamp tNow = mrpt::Clock::now();
 			if (mrpt::system::timeDifference(m_last_console_update, tNow) >
 				0.25)
 			{
@@ -176,23 +176,23 @@ class CRawlogProcessorOnEachObservation : public CRawlogProcessor
 		// within a "SF":
 		for (size_t idxObs = 0; true; idxObs++)
 		{
-			mrpt::obs::CObservation::Ptr* obs_indiv = nullptr;
+			mrpt::obs::CObservation::Ptr obs_indiv;
 			if (obs)
 			{
 				if (idxObs > 0) break;
-				obs_indiv = &obs;
+				obs_indiv = obs;
 			}
 			else if (SF)
 			{
 				if (idxObs >= SF->size()) break;
-				obs_indiv = &SF->getObservationByIndex(idxObs);
+				obs_indiv = SF->getObservationByIndex(idxObs);
 			}
 			else
 				break;	// shouldn't...
 
 			// Process "obs_indiv":
 			ASSERT_(obs_indiv);
-			if (!processOneObservation(*obs_indiv)) return false;
+			if (!processOneObservation(obs_indiv)) return false;
 		}
 
 		if (actions)

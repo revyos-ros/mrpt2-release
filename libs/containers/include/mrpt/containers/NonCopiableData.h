@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -31,10 +31,10 @@ class NonCopiableData
 	T data;
 
 	NonCopiableData(const NonCopiableData&) {}
-	NonCopiableData& operator=(const NonCopiableData& o) { return *this; }
+	NonCopiableData& operator=(const NonCopiableData&) { return *this; }
 
 	NonCopiableData(NonCopiableData&&) {}
-	NonCopiableData& operator=(NonCopiableData&& o) { return *this; }
+	NonCopiableData& operator=(NonCopiableData&&) { return *this; }
 };
 
 }  // namespace mrpt::containers

@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -36,7 +36,9 @@ bool tfest::se2_l2(
 }
 
 // Non-vectorized version
-static mrpt::tfest::internal::se2_l2_impl_return_t<float> se2_l2_impl(
+namespace
+{
+mrpt::tfest::internal::se2_l2_impl_return_t<float> se2_l2_impl(
 	const TMatchingPairList& in_correspondences)
 {
 	// SSE vectorized version:
@@ -81,6 +83,7 @@ static mrpt::tfest::internal::se2_l2_impl_return_t<float> se2_l2_impl(
 
 	return ret;
 }
+}  // namespace
 
 /*---------------------------------------------------------------
 			leastSquareErrorRigidTransformation

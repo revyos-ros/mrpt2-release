@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -29,9 +29,12 @@ MRPT_WARNING(
 #include <mrpt/maps/COctoMap.h>
 #include <mrpt/maps/CPointsMap.h>
 #include <mrpt/maps/CPointsMapXYZI.h>
+#include <mrpt/maps/CPointsMapXYZIRT.h>
 #include <mrpt/maps/CRandomFieldGridMap3D.h>
 #include <mrpt/maps/CReflectivityGridMap2D.h>
 #include <mrpt/maps/CSimplePointsMap.h>
+#include <mrpt/maps/CVoxelMap.h>
+#include <mrpt/maps/CVoxelMapRGB.h>
 #include <mrpt/maps/CWeightedPointsMap.h>
 #include <mrpt/maps/CWirelessPowerGridMap2D.h>
 

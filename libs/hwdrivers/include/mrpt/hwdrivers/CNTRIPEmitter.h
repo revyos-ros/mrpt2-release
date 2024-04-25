@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -20,8 +20,8 @@ namespace mrpt::hwdrivers
 /** This "virtual driver" encapsulates a NTRIP client (see CNTRIPClient) but
  * adds the functionality of dumping the received datastream to a given serial
  * port.
- *  Used within rawlog-grabber, along CGPSInterface, this class allows to build
- * a powerful & simple RTK-capable GPS receiver system.
+ *  Used within rawlog-grabber, along CGPSInterface, this class allows one to
+ * build a powerful & simple RTK-capable GPS receiver system.
  *
  *  Therefore, this sensor will never "collect" any observation via the
  * CGenericSensor interface.

@@ -7,6 +7,7 @@
 #include <mrpt/containers/yaml.h>
 #include <mrpt/core/aligned_allocator.h>
 #include <mrpt/img/TColor.h>
+#include <mrpt/img/color_maps.h>
 #include <mrpt/maps/CColouredOctoMap.h>
 #include <mrpt/maps/CMetricMap.h>
 #include <mrpt/maps/COctoMapBase.h>
@@ -63,7 +64,7 @@
 	PYBIND11_MAKE_OPAQUE(std::shared_ptr<void>)
 #endif
 
-// mrpt::maps::COctoMapBase<octomap::ColorOcTree, octomap::ColorOcTreeNode>::TInsertionOptions file:mrpt/maps/COctoMapBase.h line:73
+// mrpt::maps::COctoMapBase<octomap::ColorOcTree, octomap::ColorOcTreeNode>::TInsertionOptions file:mrpt/maps/COctoMapBase.h line:67
 struct PyCallBack_mrpt_maps_COctoMapBase_octomap_ColorOcTree_octomap_ColorOcTreeNode__TInsertionOptions : public mrpt::maps::COctoMapBase<octomap::ColorOcTree, octomap::ColorOcTreeNode>::TInsertionOptions {
 	using mrpt::maps::COctoMapBase<octomap::ColorOcTree, octomap::ColorOcTreeNode>::TInsertionOptions::TInsertionOptions;
 
@@ -95,7 +96,7 @@ struct PyCallBack_mrpt_maps_COctoMapBase_octomap_ColorOcTree_octomap_ColorOcTree
 	}
 };
 
-// mrpt::maps::COctoMapBase<octomap::ColorOcTree, octomap::ColorOcTreeNode>::TLikelihoodOptions file:mrpt/maps/COctoMapBase.h line:231
+// mrpt::maps::COctoMapBase<octomap::ColorOcTree, octomap::ColorOcTreeNode>::TLikelihoodOptions file:mrpt/maps/COctoMapBase.h line:225
 struct PyCallBack_mrpt_maps_COctoMapBase_octomap_ColorOcTree_octomap_ColorOcTreeNode__TLikelihoodOptions : public mrpt::maps::COctoMapBase<octomap::ColorOcTree, octomap::ColorOcTreeNode>::TLikelihoodOptions {
 	using mrpt::maps::COctoMapBase<octomap::ColorOcTree, octomap::ColorOcTreeNode>::TLikelihoodOptions::TLikelihoodOptions;
 
@@ -129,7 +130,7 @@ struct PyCallBack_mrpt_maps_COctoMapBase_octomap_ColorOcTree_octomap_ColorOcTree
 
 void bind_mrpt_maps_COctoMapBase(std::function< pybind11::module &(std::string const &namespace_) > &M)
 {
-	{ // mrpt::maps::COctoMapBase file:mrpt/maps/COctoMapBase.h line:45
+	{ // mrpt::maps::COctoMapBase file:mrpt/maps/COctoMapBase.h line:39
 		pybind11::class_<mrpt::maps::COctoMapBase<octomap::ColorOcTree,octomap::ColorOcTreeNode>, std::shared_ptr<mrpt::maps::COctoMapBase<octomap::ColorOcTree,octomap::ColorOcTreeNode>>, mrpt::maps::CMetricMap> cl(M("mrpt::maps"), "COctoMapBase_octomap_ColorOcTree_octomap_ColorOcTreeNode_t", "");
 		cl.def_readwrite("insertionOptions", &mrpt::maps::COctoMapBase<octomap::ColorOcTree,octomap::ColorOcTreeNode>::insertionOptions);
 		cl.def_readwrite("likelihoodOptions", &mrpt::maps::COctoMapBase<octomap::ColorOcTree,octomap::ColorOcTreeNode>::likelihoodOptions);
@@ -164,8 +165,8 @@ void bind_mrpt_maps_COctoMapBase(std::function< pybind11::module &(std::string c
 		cl.def_static("GetRuntimeClassIdStatic", (const struct mrpt::rtti::TRuntimeClassId & (*)()) &mrpt::maps::CMetricMap::GetRuntimeClassIdStatic, "C++: mrpt::maps::CMetricMap::GetRuntimeClassIdStatic() --> const struct mrpt::rtti::TRuntimeClassId &", pybind11::return_value_policy::automatic);
 		cl.def("clear", (void (mrpt::maps::CMetricMap::*)()) &mrpt::maps::CMetricMap::clear, "Erase all the contents of the map \n\nC++: mrpt::maps::CMetricMap::clear() --> void");
 		cl.def("isEmpty", (bool (mrpt::maps::CMetricMap::*)() const) &mrpt::maps::CMetricMap::isEmpty, "Returns true if the map is empty/no observation has been inserted.\n\nC++: mrpt::maps::CMetricMap::isEmpty() const --> bool");
-		cl.def("loadFromProbabilisticPosesAndObservations", (void (mrpt::maps::CMetricMap::*)(const class mrpt::maps::CSimpleMap &)) &mrpt::maps::CMetricMap::loadFromProbabilisticPosesAndObservations, "Load the map contents from a CSimpleMap object, erasing all previous\n content of the map. This is done invoking `insertObservation()` for each\n observation at the mean 3D robot pose of each pose-observations pair in\n the CSimpleMap object.\n\n \n insertObservation, CSimpleMap\n \n\n std::exception Some internal steps in invoked methods can\n raise exceptions on invalid parameters, etc...\n\nC++: mrpt::maps::CMetricMap::loadFromProbabilisticPosesAndObservations(const class mrpt::maps::CSimpleMap &) --> void", pybind11::arg("Map"));
-		cl.def("loadFromSimpleMap", (void (mrpt::maps::CMetricMap::*)(const class mrpt::maps::CSimpleMap &)) &mrpt::maps::CMetricMap::loadFromSimpleMap, "! \n\nC++: mrpt::maps::CMetricMap::loadFromSimpleMap(const class mrpt::maps::CSimpleMap &) --> void", pybind11::arg("Map"));
+		cl.def("boundingBox", (struct mrpt::math::TBoundingBox_<float> (mrpt::maps::CMetricMap::*)() const) &mrpt::maps::CMetricMap::boundingBox, "Returns the bounding box of the metric map, or (0,0,0)-(0,0,0) (the\n default value of mrpt::math::TBoundingBoxf() if not implemented in the\n derived class or the map is empty.\n\nC++: mrpt::maps::CMetricMap::boundingBox() const --> struct mrpt::math::TBoundingBox_<float>");
+		cl.def("loadFromSimpleMap", (void (mrpt::maps::CMetricMap::*)(const class mrpt::maps::CSimpleMap &)) &mrpt::maps::CMetricMap::loadFromSimpleMap, "Load the map contents from a CSimpleMap object, erasing all previous\n content of the map. This is done invoking `insertObservation()` for each\n observation at the mean 3D robot pose of each pose-observations pair in\n the CSimpleMap object.\n\n \n insertObservation, CSimpleMap\n \n\n std::exception Some internal steps in invoked methods can\n raise exceptions on invalid parameters, etc...\n\nC++: mrpt::maps::CMetricMap::loadFromSimpleMap(const class mrpt::maps::CSimpleMap &) --> void", pybind11::arg("Map"));
 		cl.def("insertObs", [](mrpt::maps::CMetricMap &o, const class mrpt::obs::CObservation & a0) -> bool { return o.insertObs(a0); }, "", pybind11::arg("obs"));
 		cl.def("insertObs", (bool (mrpt::maps::CMetricMap::*)(const class mrpt::obs::CObservation &, const class mrpt::poses::CPose3D *)) &mrpt::maps::CMetricMap::insertObs, "C++: mrpt::maps::CMetricMap::insertObs(const class mrpt::obs::CObservation &, const class mrpt::poses::CPose3D *) --> bool", pybind11::arg("obs"), pybind11::arg("robotPose"));
 		cl.def("insertObs", [](mrpt::maps::CMetricMap &o, const class mrpt::obs::CSensoryFrame & a0) -> bool { return o.insertObs(a0); }, "", pybind11::arg("sf"));
@@ -183,7 +184,7 @@ void bind_mrpt_maps_COctoMapBase(std::function< pybind11::module &(std::string c
 		cl.def("getAsSimplePointsMap", (class mrpt::maps::CSimplePointsMap * (mrpt::maps::CMetricMap::*)()) &mrpt::maps::CMetricMap::getAsSimplePointsMap, "C++: mrpt::maps::CMetricMap::getAsSimplePointsMap() --> class mrpt::maps::CSimplePointsMap *", pybind11::return_value_policy::automatic);
 		cl.def("assign", (class mrpt::maps::CMetricMap & (mrpt::maps::CMetricMap::*)(const class mrpt::maps::CMetricMap &)) &mrpt::maps::CMetricMap::operator=, "C++: mrpt::maps::CMetricMap::operator=(const class mrpt::maps::CMetricMap &) --> class mrpt::maps::CMetricMap &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 
-		{ // mrpt::maps::COctoMapBase<octomap::ColorOcTree, octomap::ColorOcTreeNode>::TInsertionOptions file:mrpt/maps/COctoMapBase.h line:73
+		{ // mrpt::maps::COctoMapBase<octomap::ColorOcTree, octomap::ColorOcTreeNode>::TInsertionOptions file:mrpt/maps/COctoMapBase.h line:67
 			auto & enclosing_class = cl;
 			pybind11::class_<mrpt::maps::COctoMapBase<octomap::ColorOcTree, octomap::ColorOcTreeNode>::TInsertionOptions, std::shared_ptr<mrpt::maps::COctoMapBase<octomap::ColorOcTree, octomap::ColorOcTreeNode>::TInsertionOptions>, PyCallBack_mrpt_maps_COctoMapBase_octomap_ColorOcTree_octomap_ColorOcTreeNode__TInsertionOptions, mrpt::config::CLoadableOptions> cl(enclosing_class, "TInsertionOptions", "");
 			cl.def( pybind11::init<class mrpt::maps::COctoMapBase<class octomap::ColorOcTree, class octomap::ColorOcTreeNode> &>(), pybind11::arg("parent") );
@@ -212,7 +213,7 @@ void bind_mrpt_maps_COctoMapBase(std::function< pybind11::module &(std::string c
 			cl.def("getClampingThresMaxLog", (float (mrpt::maps::COctoMapBase<octomap::ColorOcTree, octomap::ColorOcTreeNode>::TInsertionOptions::*)() const) &mrpt::maps::COctoMapBase<octomap::ColorOcTree, octomap::ColorOcTreeNode>::TInsertionOptions::getClampingThresMaxLog, "C++: mrpt::maps::COctoMapBase<octomap::ColorOcTree, octomap::ColorOcTreeNode>::TInsertionOptions::getClampingThresMaxLog() const --> float");
 		}
 
-		{ // mrpt::maps::COctoMapBase<octomap::ColorOcTree, octomap::ColorOcTreeNode>::TLikelihoodOptions file:mrpt/maps/COctoMapBase.h line:231
+		{ // mrpt::maps::COctoMapBase<octomap::ColorOcTree, octomap::ColorOcTreeNode>::TLikelihoodOptions file:mrpt/maps/COctoMapBase.h line:225
 			auto & enclosing_class = cl;
 			pybind11::class_<mrpt::maps::COctoMapBase<octomap::ColorOcTree, octomap::ColorOcTreeNode>::TLikelihoodOptions, std::shared_ptr<mrpt::maps::COctoMapBase<octomap::ColorOcTree, octomap::ColorOcTreeNode>::TLikelihoodOptions>, PyCallBack_mrpt_maps_COctoMapBase_octomap_ColorOcTree_octomap_ColorOcTreeNode__TLikelihoodOptions, mrpt::config::CLoadableOptions> cl(enclosing_class, "TLikelihoodOptions", "");
 			cl.def( pybind11::init( [](){ return new mrpt::maps::COctoMapBase<octomap::ColorOcTree, octomap::ColorOcTreeNode>::TLikelihoodOptions(); }, [](){ return new PyCallBack_mrpt_maps_COctoMapBase_octomap_ColorOcTree_octomap_ColorOcTreeNode__TLikelihoodOptions(); } ) );
@@ -225,7 +226,7 @@ void bind_mrpt_maps_COctoMapBase(std::function< pybind11::module &(std::string c
 			cl.def("assign", (struct mrpt::maps::COctoMapBase<class octomap::ColorOcTree, class octomap::ColorOcTreeNode>::TLikelihoodOptions & (mrpt::maps::COctoMapBase<octomap::ColorOcTree, octomap::ColorOcTreeNode>::TLikelihoodOptions::*)(const struct mrpt::maps::COctoMapBase<class octomap::ColorOcTree, class octomap::ColorOcTreeNode>::TLikelihoodOptions &)) &mrpt::maps::COctoMapBase<octomap::ColorOcTree, octomap::ColorOcTreeNode>::TLikelihoodOptions::operator=, "C++: mrpt::maps::COctoMapBase<octomap::ColorOcTree, octomap::ColorOcTreeNode>::TLikelihoodOptions::operator=(const struct mrpt::maps::COctoMapBase<class octomap::ColorOcTree, class octomap::ColorOcTreeNode>::TLikelihoodOptions &) --> struct mrpt::maps::COctoMapBase<class octomap::ColorOcTree, class octomap::ColorOcTreeNode>::TLikelihoodOptions &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 		}
 
-		{ // mrpt::maps::COctoMapBase<octomap::ColorOcTree, octomap::ColorOcTreeNode>::TRenderingOptions file:mrpt/maps/COctoMapBase.h line:259
+		{ // mrpt::maps::COctoMapBase<octomap::ColorOcTree, octomap::ColorOcTreeNode>::TRenderingOptions file:mrpt/maps/COctoMapBase.h line:253
 			auto & enclosing_class = cl;
 			pybind11::class_<mrpt::maps::COctoMapBase<octomap::ColorOcTree, octomap::ColorOcTreeNode>::TRenderingOptions, std::shared_ptr<mrpt::maps::COctoMapBase<octomap::ColorOcTree, octomap::ColorOcTreeNode>::TRenderingOptions>> cl(enclosing_class, "TRenderingOptions", "");
 			cl.def( pybind11::init( [](){ return new mrpt::maps::COctoMapBase<octomap::ColorOcTree, octomap::ColorOcTreeNode>::TRenderingOptions(); } ) );

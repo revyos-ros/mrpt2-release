@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -102,7 +102,9 @@ void ffff(
 }
 #endif
 
-static void aux_posequat2poseypr(
+namespace
+{
+void aux_posequat2poseypr(
 	const CVectorFixedDouble<7>& x, [[maybe_unused]] const double& dummy,
 	CVectorFixedDouble<6>& y)
 {
@@ -113,6 +115,7 @@ static void aux_posequat2poseypr(
 	q.normalize();
 	q.rpy(y[5], y[4], y[3]);
 }
+}  // namespace
 
 /*---------------------------------------------------------------
 					CPose3DPDFGaussian

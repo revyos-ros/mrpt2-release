@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -43,7 +43,7 @@ class CRobot2NavInterfaceForSimulator_Holo : public CRobot2NavInterface
 	{
 		curPose = m_simul.getCurrentGTPose();
 		curVel = m_simul.getCurrentGTVel();
-		timestamp = mrpt::system::now();
+		timestamp = mrpt::Clock::now();
 		curOdometry = m_simul.getCurrentOdometricPose();
 		return true;  // ok
 	}
@@ -129,7 +129,7 @@ class CRobot2NavInterfaceForSimulator_DiffDriven : public CRobot2NavInterface
 	{
 		curPose = m_simul.getCurrentGTPose();
 		curVel = m_simul.getCurrentGTVel();
-		timestamp = mrpt::system::now();
+		timestamp = mrpt::Clock::now();
 		curOdometry = m_simul.getCurrentOdometricPose();
 		return true;  // ok
 	}

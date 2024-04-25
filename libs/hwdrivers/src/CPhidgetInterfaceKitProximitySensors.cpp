@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -264,11 +264,11 @@ void CPhidgetInterfaceKitProximitySensors::getObservation(
 	[[maybe_unused]] mrpt::obs::CObservationRange& obs)
 {
 #if MRPT_HAS_PHIDGET
-	obs.timestamp = mrpt::system::getCurrentTime();
+	obs.timestamp = mrpt::Clock::now();
 	obs.sensorLabel = m_sensorLabel;
 	obs.minSensorDistance = m_minOfMinRanges;
 	obs.maxSensorDistance = m_maxOfMaxRanges;
-	obs.sensorConeApperture =
+	obs.sensorConeAperture =
 		DEG2RAD(2.0f);	// TODO : Adapt to real sensor cone apperture.
 	obs.sensedData.clear();
 

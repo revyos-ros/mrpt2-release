@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -156,8 +156,7 @@ DECLARE_OP_FUNCTION(op_export_gps_gas_kml)
 				"    <name>GPS-GAS Paths</name>\n"
 				"    <description>GPS-GAS paths from dataset "
 				"'%s'</description>\n",
-				mrpt::system::dateTimeLocalToString(mrpt::system::now())
-					.c_str(),
+				mrpt::system::dateTimeLocalToString(mrpt::Clock::now()).c_str(),
 				m_inFile.c_str(), m_inFile.c_str());
 
 			// For each GPS sensor label:

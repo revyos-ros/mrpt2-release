@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -432,13 +432,7 @@ void CPointCloud::markAllPointsAsNew()
 
 /** In a base class, reserve memory to prepare subsequent calls to
  * PLY_import_set_vertex */
-void CPointCloud::PLY_import_set_vertex_count(size_t N)
-{
-	std::unique_lock<std::shared_mutex> wfWriteLock(
-		CRenderizableShaderPoints::m_pointsMtx.data);
-
-	this->resize(N);
-}
+void CPointCloud::PLY_import_set_vertex_count(size_t N) { this->resize(N); }
 
 /** In a base class, will be called after PLY_import_set_vertex_count() once
  * for each loaded point. \param pt_color Will be nullptr if the loaded file
@@ -448,9 +442,6 @@ void CPointCloud::PLY_import_set_vertex(
 	size_t idx, const mrpt::math::TPoint3Df& pt,
 	[[maybe_unused]] const mrpt::img::TColorf* pt_color)
 {
-	std::unique_lock<std::shared_mutex> wfWriteLock(
-		CRenderizableShaderPoints::m_pointsMtx.data);
-
 	this->setPoint(idx, pt.x, pt.y, pt.z);
 }
 
@@ -491,5 +482,4 @@ void CPointCloud::toYAMLMap(mrpt::containers::yaml& propertiesMap) const
 {
 	CRenderizable::toYAMLMap(propertiesMap);
 	propertiesMap["point_count"] = m_points.size();
-	propertiesMap["bounding_box"] = this->getBoundingBox().asString();
 }

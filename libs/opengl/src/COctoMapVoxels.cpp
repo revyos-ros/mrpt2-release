@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -259,7 +259,7 @@ CArchive& operator>>(CArchive& in, COctoMapVoxels::TVoxel& a)
 }
 }  // end of namespace mrpt::opengl
 
-uint8_t COctoMapVoxels::serializeGetVersion() const { return 3; }
+uint8_t COctoMapVoxels::serializeGetVersion() const { return 4; }
 void COctoMapVoxels::serializeTo(CArchive& out) const
 {
 	writeToStreamRender(out);
@@ -270,6 +270,7 @@ void COctoMapVoxels::serializeTo(CArchive& out) const
 		<< m_enable_cube_transparency  // added in v1
 		<< uint32_t(m_visual_mode);	 // added in v2
 	CRenderizableShaderTriangles::params_serialize(out);  // v3
+	out.WriteAs<uint8_t>(m_color_map);	// v4
 }
 
 void COctoMapVoxels::serializeFrom(CArchive& in, uint8_t version)
@@ -280,6 +281,7 @@ void COctoMapVoxels::serializeFrom(CArchive& in, uint8_t version)
 		case 1:
 		case 2:
 		case 3:
+		case 4:
 		{
 			readFromStreamRender(in);
 
@@ -304,6 +306,10 @@ void COctoMapVoxels::serializeFrom(CArchive& in, uint8_t version)
 
 			if (version >= 3)
 				CRenderizableShaderTriangles::params_deserialize(in);
+
+			if (version >= 4)
+				m_color_map =
+					static_cast<mrpt::img::TColormap>(in.ReadAs<uint8_t>());
 		}
 		break;
 		default: MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version);

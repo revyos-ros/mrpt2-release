@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -74,9 +74,25 @@ class CConfigFileBase
 	/** Returns a list with all the section names. */
 	virtual void getAllSections(std::vector<std::string>& sections) const = 0;
 
+	/** Returns, by value, a list with all the section names. */
+	std::vector<std::string> sections() const
+	{
+		std::vector<std::string> ret;
+		getAllSections(ret);
+		return ret;
+	}
+
 	/** Returs a list with all the keys into a section */
 	virtual void getAllKeys(
 		const std::string& section, std::vector<std::string>& keys) const = 0;
+
+	/** Returs, by value, a list with all the keys into a section */
+	std::vector<std::string> keys(const std::string& section) const
+	{
+		std::vector<std::string> keys;
+		getAllKeys(section, keys);
+		return keys;
+	}
 
 	/** Checks if a given section exists (name is case insensitive)
 	 * \sa keyExists() */

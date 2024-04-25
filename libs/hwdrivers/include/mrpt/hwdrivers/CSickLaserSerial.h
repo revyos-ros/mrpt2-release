@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -201,12 +201,12 @@ class CSickLaserSerial : public C2DRangeFinderAbstract
 	/** Enables the scanning mode (in this class this has no effect).
 	 * \return If everything works "true", or "false" if there is any error.
 	 */
-	bool turnOn() override;
+	[[nodiscard]] bool turnOn() override;
 
 	/** Disables the scanning mode (in this class this has no effect).
 	 * \return If everything works "true", or "false" if there is any error.
 	 */
-	bool turnOff() override;
+	[[nodiscard]] bool turnOff() override;
 
 };	// End of class
 

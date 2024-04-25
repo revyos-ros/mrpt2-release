@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -155,8 +155,8 @@ DECLARE_OP_FUNCTION(op_stereo_rectify)
 
 						// This is needed to raise an exception of the correct
 						// type that reveal any missing external file:
-						o->imageLeft.getWidth();
-						o->imageRight.getWidth();
+						[[maybe_unused]] auto wL = o->imageLeft.getWidth();
+						[[maybe_unused]] auto wR = o->imageRight.getWidth();
 
 						// This call rectifies the images in-place and also
 						// updates
@@ -165,19 +165,23 @@ DECLARE_OP_FUNCTION(op_stereo_rectify)
 
 						const string label_time = format(
 							"%s_%f", o->sensorLabel.c_str(),
-							timestampTotime_t(o->timestamp));
+							mrpt::Clock::toDouble(o->timestamp));
 						{
 							const string fileName = string("img_") +
 								label_time + string("_left.") +
 								imgFileExtension;
-							o->imageLeft.saveToFile(outDir + fileName);
+							bool savedOk =
+								o->imageLeft.saveToFile(outDir + fileName);
+							ASSERT_(savedOk);
 							o->imageLeft.setExternalStorage(fileName);
 						}
 						{
 							const string fileName = string("img_") +
 								label_time + string("_right.") +
 								imgFileExtension;
-							o->imageRight.saveToFile(outDir + fileName);
+							bool savedOk =
+								o->imageRight.saveToFile(outDir + fileName);
+							ASSERT_(savedOk);
 							o->imageRight.setExternalStorage(fileName);
 						}
 						m_changedCams++;

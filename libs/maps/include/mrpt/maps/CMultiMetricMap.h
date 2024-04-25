@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -34,6 +34,7 @@ class TSetOfMetricMapInitializers;
  *	- mrpt::maps::COccupancyGridMap3D: 3D occupancy voxel map.
  *	- mrpt::maps::COctoMap: For 3D occupancy grids of variable resolution,
  *    with octrees (based on the library `octomap`).
+ *  - mrpt::maps::CVoxelMap or mrpt::maps::CVoxelMapRGB: 3D sparse voxel maps.
  *	- mrpt::maps::CColouredOctoMap: The same than above, but nodes can store
  *    RGB data appart from occupancy.
  *	- mrpt::maps::CLandmarksMap: For visual landmarks,etc...
@@ -219,12 +220,7 @@ class CMultiMetricMap : public mrpt::maps::CMetricMap
 	const mrpt::maps::CSimplePointsMap* getAsSimplePointsMap() const override;
 
 	/** Returns a short description of the map. */
-	std::string asString() const override
-	{
-		return mrpt::format(
-			"Multi-map with %u children.",
-			static_cast<unsigned int>(maps.size()));
-	}
+	std::string asString() const override;
 
    protected:
 	// See base class docs:

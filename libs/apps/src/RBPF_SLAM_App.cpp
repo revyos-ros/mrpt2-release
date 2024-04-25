@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -396,8 +396,9 @@ void RBPF_SLAM_App_Base::run()
 				{
 					mrpt::img::CImage img;
 					mapBuilder->drawCurrentEstimationToImage(&img);
-					img.saveToFile(
+					bool savedOk = img.saveToFile(
 						format("%s/mapping_%05u.png", OUT_DIR, step));
+					ASSERT_(savedOk);
 				}
 			}
 

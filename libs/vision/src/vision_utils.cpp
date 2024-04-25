@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -111,7 +111,7 @@ void vision::openCV_cross_correlation(
 	// Compute cross correlation:
 	cv::matchTemplate(
 		img_region_to_search.asCvMat<cv::Mat>(SHALLOW_COPY),
-		patch_im.asCvMat<cv::Mat>(SHALLOW_COPY), result, CV_TM_CCORR_NORMED);
+		patch_im.asCvMat<cv::Mat>(SHALLOW_COPY), result, cv::TM_CCORR_NORMED);
 
 	// Find the max point:
 	double mini;

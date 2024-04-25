@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -123,9 +123,9 @@ void TestDisplay3D()
 	while (!end && win.isOpen())
 	{
 		// Move the scene:
-		Scene::Ptr& theScene = win.get3DSceneAndLock();
+		Scene::Ptr& scene = win.get3DSceneAndLock();
 
-		opengl::CRenderizable::Ptr obj1 = theScene->getByName("ball_1");
+		opengl::CRenderizable::Ptr obj1 = scene->getByName("ball_1");
 		const double t = timer.Tac();
 		const double R = 8;
 		const double W = 5.0, Q = 3.3;

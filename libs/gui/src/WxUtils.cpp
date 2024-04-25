@@ -2,13 +2,14 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
 
 #include "gui-precomp.h"  // Precompiled headers
 //
+#include <mrpt/core/round.h>
 #include <mrpt/gui/WxUtils.h>
 #include <mrpt/img/CImage.h>
 #include <mrpt/system/filesystem.h>
@@ -931,6 +932,14 @@ mrptKeyModifier mrpt::gui::keyEventToMrptKeyModifier(const wxKeyEvent& ev)
 	if (ev.MetaDown()) mod |= MRPTKMOD_META;
 	if (ev.ShiftDown()) mod |= MRPTKMOD_SHIFT;
 	return mrptKeyModifier(mod);
+}
+
+wxSize mrpt::gui::GetScaledClientSize(const wxWindow* w)
+{
+	int width, height;
+	w->GetClientSize(&width, &height);
+	const double s = w->GetContentScaleFactor();
+	return wxSize(mrpt::round(s * width), mrpt::round(s * height));
 }
 
 #endif	// MRPT_HAS_WXWIDGETS

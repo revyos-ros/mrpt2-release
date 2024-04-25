@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -25,11 +25,11 @@ TEST(CConfigFileMemory, readwrite)
 
 TEST(CConfigFileMemory, Sections)
 {
-	std::vector<std::string> sections;
 	mrpt::config::CConfigFileMemory second;
 	second.write("one", "name", "val");
 	second.write("two", "names", "value");
-	second.getAllSections(sections);
+
+	const std::vector<std::string> sections = second.sections();
 	EXPECT_EQ(2U, sections.size());
 	if (sections.size() == 2)
 	{  // avoid potential crash if fails
@@ -40,11 +40,11 @@ TEST(CConfigFileMemory, Sections)
 
 TEST(CConfigFileMemory, Names)
 {
-	std::vector<std::string> names;
 	mrpt::config::CConfigFileMemory third;
 	third.write("sec", "name", "val");
 	third.write("sec", "names", "value");
-	third.getAllKeys("sec", names);
+
+	const std::vector<std::string> names = third.keys("sec");
 	EXPECT_EQ(2U, names.size());
 	if (names.size() == 2)
 	{  // avoid potential crash if fails

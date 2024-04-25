@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -23,7 +23,7 @@ void CObjectDetection::detectObjects(
 	const mrpt::img::CImage* img, vector_detectable_object& detected)
 {
 	mrpt::obs::CObservationImage o;
-	o.timestamp = mrpt::system::now();
+	o.timestamp = mrpt::Clock::now();
 	o.image = img->makeShallowCopy();
 	this->detectObjects_Impl(o, detected);
 }

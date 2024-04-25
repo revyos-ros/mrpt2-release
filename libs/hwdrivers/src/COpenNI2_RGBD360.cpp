@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -178,7 +178,7 @@ void COpenNI2_RGBD360::getNextObservation(
 	// Set range image --------------------------
 	if (m_grab_depth || m_grab_3D_points) newObs.hasRangeImage = true;
 
-	newObs.timestamp = mrpt::system::getCurrentTime();
+	newObs.timestamp = mrpt::Clock::now();
 
 	for (unsigned sensor_id = 0; sensor_id < (unsigned int)NUM_SENSORS;
 		 sensor_id++)

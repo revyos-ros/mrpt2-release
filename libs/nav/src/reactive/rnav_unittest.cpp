@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -88,7 +88,7 @@ void run_rnav_test_impl(
 			mrpt::system::TTimeStamp& timestamp) override
 		{
 			obstacles.clear();
-			timestamp = mrpt::system::now();
+			timestamp = mrpt::Clock::now();
 
 			mrpt::math::TPose2D curPose, odomPose;
 			std::string pose_frame_id;

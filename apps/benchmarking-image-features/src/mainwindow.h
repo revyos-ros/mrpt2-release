@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -491,8 +491,6 @@ class MainWindow : public QMainWindow
 
 	QLabel* images_plots_sift_surf;	 //!< Label which holds the image to show
 	//! the descriptor distance splot
-
-	double mouse_x, mouse_y;  //!< stores the coordinates of the mouse click
 
 	bool flag_descriptor_match;	 //!< this is used to fix the overlaying of
 	//! labels on top of each other.

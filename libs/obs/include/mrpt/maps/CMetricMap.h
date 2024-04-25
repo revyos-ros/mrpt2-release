@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -12,6 +12,7 @@
 #include <mrpt/maps/CMetricMapEvents.h>
 #include <mrpt/maps/TMetricMapInitializer.h>
 #include <mrpt/maps/metric_map_types.h>
+#include <mrpt/math/TBoundingBox.h>
 #include <mrpt/math/math_frwds.h>
 #include <mrpt/obs/CObservation.h>
 #include <mrpt/obs/obs_frwds.h>
@@ -113,6 +114,15 @@ class CMetricMap : public mrpt::serialization::CSerializable,
 	 */
 	virtual bool isEmpty() const = 0;
 
+	/** Returns the bounding box of the metric map, or (0,0,0)-(0,0,0) (the
+	 * default value of mrpt::math::TBoundingBoxf() if not implemented in the
+	 * derived class or the map is empty.
+	 */
+	virtual auto boundingBox() const -> mrpt::math::TBoundingBoxf
+	{
+		return {};	// default impl: no bbox
+	}
+
 	/** Load the map contents from a CSimpleMap object, erasing all previous
 	 * content of the map. This is done invoking `insertObservation()` for each
 	 * observation at the mean 3D robot pose of each pose-observations pair in
@@ -122,14 +132,7 @@ class CMetricMap : public mrpt::serialization::CSerializable,
 	 * \exception std::exception Some internal steps in invoked methods can
 	 * raise exceptions on invalid parameters, etc...
 	 */
-	void loadFromProbabilisticPosesAndObservations(
-		const mrpt::maps::CSimpleMap& Map);
-
-	///! \overload
-	inline void loadFromSimpleMap(const mrpt::maps::CSimpleMap& Map)
-	{
-		loadFromProbabilisticPosesAndObservations(Map);
-	}
+	void loadFromSimpleMap(const mrpt::maps::CSimpleMap& Map);
 
 	/** Insert the observation information into this map. This method must be
 	 * implemented in derived classes.

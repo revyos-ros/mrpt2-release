@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -137,6 +137,9 @@ std::string mrpt::system::unitsFormat(
 	char prefix;
 	double mult;
 	const double aVal = std::abs(val);
+
+	// special case for 0:
+	if (val == 0) return middle_space ? "0 " : "0";
 
 	if (aVal >= 1e12)
 	{
@@ -320,8 +323,10 @@ bool mrpt::system::strStartsI(const std::string& s1, const std::string& s2)
 		s2.size());	 // if s1 is shorter it's not a problem
 }
 
+namespace
+{
 template <typename STRING_LIST>
-static void impl_stringListAsString(
+void impl_stringListAsString(
 	const STRING_LIST& lst, std::string& outText, const std::string& newline)
 {
 	const size_t lenNL = newline.size();
@@ -344,6 +349,7 @@ static void impl_stringListAsString(
 			outText[curPos++] = sNL;
 	}
 }
+}  // namespace
 
 void mrpt::system::stringListAsString(
 	const std::vector<std::string>& lst, std::string& outText,

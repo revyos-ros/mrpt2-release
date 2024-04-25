@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -12,6 +12,8 @@
 #include <mrpt/core/round.h>  // for round()
 #include <mrpt/math/TPose3D.h>
 #include <mrpt/serialization/CSerializable.h>
+
+#include <tuple>
 
 namespace mrpt::poses
 {
@@ -64,6 +66,8 @@ class CPose3DGridTemplate
 	std::vector<T> m_data;
 
    public:
+	const std::vector<T>& data() const { return m_data; }
+
 	/** Default constructor:
 	 */
 	CPose3DGridTemplate(
@@ -248,6 +252,37 @@ class CPose3DGridTemplate
 	{
 		return const_cast<T*>(const_cast<const self_t&>(*this).getByIndex(
 			cx, cy, cz, cY, cP, cR));
+	}
+
+	/** (x,y,z,yaw,pitch,roll) indices to absolute index in raw data container
+	 */
+	size_t idx2absidx(
+		size_t cx, size_t cy, size_t cz, size_t cYaw, size_t cPitch,
+		size_t cRoll) const
+	{
+		return cx + m_sizeX * cy + m_size_xy * cz + m_size_xyz * cYaw +
+			m_size_xyzY * cPitch + m_size_xyzYP * cRoll;
+	}
+
+	/** absolute index to (x,y,z,yaw,pitch,roll) indices */
+	std::tuple<size_t, size_t, size_t, size_t, size_t, size_t> absidx2idx(
+		size_t absIdx) const
+	{
+		const size_t cR = absIdx / m_size_xyzYP;
+		const size_t r1 = absIdx % m_size_xyzYP;
+
+		const size_t cP = r1 / m_size_xyzY;
+		const size_t r2 = r1 % m_size_xyzY;
+
+		const size_t cY = r2 / m_size_xyz;
+		const size_t r3 = r2 % m_size_xyz;
+
+		const size_t cz = r3 / m_size_xy;
+		const size_t r4 = r3 % m_size_xy;
+		const size_t cy = r4 / m_sizeX;
+		const size_t cx = r4 % m_sizeX;
+
+		return {cx, cy, cz, cY, cP, cR};
 	}
 
 	/** Returns a XY slice of the grid, for given constant z,yaw, pitch and

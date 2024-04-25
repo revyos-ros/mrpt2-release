@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -64,7 +64,7 @@ struct TMetricMapInitializer : public mrpt::config::CLoadableOptions
 
 	/** Looks up in the registry of known map types and call the corresponding
 	 * `<metric_map_class>::MapDefinition()`. */
-	static TMetricMapInitializer* factory(const std::string& mapClassName);
+	static Ptr factory(const std::string& mapClassName);
 
    protected:
 	TMetricMapInitializer(const mrpt::rtti::TRuntimeClassId* classID);
@@ -97,7 +97,7 @@ class TSetOfMetricMapInitializers : public mrpt::config::CLoadableOptions
 	template <typename MAP_DEFINITION>
 	void push_back(const MAP_DEFINITION& o)
 	{
-		m_list.push_back(TMetricMapInitializer::Ptr(new MAP_DEFINITION(o)));
+		m_list.push_back(std::make_shared<MAP_DEFINITION>(o));
 	}
 
 	void push_back(const TMetricMapInitializer::Ptr& o) { m_list.push_back(o); }
@@ -124,8 +124,6 @@ class TSetOfMetricMapInitializers : public mrpt::config::CLoadableOptions
 	 *  colourOctoMap_count=<Number of mrpt::slam::CColourOctoMap maps>
 	 *  gasGrid_count=<Number of mrpt::maps::CGasConcentrationGridMap2D maps>
 	 *  wifiGrid_count=<Number of mrpt::maps::CWirelessPowerGridMap2D maps>
-	 *  landmarksMap_count=<0 or 1, for creating a mrpt::maps::CLandmarksMap
-	 *map>
 	 *  beaconMap_count=<0 or 1, for creating a mrpt::maps::CBeaconMap map>
 	 *  pointsMap_count=<Number of mrpt::maps::CSimplePointsMap map>
 	 *  heightMap_count=<Number of mrpt::maps::CHeightGridMap2D maps>
@@ -135,6 +133,8 @@ class TSetOfMetricMapInitializers : public mrpt::config::CLoadableOptions
 	 *mrpt::maps::CColouredPointsMap map>
 	 *  weightedPointsMap_count=<0 or 1, for creating a
 	 *mrpt::maps::CWeightedPointsMap map>
+	 *  mrpt::maps::CVoxelMap_count=[0|1]
+	 *  mrpt::maps::CVoxelMapRGB_count=[0|1]
 	 *
 	 * // ====================================================
 	 * //  Creation Options for OccupancyGridMap ##:

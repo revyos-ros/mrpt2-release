@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -64,7 +64,7 @@ TEST(rtti, MyDerived1_CLASSID)
 
 	// RTTI IS_DERIVED(*)
 	{
-		auto p = mrpt::rtti::CObject::Ptr(new MyNS::MyDerived1);
+		auto p = mrpt::rtti::CObject::Ptr(std::make_shared<MyNS::MyDerived1>());
 		EXPECT_TRUE(IS_DERIVED(*p, MyNS::MyDerived1));
 		EXPECT_TRUE(IS_DERIVED(*p, mrpt::rtti::CObject));
 	}

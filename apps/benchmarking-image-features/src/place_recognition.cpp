@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -30,8 +30,8 @@ PlaceRecognition::PlaceRecognition(
 	int NumFeats)
 	: training_paths(TrainingPaths),
 	  testing_paths(TestingPaths),
-	  numFeats(NumFeats),
 	  desc_to_compute(DescToCompute),
+	  numFeats(NumFeats),
 	  descriptor_selected(DescriptorSelected),
 	  len_training(training_paths.size()),
 	  len_testing(testing_paths.size())
@@ -94,8 +94,8 @@ int PlaceRecognition::predictLabel2(
 	std::vector<int>& training_word_labels, int total_vocab_size,
 	int current_image)
 {
-	CFeatureList feats_testing = feats_testingAll[current_image];
-	int feats_size = feats_testing.size();
+	CFeatureList feats = feats_testingAll[current_image];
+	int feats_size = feats.size();
 
 	/// PUT A CONDITION IF feats_size =0 OUTPUT A RANDOM CLASS INSTEAD OF GOING
 	/// THROUGH BLANK STUFF, actually kinda doing that only currently
@@ -113,11 +113,11 @@ int PlaceRecognition::predictLabel2(
 		vector<uint8_t> temp_feat;
 
 		if (descriptor_selected == 5)
-			temp_feat = feats_testing.getByID(i)->descriptors.ORB.value();
+			temp_feat = feats.getByID(i)->descriptors.ORB.value();
 		else if (descriptor_selected == 6)
-			temp_feat = feats_testing.getByID(i)->descriptors.BLD.value();
+			temp_feat = feats.getByID(i)->descriptors.BLD.value();
 		else if (descriptor_selected == 7)
-			temp_feat = feats_testing.getByID(i)->descriptors.LATCH.value();
+			temp_feat = feats.getByID(i)->descriptors.LATCH.value();
 
 		long descriptor_size = temp_feat.size();
 		/// following for loop iterates over the entire vocabulary in the
@@ -145,7 +145,7 @@ int PlaceRecognition::predictLabel2(
 
 		}  // iterates over each key-point in the training images / dataset
 
-	}  // end of outter loop iterates over each key-point
+	}  // end of outer loop iterates over each key-point
 
 	for (int i = 0; i < feats_size; i++)
 		cout << labels[i] << " ";
@@ -161,8 +161,8 @@ int PlaceRecognition::predictLabel(
 	std::vector<int>& training_word_labels, int total_vocab_size,
 	int current_image)
 {
-	CFeatureList feats_testing = feats_testingAll[current_image];
-	int feats_size = feats_testing.size();
+	CFeatureList feats = feats_testingAll[current_image];
+	int feats_size = feats.size();
 
 	/// PUT A CONDITION IF feats_size =0 OUTPUT A RANDOM CLASS INSTEAD OF GOING
 	/// THROUGH BLANK STUFF, actually kinda doing that only currently
@@ -176,9 +176,9 @@ int PlaceRecognition::predictLabel(
 		double min = std::numeric_limits<double>::max();  // 99999;
 		vector<float> temp_feat;
 		if (descriptor_selected == 1)
-			temp_feat = feats_testing.getByID(i)->descriptors.SURF.value();
+			temp_feat = feats.getByID(i)->descriptors.SURF.value();
 		else if (descriptor_selected == 2)
-			temp_feat = feats_testing.getByID(i)->descriptors.SpinImg.value();
+			temp_feat = feats.getByID(i)->descriptors.SpinImg.value();
 
 		long descriptor_size = temp_feat.size();
 
@@ -207,7 +207,7 @@ int PlaceRecognition::predictLabel(
 				}
 			}
 		}  // iterates over each key-point in the training images / dataset
-	}  // end of outter loop iterates over each key-point
+	}  // end of outer loop iterates over each key-point
 
 	for (int i = 0; i < feats_size; i++)
 		cout << labels[i] << " ";
@@ -264,14 +264,18 @@ string PlaceRecognition::startPlaceRecognition(CFeatureExtraction fext)
 	{
 		for (int i = 0; i < len_training; i++)
 		{
-			training[i].loadFromFile(training_paths.at(i));
+			bool loadOk = training[i].loadFromFile(training_paths.at(i));
+			ASSERT_(loadOk);
+
 			fext.detectFeatures(training[i], feats_training[i], 0, numFeats);
 			fext.computeDescriptors(
 				training[i], feats_training[i], desc_to_compute);
 		}
 		for (int i = 0; i < len_testing; i++)
 		{
-			testing[i].loadFromFile(testing_paths.at(i));
+			bool loadOk = testing[i].loadFromFile(testing_paths.at(i));
+			ASSERT_(loadOk);
+
 			fext.detectFeatures(testing[i], feats_testing[i], 0, numFeats);
 			fext.computeDescriptors(
 				testing[i], feats_testing[i], desc_to_compute);

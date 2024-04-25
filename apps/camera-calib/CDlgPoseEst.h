@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -56,7 +56,6 @@ class CDlgPoseEst : public wxDialog
 	wxTextCtrl* edLengthY;
 	wxButton* btnClose;
 	wxCheckBox* cbNormalize;
-	wxRadioBox* rbMethod;
 	mrpt::gui::wxMRPTImageControl* m_realtimeview;
 	wxSpinCtrl* edSizeY;
 	wxStaticText* StaticText1;
@@ -132,7 +131,6 @@ class CDlgPoseEst : public wxDialog
 	unsigned int m_check_size_x;
 	unsigned int m_check_size_y;
 	bool m_normalize_image;
-	bool m_useScaramuzzaAlternativeDetector;
 	mrpt::hwdrivers::CCameraSensor::Ptr m_video;
 	CMyGLCanvas* m_3Dview_cam;
 	mrpt::vision::pnp::CPnP pnp_algos;

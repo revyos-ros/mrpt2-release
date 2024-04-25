@@ -502,7 +502,7 @@ class CMyReactInterface
 	{
 		curPose = robotSim.getCurrentGTPose();
 		curVel = robotSim.getCurrentGTVel();
-		timestamp = mrpt::system::now();
+		timestamp = mrpt::Clock::now();
 		odomPose = robotSim.getCurrentOdometricPose();
 		return true;
 	}
@@ -527,7 +527,7 @@ class CMyReactInterface
 
 			obstacles.insertObservation(lasers[i].m_scan);
 		}
-		timestamp = mrpt::system::now();
+		timestamp = mrpt::Clock::now();
 
 		// Depth scans
 		for (unsigned int i = 0; i < kinects.size(); i++)
@@ -568,13 +568,18 @@ class CMyReactInterface
 
 		// Maps are loaded here. Different maps can be loaded changing these
 		// lines  and including them above (#define...)
-		myImg.loadFromXPM(map2_1_xpm);
+		bool loadOk = myImg.loadFromXPM(map2_1_xpm);
+		ASSERT_(loadOk);
 		grid.loadFromBitmap(myImg, resolution);
 		maps.push_back(grid);
-		myImg.loadFromXPM(map2_2_xpm);
+
+		loadOk = myImg.loadFromXPM(map2_2_xpm);
+		ASSERT_(loadOk);
 		grid.loadFromBitmap(myImg, resolution);
 		maps.push_back(grid);
-		myImg.loadFromXPM(map2_3_xpm);
+
+		loadOk = myImg.loadFromXPM(map2_3_xpm);
+		ASSERT_(loadOk);
 		grid.loadFromBitmap(myImg, resolution);
 		maps.push_back(grid);
 

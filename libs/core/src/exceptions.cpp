@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -29,7 +29,9 @@ std::string exception_line_msg(
 	return s;
 }
 
-static size_t findClosingBracket(
+namespace
+{
+size_t findClosingBracket(
 	const char chClosing, const char chOpening, const std::string& str)
 {
 	const size_t N = str.size();
@@ -46,6 +48,7 @@ static size_t findClosingBracket(
 	}
 	return std::string::npos;
 }
+}  // namespace
 
 /** Recursive implementation for mrpt::exception_to_str() */
 void impl_excep_to_str(

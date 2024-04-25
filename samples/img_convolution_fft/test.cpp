@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -82,11 +82,11 @@ void TestImageConvolutionFFT()
 			{
 				float r1 = I1_R(y, x);
 				float r2 = I2_R(y, x);
-				float i1 = I1_I(y, x);
-				float i2 = I2_I(y, x);
+				float im1 = I1_I(y, x);
+				float im2 = I2_I(y, x);
 
-				I2_R(y, x) = r1 * r2 - i1 * i2;
-				I2_I(y, x) = r2 * i1 + r1 * i2;
+				I2_R(y, x) = r1 * r2 - im1 * im2;
+				I2_I(y, x) = r2 * im1 + r1 * im2;
 			}
 
 		// IFFT:

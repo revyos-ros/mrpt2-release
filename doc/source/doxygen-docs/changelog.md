@@ -1,5 +1,249 @@
 \page changelog Change Log
 
+# Version 2.12.2: Released April 23rd, 2024
+- Changes in libraries:
+  - \ref mrpt_math_grp:
+    - Remove deprecated headers:
+      - `<mrpt/math/lightweight_geom_data_frwds.h>`
+      - `<mrpt/math/lightweight_geom_data.h>`
+    - Static constructors of mrpt::math::TPoint2D and mrpt::math::TPoint3D marked as `[[nodiscard]]`.
+  - \ref mrpt_opengl_grp:
+    - Render pipeline is now robust against exceptions thrown in the 3D entities boundingBox determination methods.
+- BUG FIXES:
+  - rosbag2rawlog: Fix wrong sensorPose while importing ROS1 datasets.
+  - mrpt::math::TPoint2D::FromVector() and mrpt::math::TPoint3D::FromVector() will silently access undefined memory if an input vector smaller than the vector dimensionality is passed.
+
+
+# Version 2.12.1: Released April 4th, 2024
+- Changes in apps:
+  - simul-landmarks: Fix correct generation of sensorLabel and timestamps in observations.
+- Changes in libraries:
+  - \ref mrpt_obs_grp:
+    - mrpt::obs::CObservationBearingRange now implements the `exportTxt*()` virtual interface.
+  - \ref mrpt_opengl_grp:
+    - mrpt::opengl::CAssimpModel now can read embedded textures in model files.
+    - Update embedded Assimp lib version 4.1.0 -> 5.3.1 (when built as ExternalProject)
+  - \ref mrpt_poses_grp:
+    - New methods:
+      - mrpt::poses::CPose2DGridTemplate::data(), mrpt::poses::CPose3DGridTemplate::data()
+      - mrpt::poses::CPose2DGridTemplate::absidx2idx(), mrpt::poses::CPose3DGridTemplate::absidx2idx()
+      - mrpt::poses::CPose2DGridTemplate::idx2absidx(), mrpt::poses::CPose3DGridTemplate::idx2absidx()
+    - Fix const-correctness of mrpt::poses::CPose2DGridTemplate::getAsMatrix()
+  - rplidar_skd: Update to the latest upstream version, and fix all build warnings.
+  - xsens library: Fix all build warnings.
+
+
+# Version 2.12.0: Released March 17th, 2024
+- Changes in libraries:
+  - \ref mrpt_obs_grp:
+    - mrpt::math::TBoundingBox: Mark all relevant methods with ``[nodiscard]`` to avoid mistakes.
+  - \ref mrpt_system_grp:
+    - Removed explicit references to `time_t` and redundant functions. Removed functions:
+      - mrpt::system::getCurrentTime()    -> replaced by mrpt::Clock::now()
+      - mrpt::system::now()               -> replaced by mrpt::Clock::now()
+      - mrpt::system::now_double()        -> replaced by mrpt::Clock::nowDouble()
+      - mrpt::system::time_tToTimestamp() -> replaced by mrpt::Clock::fromDouble()
+      - mrpt::system::timestampTotime_t() -> replaced by mrpt::Clock::toDouble()
+      - mrpt::system::timestampToDouble() -> replaced by mrpt::Clock::toDouble()
+- BUG FIXES:
+  - Fix Debian bug #1066207: FTBFS in latest sid due to undefined declarations in mrpt_xsens C library.
+  - Fix FTBFS if using embedded libfreenect due to undefined declarations (usleep).
+  - Update embedded version of libfreenect to v0.7.0
+  - Fix wrong computation of bounding boxes for mrpt::opengl::CSetOfObjects.
+
+# Version 2.11.12: Released March 10th, 2024
+- Changes in libraries:
+  - \ref mrpt_obs_grp:
+    - Fix compiler error on invocation of template mrpt::obs::CObservationGPS::getMsgByClassPtr()
+    - Add field mrpt::obs::CObservationGPS::covariance_enu for easier interoperability with ROS.
+    - API simplified: replace custom `mrpt::obs::gnss::gnss_message_ptr` with a `std::shared_ptr<>`.
+    - mrpt::obs::CObservationRobotPose::getDescriptionAsText(): add human-readable pose uncertainties.
+- BUG FIXES:
+  - Fix wrong encoding of grayscale images in mrpt::ros1bridge::toROS() and mrpt::ros2bridge::toROS().
+  - Correctly return true/false in conversion of GPS observation in mrpt::ros1bridge::toROS() and mrpt::ros2bridge::toROS() depending on whether there is a valid GGA message.
+  - mrpt::obs::CObservationComment: Missing serialization of sensorLabel.
+
+# Version 2.11.11: Released March 5th, 2024
+- Changes in libraries:
+  - \ref mrpt_ros1bridge_grp:
+    - Add missing mrpt::ros1bridge::toROS() for mrpt::maps::CPointsMapXYZIRT => `PointCloud2` conversions.
+- BUG FIXES:
+  - mrpt::nav::CPTG_DiffDrive_CollisionGridBased: Fix wrongly discarding of WS points out of the refDistance radius as invalid instead of returnin its closest extrapolated path pose.
+
+# Version 2.11.10: Released Feb 19th, 2024
+- Changes in libraries:
+  - \ref mrpt_maps_grp:
+    - mrpt::maps::CHeightGridMap2D: now supports integrating any point-cloud observation.
+  - \ref mrpt_vision_grp:
+    - Remove functions that were problematic with opencv 5: mrpt::vision::findMultipleChessboardsCorners()
+- Others:
+  - Fix Debian appstream warnings on mrpt-apps.
+  - Fix build against opencv 5.
+
+# Version 2.11.9: Released Feb 11th, 2024
+- Changes in libraries:
+  - \ref mrpt_vision_grp:
+    - mrpt::vision::TStereoCalibParams::use_robust_kernel now defaults to `true`.
+  - \ref mrpt_img_grp:
+    - Fix const-correctness of arguments in mrpt::img::CImage::drawChessboardCorners()
+  - \ref mrpt_obs_grp:
+    - Added support for mrpt::typemeta::TEnumType to mrpt::obs::CActionRobotMovement3D::TDrawSampleMotionModel and mrpt::obs::CActionRobotMovement2D::TDrawSampleMotionModel.
+- BUG FIXES:
+  - Fix missing build dep on tf2_geometry_msgs for ROS 1 only.
+  - Application kinect-stereo-calib: fix exceptions when selecting images without a good chessboard detection on the left list box.
+
+# Version 2.11.8: Released Feb 7th, 2024
+- Changes in apps:
+  - RawLogViewer: Show pointcloud ring, intensity, and time min/max ranges.
+  - rawlog-edit: Show dataset duration as formatted time interval.
+  - rosbag2rawlog (ROS 1):
+    - Added support for XYZIRT point clouds.
+    - Finally, implemented automatic detection of sensor poses wrt `base_link` from `tf` messages, with an option to manually override sensor poses from YAML config.
+- Changes in libraries:
+  - \ref mrpt_maps_grp:
+    - Implement missing probabilistic observation models in mrpt::maps::CVoxelMap and mrpt::maps::CVoxelMapRGB
+    - Add debug env variable `MRPT_DEBUG_OBSPTS_LAZY_LOAD` to debug lazy-load point cloud observations.
+  - \ref mrpt_ros1bridge_grp:
+    - Add missing mrpt::ros1bridge::fromROS() for `PointCloud2` => mrpt::maps::CPointsMapXYZIRT conversions.
+  - \ref mrpt_ros2bridge_grp:
+    - Fix wrong macros leading to including obsolete header `<cv_bridge/cv_bridge.h>`.
+  - \ref mrpt_system_grp:
+    - New function mrpt::system::hyperlink() to generate clickable links in terminal messages.
+
+# Version 2.11.7: Released Jan 25th, 2024
+- Changes in apps:
+  - carmen2rawlog: Generate valid timestamps.
+  - rosbag2rawlog: Add support for `sensor_msgs/CompressedImage` topics.
+- BUG FIXES:
+  - mrpt::hwdrivers::CImageGrabber_dc1394 did not mark the right image as present in stereo cameras.
+  - kinect-stereo-calib: Fix exception un-distorting images.
+
+# Version 2.11.6: Released Jan 13th, 2024
+- Changes in libraries:
+  - \ref mrpt_obs_grp
+    - mrpt::obs::CObservation::load() is now protected with a std::mutex for safe multi-threading usage.
+  - \ref mrpt_nav_grp
+    - mrpt::nav::CPTG_DiffDrive_alpha now has a "K" parameter for generating backwards trajectories too.
+- BUG FIXES:
+  - Fix wrong filenames in `rawlog-edit --externalize` when sensor labels contain the `/` character (e.g. mimicking ROS topic names).
+  - Fix crash in mrpt::ros2bridge::toROS() for XYZIRT point clouds.
+  - Fix exception while rendering paths in the `ptg-configurator` application.
+  - Fix potential race condition in mrpt::obs::CObservation3DRangeScan.
+
+# Version 2.11.5: Released Dec 21st, 2023
+- Changes in libraries:
+  - \ref mrpt_maps_grp
+    - New method mrpt::maps::CPointsMap::insertPointFrom() (and associated auxiliary methods) to easily copy points between different point clouds with different fields (timestamp, ring, RGB, etc.).
+  - \ref mrpt_obs_grp
+    - mrpt::maps::CSimpleMap changes:
+      - Added an optional twist field.
+      - Simplified API for preferred usage with structured binding tuples.
+  - \ref mrpt_system_grp
+    - More readable results in mrpt::system::unitsFormat() for the special case of exactly `0`.
+- BUG FIXES:
+  - Fix filtering of NANs input point clouds in mrpt::maps::CPointsMap::insertAnotherMap().
+
+# Version 2.11.4: Released Dec 15th, 2023
+- Changes in apps:
+  - RawLogViewer: visualize mrpt::obs::CObservationRotatingScan as point cloud  + range image + intensity image.
+  - rawlog-edit: `--info` command now also shows the type of each sensor label.
+- Changes in libraries:
+  - \ref mrpt_maps_grp
+    - Use nanoflann RKNN search in mrpt::maps::CPointsMap::nn_radius_search()
+    - Added a new point cloud class mrpt::maps::CPointsMapXYZIRT, including its Python and ROS wrappers.
+  - \ref mrpt_math_grp
+    - mrpt::math::KDTreeCapable: Add optional argument maximumSearchDistanceSqr in many API methods to exploit the new nanoflann RKNN search method.
+  - \ref mrpt_opengl_grp
+    - mrpt::opengl::PLY_Importer: Add support for importing point clouds with the `timestamp` property per point.
+  - \ref mrpt_obs_grp
+    - mrpt::obs::CObservationRotatingScan:
+      - Moved from the library mrpt-maps to mrpt-obs, since it no longer requires any mrpt::maps class.
+      - Complete its implementation: insertion into point cloud, observation likelihood, visualization in RawLogViewer, etc.
+- BUG FIXES:
+  - Fix missing Threads::Threads downstream due to missing `find_dependency(Threads)` in MRPT cmake config files.
+  - Fix broken import of PLY files in SceneViewer3D (empty scene even if correctly imported).
+  - mrpt::math::CMatrixDynamic constructor from (row,col) was not marked explicit, leading to potential problems.
+  - mrpt::opengl::Viewport::setViewportPosition() did not handle negative width values as expected (i.e. pixel distances from the opposite corner).
+
+
+# Version 2.11.3: Released Nov 21st, 2023
+- Changes in libraries:
+  - \ref mrpt_core_grp
+    - Add the `[[nodiscard]]` attribute to all functions returning a value in `<mrpt/core/bits_math.h>`
+  - \ref mrpt_maps_grp
+    - mrpt::maps::COccupancyGridMap3D::insertObservation() now also handles mrpt::obs::CObservationPointCloud
+    - New virtual interface mrpt::maps::NearestNeighborsCapable, implemented in:
+      - All mrpt::maps::CPointsMap classes
+      - All classes derived from mrpt::maps::CVoxelMapOccupancyBase
+      - mrpt::maps::COccupancyGridMap2D
+      - mrpt::maps::COccupancyGridMap2D
+    - New virtual method mrpt::maps::CMetricMap::boundingBox()
+    - mrpt::maps::TMetricMapInitializer now returns `shared_ptr`s instead of plain pointers.
+    - mrpt::maps::TSetOfMetricMapInitializers::loadFromConfigFile() now throws if it finds a `*_count` entry with an unknown map class name.
+  - \ref mrpt_math_grp
+    - New template mrpt::math::confidenceIntervalsFromHistogram()
+  - \ref mrpt_obs_grp
+    - mrpt::maps::CMetricMap::loadFromSimpleMap() now automatically calls mrpt::obs::CObservation::load() and mrpt::obs::CObservation::unload() for all observations, so it works with lazy-load datasets.
+- BUG FIXES:
+  - Fix compilation errors if using the `MCP_SAVE()` macro with class enum types.
+  - Fix wrong cloud pose in CPointsMap::insertObservation() when inserting an mrpt::obs::CObservationPointCloud.
+  - Fix potential data race in mrpt::WorkerThreadsPool::pendingTasks()
+
+# Version 2.11.2: Released Oct 25th, 2023
+- Changes in libraries:
+  - \ref mrpt_gui_grp
+    - New function mrpt::gui::GetScaledClientSize().
+  - \ref mrpt_obs_grp
+    - Fix typo in data field: mrpt::obs::CObservationRange: `sensorConeApperture`  -> `sensorConeAperture`
+  - \ref mrpt_ros2bridge_grp
+    - Address the new field `variance` in `sensor_msgs/Range` (Closes [issue #1270](https://github.com/MRPT/mrpt/issues/1270)).
+- BUG FIXES:
+  - Fix wrong rendering of all wxWidgets-based OpenGL windows when using Ubuntu's display settings to change UI to a size different than 100% (Fixes [issue #1114](https://github.com/MRPT/mrpt/issues/1114)).
+  - Fix ignored sensorPose of mrpt::obs::CObservationPointCloud while inserting them into voxel maps.
+
+# Version 2.11.1: Released Oct 23rd, 2023
+- Changes in libraries:
+  - \ref mrpt_math_grp
+    - Fix several build warnings introduced in the last version.
+  - \ref mrpt_maps_grp
+    - Voxel maps: A voxel is considered occupied if its occupancy is larger than `likelihoodOptions.occupiedThreshold` instead of a fixed `0.5`.
+
+# Version 2.11.0: Released Oct 19th, 2023
+- Changes in libraries:
+  - \ref mrpt_maps_grp
+    - New voxel map containers, based on Faconti's [Bonxai](https://github.com/facontidavide/Bonxai) header-only libray (MPL-2.0 license):
+      - mrpt::maps::CVoxelMap
+      - mrpt::maps::CVoxelMapRGB
+      - Example: \ref maps_voxelmap_from_tum_dataset
+      - Example: \ref maps_voxelmap_simple
+- BUG FIXES:
+  - Fix python wrapper FTBFS in armhf and other architectures.
+  - Fix matrices removeColumns() and removeRows() won't throw if user specified a non-existing index.
+
+# Version 2.10.2: Released Oct 5th, 2023
+- Build system:
+  - ROS: fix missing deps in package.xml needed for build via Nix.
+  - MRPT and OpenCV versions were until now exposed as macros with 3 hexadecimal digits (e.g. `2.4.0`->`0x240`), with a clear limitation of versions greater than 15. Now, both symbols `MRPT_VERSION` and `MRPT_OPENCV_VERSION_NUM` use TWO hexadecimal digits per version part, like: `2.10.2` -> `0x010A02`, which is much more general and safe for the future. For backwards compatibility, just make sure your user code only uses `MRPT_VERSION>=xxx` or `MRPT_VERSION>xxx` comparisons, instead of less-than comparisons (Fixes [issue #1285](https://github.com/MRPT/mrpt/issues/1285)).
+- Changes in apps:
+  - rawlog-edit: Add `--select-label` optional filter to command `--remap-timestamps`.
+- Changes in libraries:
+  - mrpt-ros1bridge and mrpt-ros2bridge: Remove leftover printf debugging trace printing ``Ok`` to console.
+  - \ref mrpt_hwdrivers_grp
+    - New overload mrpt::hwdrivers::CFFMPEG_InputStream::retrieveFrame() returning the frame PTS (presentation timestamp).
+- BUG FIXES:
+  - Fix CSparse "C" linkage build error (OSX Clang). PR [#1280](https://github.com/MRPT/mrpt/pull/1280)
+  - Fix missing Python wrapping of poses PDF (poses with uncertainty) composition (\oplus and \ominus) operators. (Closes [#1281](https://github.com/MRPT/mrpt/issues/1281)). PR [#1283](https://github.com/MRPT/mrpt/pull/1283)
+  - Fix wrong Jacobian in mrpt::math::CQuaternion::rpy_and_jacobian() for the case of Gimbal Lock. Thanks @giafranchini for reporting!. PR [#1290](https://github.com/MRPT/mrpt/pull/1290) (Closes [#1289](https://github.com/MRPT/mrpt/issues/1289))
+  - Fix spurious failures in offscreen render unit tests in RISCV64 (Closes [#1287](https://github.com/MRPT/mrpt/issues/1287)).
+
+# Version 2.10.1: Released August 10th, 2023
+- Build system:
+  - Add cmake flag to disable LTO in pymrpt module.
+  - Add -flto=auto to pymrpt so linking is much faster.
+- BUG FIXES:
+  - Fix "FTBFS when binutils-dev is installed but not libiberty-dev" (Debian bug [#1041165](https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1041165))
+  - pymrpt Debian packaging: triggering of post/pre installation scripts was missing.
+
 # Version 2.10.0: Released July 9th, 2023
 - Changes in libraries:
   - \ref mrpt_opengl_grp

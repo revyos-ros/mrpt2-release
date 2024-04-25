@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -944,7 +944,7 @@ void gridmapSimulFrame::OntimRunTrigger(wxTimerEvent& event)
 				// Desired rawlog format?
 				const bool is_sf_format = cbRawlogSFformat->GetValue();
 
-				const TTimeStamp tim_now = mrpt::system::now();
+				const TTimeStamp tim_now = mrpt::Clock::now();
 				const mrpt::poses::CPose2D odo_now =
 					CPose2D(the_robot.getCurrentOdometricPose());
 
@@ -991,8 +991,7 @@ void gridmapSimulFrame::OntimRunTrigger(wxTimerEvent& event)
 				CPose2D cur_pose_relative = CPose2D(p) - pose_start;
 
 				out_GT.printf(
-					"%f %.03f %.03f %.03f\n",
-					mrpt::system::timestampTotime_t(tim_now),
+					"%f %.03f %.03f %.03f\n", mrpt::Clock::toDouble(tim_now),
 					cur_pose_relative.x(), cur_pose_relative.y(),
 					cur_pose_relative.phi());
 

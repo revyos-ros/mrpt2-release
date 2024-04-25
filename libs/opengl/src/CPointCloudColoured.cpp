@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -153,7 +153,7 @@ void CPointCloudColoured::setPoint(size_t i, const TPointXYZfRGBAu8& p)
 		CRenderizableShaderPoints::m_pointsMtx.data);
 
 #ifdef _DEBUG
-	ASSERT_LT_(i, size());
+	ASSERT_LT_(i, size_unprotected());
 #endif
 	m_points[i] = p.pt;
 	auto& c = m_point_colors[i];
@@ -247,6 +247,9 @@ void CPointCloudColoured::PLY_export_get_vertex(
 	size_t idx, mrpt::math::TPoint3Df& pt, bool& pt_has_color,
 	mrpt::img::TColorf& pt_color) const
 {
+	std::shared_lock<std::shared_mutex> wfReadLock(
+		CRenderizableShaderPoints::m_pointsMtx.data);
+
 	auto& p = m_points[idx];
 	auto& p_color = m_point_colors[idx];
 	p = pt;

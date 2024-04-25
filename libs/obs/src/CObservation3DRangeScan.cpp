@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -74,29 +74,44 @@ struct hash<LUT_info>
 };
 }  // namespace std
 
-static std::unordered_map<LUT_info, CObservation3DRangeScan::unproject_LUT_t>
-	LUTs;
-static std::mutex LUTs_mtx;
+namespace
+{
+struct LUT_Storage
+{
+	static LUT_Storage& Instance()
+	{
+		static LUT_Storage lut;
+		return lut;
+	}
+	std::unordered_map<LUT_info, CObservation3DRangeScan::unproject_LUT_t> LUTs;
+	std::mutex LUTs_mtx;
+};
+
+}  // namespace
 
 const CObservation3DRangeScan::unproject_LUT_t&
 	CObservation3DRangeScan::get_unproj_lut() const
 {
 #if MRPT_HAS_OPENCV
+
+	LUT_Storage& ls = LUT_Storage::Instance();
+
 	// Access to, or create upon first usage:
 	LUT_info linfo;
 	linfo.calib = this->cameraParams;
 	linfo.sensorPose = this->sensorPose;
 	linfo.range_is_depth = this->range_is_depth;
 
-	LUTs_mtx.lock();
+	// Important: keep lock until we return since this function modifies its
+	// contents:
+	auto lck = mrpt::lockHelper(ls.LUTs_mtx);
+
 	// Protect against infinite memory growth: imagine sensorPose gets changed
 	// every time for a sweeping sensor, etc.
 	// Unlikely, but "just in case" (TM)
-	if (LUTs.size() > 100) LUTs.clear();
+	if (ls.LUTs.size() > 100) ls.LUTs.clear();
 
-	const unproject_LUT_t& ret = LUTs[linfo];
-
-	LUTs_mtx.unlock();
+	const unproject_LUT_t& ret = ls.LUTs[linfo];
 
 	ASSERT_EQUAL_(rangeImage.cols(), static_cast<int>(cameraParams.ncols));
 	ASSERT_EQUAL_(rangeImage.rows(), static_cast<int>(cameraParams.nrows));
@@ -263,7 +278,9 @@ using TMyRangesMemPool = mrpt::system::CGenericMemoryPool<
 	CObservation3DRangeScan_Ranges_MemPoolParams,
 	CObservation3DRangeScan_Ranges_MemPoolData>;
 
-static void mempool_donate_xyz_buffers(CObservation3DRangeScan& obs)
+namespace
+{
+void mempool_donate_xyz_buffers(CObservation3DRangeScan& obs)
 {
 	if (obs.points3D_x.empty()) return;
 	// Before dying, donate my memory to the pool for the joy of future
@@ -291,6 +308,8 @@ static void mempool_donate_xyz_buffers(CObservation3DRangeScan& obs)
 
 	pool->dump_to_pool(mem_params, mem_block);
 }
+}  // namespace
+
 void mempool_donate_range_matrix(CObservation3DRangeScan& obs)
 {
 	if (obs.rangeImage.cols() == 0 || obs.rangeImage.rows() == 0) return;
@@ -646,7 +665,7 @@ void CObservation3DRangeScan::swap(CObservation3DRangeScan& o)
 	rangeImageOtherLayers.swap(o.rangeImageOtherLayers);
 }
 
-void CObservation3DRangeScan::load() const
+void CObservation3DRangeScan::load_impl() const
 {
 	if (hasPoints3D && m_points3D_external_stored)
 	{
@@ -912,7 +931,9 @@ struct TLevMarData
 	}
 };
 
-static void cam2vec(const TCamera& camPar, CVectorDouble& x)
+namespace
+{
+void cam2vec(const TCamera& camPar, CVectorDouble& x)
 {
 	if (x.size() < 4 + 4) x.resize(4 + 4);
 
@@ -924,7 +945,7 @@ static void cam2vec(const TCamera& camPar, CVectorDouble& x)
 	for (size_t i = 0; i < 4; i++)
 		x[4 + i] = camPar.dist[i];
 }
-static void vec2cam(const CVectorDouble& x, TCamera& camPar)
+void vec2cam(const CVectorDouble& x, TCamera& camPar)
 {
 	camPar.intrinsicParams(0, 0) = x[0];  // fx
 	camPar.intrinsicParams(1, 1) = x[1];  // fy
@@ -934,7 +955,7 @@ static void vec2cam(const CVectorDouble& x, TCamera& camPar)
 	for (size_t i = 0; i < 4; i++)
 		camPar.dist[i] = x[4 + i];
 }
-static void cost_func(
+void cost_func(
 	const CVectorDouble& par, const TLevMarData& d, CVectorDouble& err)
 {
 	const CObservation3DRangeScan& obs = d.obs;
@@ -991,6 +1012,7 @@ static void cost_func(
 		}
 	}
 }  // end error_func
+}  // namespace
 }  // namespace mrpt::obs::detail
 
 /** A Levenberg-Marquart-based optimizer to recover the calibration parameters

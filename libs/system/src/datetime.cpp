@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -54,14 +54,9 @@ const TTimeStamp& mrpt::system::InvalidTimeStamp()
 	return t;
 }
 
-mrpt::system::TTimeStamp mrpt::system::time_tToTimestamp(const time_t& t)
-{
-	return time_tToTimestamp(static_cast<double>(t));
-}
-
 void mrpt::system::timestampToParts(TTimeStamp t, TTimeParts& p, bool localTime)
 {
-	const double T = mrpt::system::timestampTotime_t(t);
+	const double T = mrpt::Clock::toDouble(t);
 	double sec_frac = T - floor(T);
 	ASSERT_(sec_frac < 1.0);
 
@@ -86,6 +81,52 @@ void mrpt::system::timestampToParts(TTimeStamp t, TTimeParts& p, bool localTime)
 	p.second = parts->tm_sec + sec_frac;
 }
 
+namespace internal
+{
+/*---------------------------------------------------------------
+					timegm
+  ---------------------------------------------------------------*/
+#ifdef HAVE_TIMEGM
+time_t my_timegm(struct tm* tm) { return ::timegm(tm); }
+#else
+// Version for MSVC>=2005, which lacks "timegm"
+#ifdef HAVE_MKGMTIME
+time_t my_timegm(struct tm* tm) { return ::_mkgmtime(tm); }
+#else
+// generic version, slower but probably not used in any modern compiler!
+time_t my_timegm(struct tm* tm)
+{
+	static std::mutex cs;
+	std::lock_guard<std::mutex> lock(cs);
+
+	time_t ret;
+	char tz[256];
+
+	/* save current timezone and set UTC */
+	char* org_tz = getenv("TZ");
+	if (org_tz) os::strcpy(tz, sizeof(tz), org_tz);
+
+	putenv("TZ=UTC"); /* use Coordinated Universal Time (i.e. zero offset) */
+	tzset();
+
+	ret = mktime(tm);
+	if (org_tz)
+	{
+		char buf[256];
+		mrpt::system::os::sprintf(buf, sizeof(buf), "TZ=%s", tz);
+		putenv(buf);
+	}
+	else
+		putenv("TZ=");
+	tzset();
+
+	return ret;
+}
+
+#endif
+#endif	// HAVE_TIMEGM
+}  // namespace internal
+
 /*---------------------------------------------------------------
 					buildTimestampFromParts
   ---------------------------------------------------------------*/
@@ -106,9 +147,9 @@ TTimeStamp mrpt::system::buildTimestampFromParts(const TTimeParts& p)
 
 	double sec_frac = p.second - parts.tm_sec;
 
-	time_t tt = mrpt::system::os::timegm(&parts);  // Local time: mktime
+	time_t tt = ::internal::my_timegm(&parts);	// Local time: mktime
 
-	return mrpt::system::time_tToTimestamp(double(tt) + sec_frac);
+	return mrpt::Clock::fromDouble(double(tt) + sec_frac);
 }
 
 /*---------------------------------------------------------------
@@ -133,7 +174,7 @@ TTimeStamp mrpt::system::buildTimestampFromPartsLocalTime(const TTimeParts& p)
 
 	time_t tt = mktime(&parts);
 
-	return mrpt::system::time_tToTimestamp(double(tt) + sec_frac);
+	return mrpt::Clock::fromDouble(double(tt) + sec_frac);
 }
 
 /*---------------------------------------------------------------
@@ -160,11 +201,14 @@ string mrpt::system::formatTimeInterval(const double t)
 	return s;
 }
 
-static unsigned int calcSecFractions(const uint64_t tmp)
+namespace
+{
+unsigned int calcSecFractions(const uint64_t tmp)
 {
 	return static_cast<unsigned int>(
 		1e6 * static_cast<double>(tmp % 10000000) / 1e7);
 }
+}  // namespace
 
 /*---------------------------------------------------------------
   Convert a timestamp into this textual form: YEAR/MONTH/DAY,HH:MM:SS.MMM
@@ -306,7 +350,9 @@ string mrpt::system::dateToString(const mrpt::system::TTimeStamp tt)
 		"%u/%02u/%02u", 1900 + ptm->tm_year, ptm->tm_mon + 1, ptm->tm_mday);
 }
 
-static std::string implIntervalFormat(const double seconds)
+namespace
+{
+std::string implIntervalFormat(const double seconds)
 {
 	using namespace std::string_literals;
 
@@ -343,6 +389,7 @@ static std::string implIntervalFormat(const double seconds)
 	else
 		return format("%.2f ns", seconds * 1e9);
 }
+}  // namespace
 
 std::string mrpt::system::intervalFormat(const double seconds)
 {

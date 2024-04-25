@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -69,12 +69,12 @@ void CBeaconMap::TMapDefinition::dumpToTextStream_map_specific(
 	this->likelihoodOpts.dumpToTextStream(out);
 }
 
-mrpt::maps::CMetricMap* CBeaconMap::internal_CreateFromMapDefinition(
+mrpt::maps::CMetricMap::Ptr CBeaconMap::internal_CreateFromMapDefinition(
 	const mrpt::maps::TMetricMapInitializer& _def)
 {
 	const CBeaconMap::TMapDefinition& def =
 		*dynamic_cast<const CBeaconMap::TMapDefinition*>(&_def);
-	auto* obj = new CBeaconMap();
+	auto obj = CBeaconMap::Create();
 	obj->insertionOptions = def.insertionOpts;
 	obj->likelihoodOptions = def.likelihoodOpts;
 	return obj;
@@ -1236,6 +1236,8 @@ void CBeaconMap::saveToTextFile(const string& fil) const
 	MRPT_START
 	FILE* f = os::fopen(fil.c_str(), "wt");
 	ASSERT_(f != nullptr);
+	os::fprintf(
+		f, "%% ID X Y Z C(0,0) C(1,1) C(2,2) D2 |C| C(0,1) C(1,2) C(1,1)\n");
 
 	for (const auto& m_beacon : m_beacons)
 	{

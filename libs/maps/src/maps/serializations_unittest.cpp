@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -44,6 +44,8 @@ TEST_CLASS_MOVE_COPY_CTORS(CWeightedPointsMap);
 TEST_CLASS_MOVE_COPY_CTORS(CPointsMapXYZI);
 TEST_CLASS_MOVE_COPY_CTORS(COctoMap);
 TEST_CLASS_MOVE_COPY_CTORS(CColouredOctoMap);
+TEST_CLASS_MOVE_COPY_CTORS(CVoxelMap);
+TEST_CLASS_MOVE_COPY_CTORS(CVoxelMapRGB);
 TEST_CLASS_MOVE_COPY_CTORS(CSinCosLookUpTableFor2DScans);
 // obs:
 TEST_CLASS_MOVE_COPY_CTORS(CObservationPointCloud);
@@ -72,6 +74,8 @@ TEST(SerializeTestMaps, WriteReadToMem)
 		CLASS_ID(CPointsMapXYZI),
 		CLASS_ID(COctoMap),
 		CLASS_ID(CColouredOctoMap),
+		CLASS_ID(CVoxelMap),
+		CLASS_ID(CVoxelMapRGB),
 		// obs:
 		CLASS_ID(CObservationPointCloud),
 		CLASS_ID(CObservationRotatingScan),

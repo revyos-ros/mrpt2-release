@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -41,7 +41,7 @@ struct TRandomFieldCell
 	TRandomFieldCell(double kfmean_dm_mean = 1e-20, double kfstd_dmmeanw = 0)
 		: param1_(kfmean_dm_mean),
 		  param2_(kfstd_dmmeanw),
-		  last_updated(mrpt::system::now()),
+		  last_updated(mrpt::Clock::now()),
 		  updated_std(kfstd_dmmeanw)
 	{
 	}

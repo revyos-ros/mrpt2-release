@@ -31,6 +31,7 @@ mrpt/rtti/CObject.cpp
 mrpt/rtti/CObject_1.cpp
 mrpt/rtti/CObject_2.cpp
 mrpt/rtti/CObject_3.cpp
+mrpt/rtti/CObject_4.cpp
 mrpt/serialization/CSerializable.cpp
 std/stl_multimap.cpp
 std/stl_map.cpp
@@ -41,6 +42,7 @@ mrpt/typemeta/TEnumType_3.cpp
 mrpt/typemeta/TEnumType_4.cpp
 mrpt/typemeta/TEnumType_5.cpp
 mrpt/typemeta/TEnumType_6.cpp
+mrpt/typemeta/TEnumType_7.cpp
 mrpt/serialization/CArchive.cpp
 mrpt/serialization/CArchive_1.cpp
 mrpt/serialization/CArchive_2.cpp
@@ -75,6 +77,7 @@ mrpt/obs/CObservation.cpp
 mrpt/system/mrptEvent.cpp
 mrpt/maps/CMetricMapEvents.cpp
 mrpt/maps/metric_map_types.cpp
+mrpt/math/TBoundingBox.cpp
 mrpt/opengl/Visualizable.cpp
 mrpt/system/CObservable.cpp
 mrpt/tfest/TMatchingPair.cpp
@@ -94,12 +97,14 @@ mrpt/apps/MonteCarloLocalization_App.cpp
 mrpt/img/TColor.cpp
 mrpt/img/CCanvas.cpp
 mrpt/maps/CMultiMetricMap.cpp
+mrpt/math/TTwist3D.cpp
+mrpt/maps/CSimpleMap.cpp
 mrpt/bayes/CProbabilityParticle.cpp
 mrpt/bayes/CParticleFilterData.cpp
 mrpt/bayes/CParticleFilterData_1.cpp
 mrpt/poses/CPose3DPDFParticles.cpp
 mrpt/img/color_maps.cpp
-mrpt/math/TBoundingBox.cpp
+mrpt/maps/NearestNeighborsCapable.cpp
 mrpt/obs/T2DScanProperties.cpp
 mrpt/opengl/PLY_import_export.cpp
 mrpt/maps/CPointsMap.cpp
@@ -165,11 +170,12 @@ mrpt/obs/CObservationStereoImages.cpp
 mrpt/vision/CStereoRectifyMap.cpp
 mrpt/hwdrivers/CDUO3DCamera.cpp
 mrpt/math/CMatrixDynamic.cpp
+mrpt/math/CMatrixDynamic_1.cpp
 mrpt/math/CMatrixFixed.cpp
 mrpt/math/CMatrixFixed_1.cpp
 mrpt/math/CMatrixFixed_2.cpp
 mrpt/math/CMatrixFixed_3.cpp
-mrpt/math/CMatrixFixed_4.cpp
+mrpt/math/MatrixVectorBase.cpp
 mrpt/math/math_frwds.cpp
 mrpt/bayes/CProbabilityParticle_1.cpp
 mrpt/math/CMatrixF.cpp
@@ -192,7 +198,6 @@ unknown/unknown_4.cpp
 unknown/unknown_5.cpp
 unknown/unknown_6.cpp
 unknown/unknown_7.cpp
-unknown/unknown_8.cpp
 mrpt/obs/CObservationGPS.cpp
 mrpt/hwdrivers/CGPSInterface.cpp
 mrpt/containers/MT_buffer.cpp
@@ -221,7 +226,7 @@ mrpt/kinematics/CKinematicChain.cpp
 mrpt/kinematics/CVehicleVelCmd.cpp
 mrpt/kinematics/CVehicleVelCmd_DiffDriven.cpp
 mrpt/poses/CPointPDF.cpp
-mrpt/math/CMatrixDynamic_1.cpp
+mrpt/math/CMatrixDynamic_2.cpp
 mrpt/poses/CPointPDFSOG.cpp
 mrpt/maps/CBeacon.cpp
 mrpt/opengl/COctoMapVoxels.cpp
@@ -256,6 +261,11 @@ mrpt/maps/CRandomFieldGridMap3D.cpp
 mrpt/maps/CReflectivityGridMap2D.cpp
 mrpt/maps/CWeightedPointsMap.cpp
 mrpt/maps/CWirelessPowerGridMap2D.cpp
+mrpt/maps/CVoxelMapBase.cpp
+mrpt/maps/CVoxelMapOccupancyBase.cpp
+mrpt/maps/CVoxelMapOccupancyBase_1.cpp
+mrpt/maps/CVoxelMapOccupancyBase_2.cpp
+mrpt/maps/CVoxelMap.cpp
 mrpt/obs/CObservationPointCloud.cpp
 mrpt/opengl/CBox.cpp
 mrpt/opengl/COctreePointRenderer.cpp
@@ -270,7 +280,6 @@ mrpt/opengl/CSetOfTriangles.cpp
 mrpt/opengl/CPlanarLaserScan.cpp
 mrpt/math/CAtan2LookUpTable.cpp
 mrpt/math/ops_containers.cpp
-mrpt/math/TTwist3D.cpp
 mrpt/math/data_utils.cpp
 mrpt/math/fresnel.cpp
 mrpt/nav/holonomic/ClearanceDiagram.cpp
@@ -294,9 +303,9 @@ mrpt/nav/reactive/CReactiveNavigationSystem3D.cpp
 mrpt/nav/tpspace/CPTG_DiffDrive_C.cpp
 mrpt/nav/tpspace/CPTG_DiffDrive_alpha.cpp
 mrpt/obs/CActionRobotMovement3D.cpp
-mrpt/obs/CObservationBatteryState.cpp
-mrpt/obs/CObservationOdometry.cpp
-mrpt/obs/CRawlog.cpp
+mrpt/obs/CObservation3DScene.cpp
+mrpt/obs/CObservationBearingRange.cpp
+mrpt/obs/CObservationRobotPose.cpp
 mrpt/obs/format_externals_filename.cpp
 mrpt/obs/stock_observations.cpp
 mrpt/opengl/CArrow.cpp

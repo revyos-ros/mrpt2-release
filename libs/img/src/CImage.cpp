@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -96,7 +96,9 @@ mrpt::img::CTimeLogger alloc_tims;
 #endif
 
 #if MRPT_HAS_OPENCV
-static int interpolationMethod2Cv(TInterpolationMethod i)
+namespace
+{
+int interpolationMethod2Cv(TInterpolationMethod i)
 {
 	// clang-format off
 	switch (i)
@@ -109,6 +111,7 @@ static int interpolationMethod2Cv(TInterpolationMethod i)
 	// clang-format on
 	return -1;
 }
+}  // namespace
 
 template <typename RET = uint32_t>
 constexpr RET pixelDepth2CvDepth(PixelDepth d)
@@ -145,7 +148,9 @@ RET pixelDepth2IPLCvDepth(PixelDepth d)
 	return std::numeric_limits<RET>::max();
 }
 
-static PixelDepth cvDepth2PixelDepth(int64_t d)
+namespace
+{
+PixelDepth cvDepth2PixelDepth(int64_t d)
 {
 	// clang-format off
 	switch (d)
@@ -161,7 +166,7 @@ static PixelDepth cvDepth2PixelDepth(int64_t d)
 	// clang-format on
 	return PixelDepth::D8U;
 }
-
+}  // namespace
 #endif	// MRPT_HAS_OPENCV
 
 // Default ctor
@@ -982,7 +987,9 @@ CImage CImage::grayscale() const
 
 // Auxiliary function for both ::grayscale() and ::grayscaleInPlace()
 #if MRPT_HAS_OPENCV
-static bool my_img_to_grayscale(const cv::Mat& src, cv::Mat& dest)
+namespace
+{
+bool my_img_to_grayscale(const cv::Mat& src, cv::Mat& dest)
 {
 	if (dest.size() != src.size() || dest.type() != src.type())
 		dest = cv::Mat(src.rows, src.cols, CV_8UC1);
@@ -1000,9 +1007,10 @@ static bool my_img_to_grayscale(const cv::Mat& src, cv::Mat& dest)
 #endif
 
 	// OpenCV Method:
-	cv::cvtColor(src, dest, CV_BGR2GRAY);
+	cv::cvtColor(src, dest, cv::COLOR_BGR2GRAY);
 	return false;
 }
+}  // namespace
 #endif
 
 bool CImage::grayscale(CImage& ret) const
@@ -1839,7 +1847,7 @@ void CImage::rotateImage(
 }
 
 bool CImage::drawChessboardCorners(
-	std::vector<TPixelCoordf>& cornerCoords, unsigned int check_size_x,
+	const std::vector<TPixelCoordf>& cornerCoords, unsigned int check_size_x,
 	unsigned int check_size_y, unsigned int lines_width, unsigned int r)
 {
 #if MRPT_HAS_OPENCV
@@ -2223,7 +2231,7 @@ void CImage::getAsIplImage(IplImage* dest) const
 #if MRPT_HAS_OPENCV
 	makeSureImageIsLoaded();
 
-#if MRPT_OPENCV_VERSION_NUM < 0x300
+#if MRPT_OPENCV_VERSION_NUM < 0x030000
 	ASSERT_(dest != nullptr);
 	*dest = cvIplImage(m_impl->img);
 #else

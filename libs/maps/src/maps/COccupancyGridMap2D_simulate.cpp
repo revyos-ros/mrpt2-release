@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -82,13 +82,13 @@ void COccupancyGridMap2D::sonarSimulator(
 
 		// For each sonar cone, simulate several rays and keep the shortest
 		// distance:
-		ASSERT_(inout_observation.sensorConeApperture > 0);
+		ASSERT_(inout_observation.sensorConeAperture > 0);
 		size_t nRays =
-			round(1 + inout_observation.sensorConeApperture / 1.0_deg);
+			round(1 + inout_observation.sensorConeAperture / 1.0_deg);
 
 		double direction = sensorAbsolutePose.phi() -
-			0.5 * inout_observation.sensorConeApperture;
-		const double Adir = inout_observation.sensorConeApperture / nRays;
+			0.5 * inout_observation.sensorConeAperture;
+		const double Adir = inout_observation.sensorConeAperture / nRays;
 
 		float min_detected_obs = 0;
 		for (size_t i = 0; i < nRays; i++, direction += Adir)

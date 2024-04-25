@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -102,7 +102,7 @@ TPolygon3D::TPolygon3D(const TPolygon2D& p) : std::vector<TPoint3D>()
 	size_t N = p.size();
 	resize(N);
 	for (size_t i = 0; i < N; i++)
-		operator[](i) = p[i];
+		operator[](i) = TPoint3D(p[i]);
 }
 void TPolygon3D::createRegularPolygon(
 	size_t numEdges, double radius, TPolygon3D& poly)

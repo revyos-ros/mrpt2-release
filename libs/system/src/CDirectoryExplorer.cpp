@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -118,8 +118,10 @@ CDirectoryExplorer::TFileInfoList CDirectoryExplorer::explore(
 					newEntry.wholePath.c_str());
 			}
 
-			newEntry.modTime = statDat.st_mtime;
-			newEntry.accessTime = statDat.st_atime;
+			newEntry.modTime =
+				mrpt::Clock::fromDouble(static_cast<double>(statDat.st_mtime));
+			newEntry.accessTime =
+				mrpt::Clock::fromDouble(static_cast<double>(statDat.st_atime));
 
 			// Flags:
 			newEntry.isDir = 0 != (statDat.st_mode & _S_IFDIR);
@@ -170,8 +172,10 @@ CDirectoryExplorer::TFileInfoList CDirectoryExplorer::explore(
 					newEntry.wholePath.c_str());
 			}
 
-			newEntry.modTime = statDat.st_mtime;
-			newEntry.accessTime = statDat.st_atime;
+			newEntry.modTime =
+				mrpt::Clock::fromDouble(static_cast<double>(statDat.st_mtime));
+			newEntry.accessTime =
+				mrpt::Clock::fromDouble(static_cast<double>(statDat.st_atime));
 
 			// Flags:
 			newEntry.isDir = S_ISDIR(statDat.st_mode);

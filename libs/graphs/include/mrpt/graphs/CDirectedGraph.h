@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -319,7 +319,7 @@ class CDirectedGraph
 	/** Save the graph in a Graphviz (.dot files) text format; useful for
 	 * quickly rendering the graph with "dot"
 	 * \return false on any error */
-	bool saveAsDot(
+	[[nodiscard]] bool saveAsDot(
 		std::ostream& o,
 		const TGraphvizExportParams& p = TGraphvizExportParams()) const
 	{

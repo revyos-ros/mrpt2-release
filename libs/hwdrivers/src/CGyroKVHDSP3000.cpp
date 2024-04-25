@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -50,7 +50,7 @@ void CGyroKVHDSP3000::doProcess()
 
 	string msg;
 	CObservationIMU::Ptr observationGyro = std::make_shared<CObservationIMU>();
-	observationGyro->timestamp = mrpt::system::now();
+	observationGyro->timestamp = mrpt::Clock::now();
 
 	msg = m_serialPort->ReadString(-1, nullptr, "\n");
 

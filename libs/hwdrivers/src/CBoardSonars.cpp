@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -211,10 +211,10 @@ bool CBoardSonars::getObservation(mrpt::obs::CObservationRange& obs)
 	try
 	{
 		obs.sensorLabel = m_sensorLabel;
-		obs.timestamp = mrpt::system::getCurrentTime();
+		obs.timestamp = mrpt::Clock::now();
 		obs.minSensorDistance = 0.04f;
 		obs.maxSensorDistance = m_maxRange;
-		obs.sensorConeApperture = DEG2RAD(30.0f);
+		obs.sensorConeAperture = DEG2RAD(30.0f);
 		obs.sensedData.clear();
 		mrpt::obs::CObservationRange::TMeasurement obsRange;
 

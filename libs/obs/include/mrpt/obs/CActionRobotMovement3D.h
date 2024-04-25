@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -10,6 +10,7 @@
 
 #include <mrpt/obs/CAction.h>
 #include <mrpt/poses/CPose3DPDFGaussian.h>
+#include <mrpt/typemeta/TEnumType.h>
 
 namespace mrpt::obs
 {
@@ -125,3 +126,8 @@ class CActionRobotMovement3D : public CAction
 };	// End of class def.
 
 }  // namespace mrpt::obs
+
+MRPT_ENUM_TYPE_BEGIN(mrpt::obs::CActionRobotMovement3D::TDrawSampleMotionModel)
+MRPT_FILL_ENUM_MEMBER(mrpt::obs::CActionRobotMovement3D, mmGaussian);
+MRPT_FILL_ENUM_MEMBER(mrpt::obs::CActionRobotMovement3D, mm6DOF);
+MRPT_ENUM_TYPE_END()

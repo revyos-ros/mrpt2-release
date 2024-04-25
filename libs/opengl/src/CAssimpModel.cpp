@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -37,6 +37,11 @@
 #include <mrpt/serialization/CArchive.h>
 #include <mrpt/system/filesystem.h>
 
+// Universal include for all versions of OpenCV
+#if MRPT_HAS_OPENCV
+#include <mrpt/3rdparty/do_opencv_includes.h>
+#endif
+
 #include <mutex>
 #include <optional>
 
@@ -67,7 +72,13 @@ class TexturesCache
 	};
 
 	CachedTexturesInfo& get(
-		const CAssimpModel::filepath_t& texturePath, bool verboseLoad)
+		const CAssimpModel::filepath_t& texturePath, bool verboseLoad,
+#if MRPT_HAS_ASSIMP
+		const aiScene* scene
+#else
+		const void* scene
+#endif
+	)
 	{
 		using namespace std::string_literals;
 
@@ -96,7 +107,46 @@ class TexturesCache
 				std::cout << "[CAssimpModel] Loaded texture: " << texturePath
 						  << "\n";
 		}
-		else
+#if MRPT_HAS_ASSIMP && MRPT_HAS_OPENCV
+		else if (scene->HasTextures())
+		{
+			// Embedded texture?
+			auto aiTex = scene->GetEmbeddedTexture(texturePath.c_str());
+			if (aiTex)
+			{
+				const auto texW = aiTex->mWidth;
+				const auto texH = aiTex->mHeight;
+
+				if (texH == 0)
+				{
+					// compressed format:
+					// aiTex->achFormatHint;
+
+					const cv::Mat data(texW, 1, CV_8UC1, aiTex->pcData);
+
+					const cv::Mat im = cv::imdecode(data, cv::IMREAD_UNCHANGED);
+
+					if (!im.empty())
+					{
+						// load ok:
+						entry.load_ok = true;
+
+						entry.img_rgb =
+							mrpt::img::CImage(im, mrpt::img::DEEP_COPY);
+					}
+				}
+				else
+				{
+					// uncompressed format:
+					THROW_EXCEPTION(
+						"Support for uncompressed embedded textures not "
+						"implemented yet for mrpt::opengl::CAssimpModel.");
+				}
+			}
+		}
+#endif
+
+		if (!entry.load_ok)
 		{
 			/* Error occured */
 			const std::string sError = mrpt::format(
@@ -154,14 +204,16 @@ struct CAssimpModel::Impl
 #if (MRPT_HAS_OPENGL_GLUT || MRPT_HAS_EGL) && MRPT_HAS_ASSIMP
 
 // Just return the diffuse color:
-static mrpt::img::TColor apply_material(
+namespace
+{
+mrpt::img::TColor apply_material(
 	const aiMaterial* mtl, const img::TColor& defaultColor,
 	const bool ignoreMaterialColor);
-static void get_bounding_box(
-	const aiScene* sc, aiVector3D* min, aiVector3D* max);
-static void get_bounding_box_for_node(
+void get_bounding_box(const aiScene* sc, aiVector3D* min, aiVector3D* max);
+void get_bounding_box_for_node(
 	const aiScene* sc, const aiNode* nd, aiVector3D* min, aiVector3D* max,
 	aiMatrix4x4* trafo);
+}  // namespace
 #endif	// MRPT_HAS_OPENGL_GLUT && MRPT_HAS_ASSIMP
 
 void CAssimpModel::render(const RenderContext& rc) const
@@ -438,7 +490,9 @@ bool CAssimpModel::traceRay(
 
 #if (MRPT_HAS_OPENGL_GLUT || MRPT_HAS_EGL) && MRPT_HAS_ASSIMP
 
-static void get_bounding_box_for_node(
+namespace
+{
+void get_bounding_box_for_node(
 	const aiScene* scene, const aiNode* nd, aiVector3D* min, aiVector3D* max,
 	aiMatrix4x4* trafo)
 {
@@ -473,8 +527,7 @@ static void get_bounding_box_for_node(
 	*trafo = prev;
 }
 
-static void get_bounding_box(
-	const aiScene* scene, aiVector3D* min, aiVector3D* max)
+void get_bounding_box(const aiScene* scene, aiVector3D* min, aiVector3D* max)
 {
 	aiMatrix4x4 trafo;
 	aiIdentityMatrix4(&trafo);
@@ -484,12 +537,12 @@ static void get_bounding_box(
 	get_bounding_box_for_node(scene, scene->mRootNode, min, max, &trafo);
 }
 
-static mrpt::img::TColor color4_to_TColor(const aiColor4D& c)
+mrpt::img::TColor color4_to_TColor(const aiColor4D& c)
 {
 	return mrpt::img::TColorf(c.r, c.g, c.b, c.a).asTColor();
 }
 
-static mrpt::img::TColor apply_material(
+mrpt::img::TColor apply_material(
 	const aiMaterial* mtl, const mrpt::img::TColor& defaultColor,
 	const bool ignoreMaterialColor)
 {
@@ -506,7 +559,7 @@ static mrpt::img::TColor apply_material(
 	}
 }
 
-static mrpt::math::CMatrixDouble44 aiMatrix_to_mrpt(const aiMatrix4x4& m)
+mrpt::math::CMatrixDouble44 aiMatrix_to_mrpt(const aiMatrix4x4& m)
 {
 	mrpt::math::CMatrixDouble44 M;
 	M(0, 0) = m.a1;
@@ -531,10 +584,8 @@ static mrpt::math::CMatrixDouble44 aiMatrix_to_mrpt(const aiMatrix4x4& m)
 	return M;
 }
 
-static mrpt::math::TPoint3Df to_mrpt(const aiVector3D& v)
-{
-	return {v.x, v.y, v.z};
-}
+mrpt::math::TPoint3Df to_mrpt(const aiVector3D& v) { return {v.x, v.y, v.z}; }
+}  // namespace
 
 void CAssimpModel::recursive_render(
 	const aiScene* sc, const aiNode* nd, const mrpt::poses::CPose3D& transf,
@@ -692,12 +743,6 @@ void CAssimpModel::process_textures(const aiScene* scene)
 {
 	using namespace std::string_literals;
 
-	if (scene->HasTextures())
-		THROW_EXCEPTION(
-			"Support for meshes with *embedded* textures is not implemented. "
-			"Please, use external texture files or contribute a PR to mrpt "
-			"with this feature.");
-
 	m_textureIdMap.clear();
 	m_texturedObjects.clear();
 
@@ -745,7 +790,7 @@ void CAssimpModel::process_textures(const aiScene* scene)
 
 		// Query textureCache:
 		auto& cache = internal::TexturesCache::Instance();
-		auto& tc = cache.get(fileloc, m_verboseLoad);
+		auto& tc = cache.get(fileloc, m_verboseLoad, scene);
 
 		if (tc.load_ok)
 		{

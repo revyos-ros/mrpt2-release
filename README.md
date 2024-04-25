@@ -10,10 +10,7 @@
 
 <a href="https://github.com/MRPT/mrpt/releases" alt="Releases"><img src="https://img.shields.io/github/release/MRPT/mrpt.svg" /></a>
 <a href='https://github.com/MRPT/mrpt/releases/tag/Windows-nightly-builds'><img src='https://img.shields.io/badge/Windows-Installer-orange?logo=Windows'></a>
-<a href="https://github.com/MRPT/mrpt/releases" alt="GitHub"><img src="https://img.shields.io/github/downloads/mrpt/mrpt/total.svg" /></a>
-<a href="https://sourceforge.net/projects/mrpt/files/" alt="SourceForge"><img src="https://img.shields.io/sourceforge/dt/mrpt.svg" /></a>
-<a href="https://gitter.im/MRPT/mrpt" alt="Gitter"><img src="https://badges.gitter.im/Join%20Chat.svg" /></a>
-[![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/MRPT/mrpt)
+<a href="https://zenodo.org/doi/10.5281/zenodo.10595286"><img src="https://zenodo.org/badge/13708826.svg" alt="DOI"></a>
 
 ## 1. Introduction
 <img align="right" src="https://mrpt.github.io/imgs/mrpt-videos-mix2.gif">
@@ -27,7 +24,7 @@ and [much more](https://docs.mrpt.org/reference/latest/applications.html).
 
 ## 2. Resources
   * Download the latest unstable code with: `git clone https://github.com/MRPT/mrpt.git --recursive`
-  * Ask questions at: [this Google group](https://www.mrpt.org/forum/) or at [stackoverflow](https://stackoverflow.com/search?q=mrpt) (please, use the tag `mrpt`!)
+  * Ask questions at [stackoverflow](https://stackoverflow.com/search?q=mrpt) (use the tag `mrpt`)
   * [Main project website](https://www.mrpt.org/), including [sources and Windows installer downloads](https://www.mrpt.org/download-mrpt/)
   * [C++ API reference](https://docs.mrpt.org/reference/)
   * [ROS packages](https://docs.mrpt.org/reference/latest/wrappers.html#mrpt-ros-packages)
@@ -81,7 +78,7 @@ sudo apt install ros-$ROS_DISTRO-mrpt2
 | ROS1 Noetic @ u20.04 | [![Build Status](https://build.ros.org/job/Ndev__mrpt2__ubuntu_focal_amd64/badge/icon)](https://build.ros.org/job/Ndev__mrpt2__ubuntu_focal_amd64/) | [![Version](https://img.shields.io/ros/v/noetic/mrpt2)](https://index.ros.org/search/?term=mrpt2) | [![Build Status](https://build.ros.org/job/Nbin_uF64__mrpt2__ubuntu_focal_amd64__binary/badge/icon)](https://build.ros.org/job/Nbin_uF64__mrpt2__ubuntu_focal_amd64__binary/) |
 | ROS2 Humble @ u22.04 | [![Build Status](https://build.ros2.org/job/Hdev__mrpt2__ubuntu_jammy_amd64/badge/icon)](https://build.ros2.org/job/Hdev__mrpt2__ubuntu_jammy_amd64/) | [![Version](https://img.shields.io/ros/v/humble/mrpt2)](https://index.ros.org/search/?term=mrpt2) | [![Build Status](https://build.ros2.org/job/Hbin_uJ64__mrpt2__ubuntu_jammy_amd64__binary/badge/icon)](https://build.ros2.org/job/Hbin_uJ64__mrpt2__ubuntu_jammy_amd64__binary/) | 
 | ROS2 Iron @ u22.04 | [![Build Status](https://build.ros2.org/job/Idev__mrpt2__ubuntu_jammy_amd64/badge/icon)](https://build.ros2.org/job/Idev__mrpt2__ubuntu_jammy_amd64/) | [![Version](https://img.shields.io/ros/v/iron/mrpt2)](https://index.ros.org/search/?term=mrpt2) | [![Build Status](https://build.ros2.org/job/Ibin_uJ64__mrpt2__ubuntu_jammy_amd64__binary/badge/icon)](https://build.ros2.org/job/Ibin_uJ64__mrpt2__ubuntu_jammy_amd64__binary/) | 
-| ROS2 Rolling @ u22.04 | [![Build Status](https://build.ros2.org/job/Rdev__mrpt2__ubuntu_jammy_amd64/badge/icon)](https://build.ros2.org/job/Rdev__mrpt2__ubuntu_jammy_amd64/) |  [![Version](https://img.shields.io/ros/v/rolling/mrpt2)](https://index.ros.org/search/?term=mrpt2) | [![Build Status](https://build.ros2.org/job/Rbin_uJ64__mrpt2__ubuntu_jammy_amd64__binary/badge/icon)](https://build.ros2.org/job/Rbin_uJ64__mrpt2__ubuntu_jammy_amd64__binary/) | 
+| ROS2 Rolling @ u24.04 | [![Build Status](https://build.ros2.org/job/Rdev__mrpt2__ubuntu_noble_amd64/badge/icon)](https://build.ros2.org/job/Rdev__mrpt2__ubuntu_noble_amd64/) |  [![Version](https://img.shields.io/ros/v/rolling/mrpt2)](https://index.ros.org/search/?term=mrpt2) | [![Build Status](https://build.ros2.org/job/Rbin_uN64__mrpt2__ubuntu_noble_amd64__binary/badge/icon)](https://build.ros2.org/job/Rbin_uN64__mrpt2__ubuntu_noble_amd64__binary/) | 
 
 | EOL Distro | Last release |
 |---|---|
@@ -91,6 +88,13 @@ sudo apt install ros-$ROS_DISTRO-mrpt2
 
 ## 4. License
 MRPT is released under the [new BSD license](http://www.mrpt.org/License/).
+
+
+**Contributors**
+
+<a href="https://github.com/MRPT/mrpt/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=MRPT/mrpt" />
+</a>
 
 ## 5. Versions in repositories
 

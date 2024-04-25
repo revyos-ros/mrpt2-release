@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -80,13 +80,13 @@ void CGasConcentrationGridMap2D::TMapDefinition::dumpToTextStream_map_specific(
 	this->insertionOpts.dumpToTextStream(out);
 }
 
-mrpt::maps::CMetricMap*
+mrpt::maps::CMetricMap::Ptr
 	CGasConcentrationGridMap2D::internal_CreateFromMapDefinition(
 		const mrpt::maps::TMetricMapInitializer& _def)
 {
 	const CGasConcentrationGridMap2D::TMapDefinition& def =
 		*dynamic_cast<const CGasConcentrationGridMap2D::TMapDefinition*>(&_def);
-	auto* obj = new CGasConcentrationGridMap2D(
+	auto obj = CGasConcentrationGridMap2D::Create(
 		def.mapType, def.min_x, def.max_x, def.min_y, def.max_y,
 		def.resolution);
 	obj->insertionOptions = def.insertionOpts;
@@ -124,7 +124,7 @@ CGasConcentrationGridMap2D::CGasConcentrationGridMap2D(
 	windGrid_direction.setSize(x_min, x_max, y_min, y_max, resolution);
 
 	// initialize counter for advection simulation
-	timeLastSimulated = mrpt::system::now();
+	timeLastSimulated = mrpt::Clock::now();
 }
 
 CGasConcentrationGridMap2D::~CGasConcentrationGridMap2D() = default;
@@ -645,10 +645,10 @@ bool CGasConcentrationGridMap2D::simulateAdvection(double STD_increase_value)
 
 	// Get time since last simulation
 	double At =
-		mrpt::system::timeDifference(timeLastSimulated, mrpt::system::now());
+		mrpt::system::timeDifference(timeLastSimulated, mrpt::Clock::now());
 	cout << endl << " - At since last simulation = " << At << "seconds" << endl;
 	// update time of last updated.
-	timeLastSimulated = mrpt::system::now();
+	timeLastSimulated = mrpt::Clock::now();
 
 	/* 3- Build Transition Matrix (SA)
 	  This Matrix contains the probabilities of each cell

@@ -2,19 +2,22 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
 
 #include "maps-precomp.h"  // Precomp header
 //
+#include <mrpt/core/get_env.h>
+#include <mrpt/core/lock_helper.h>
 #include <mrpt/io/CFileGZInputStream.h>
 #include <mrpt/io/CFileGZOutputStream.h>
 #include <mrpt/io/lazy_load_path.h>
 #include <mrpt/maps/CColouredPointsMap.h>
 #include <mrpt/maps/CPointsMapXYZI.h>
 #include <mrpt/maps/CSimplePointsMap.h>
+#include <mrpt/math/ops_containers.h>  // minimum_maximum()
 #include <mrpt/obs/CObservation3DRangeScan.h>
 #include <mrpt/obs/CObservationPointCloud.h>
 #include <mrpt/serialization/CArchive.h>
@@ -56,6 +59,31 @@ void CObservationPointCloud::getDescriptionAsText(std::ostream& o) const
 	{
 		o << pointcloud->GetRuntimeClass()->className << "\n";
 		o << "Number of points: " << pointcloud->size() << "\n";
+
+		// Special cases: show IRT stats:
+		if (auto* ptrIs = pointcloud->getPointsBufferRef_intensity();
+			ptrIs && !ptrIs->empty())
+		{
+			float Imin, Imax;
+			mrpt::math::minimum_maximum(*ptrIs, Imin, Imax);
+			o << "Intensity channel values: min=" << Imin << " max=" << Imax
+			  << "\n";
+		}
+		if (auto* ptrTs = pointcloud->getPointsBufferRef_timestamp();
+			ptrTs && !ptrTs->empty())
+		{
+			float Tmin, Tmax;
+			mrpt::math::minimum_maximum(*ptrTs, Tmin, Tmax);
+			o << "Timestamp channel values: min=" << Tmin << " max=" << Tmax
+			  << "\n";
+		}
+		if (auto* ptrRs = pointcloud->getPointsBufferRef_ring();
+			ptrRs && !ptrRs->empty())
+		{
+			uint16_t Rmin, Rmax;
+			mrpt::math::minimum_maximum(*ptrRs, Rmin, Rmax);
+			o << "Ring channel values: min=" << Rmin << " max=" << Rmax << "\n";
+		}
 	}
 
 	if (m_externally_stored != ExternalStorageFormat::None)
@@ -106,9 +134,15 @@ void CObservationPointCloud::serializeFrom(
 	};
 }
 
-void CObservationPointCloud::load() const
+void CObservationPointCloud::load_impl() const
 {
 	MRPT_START
+
+	const thread_local bool MRPT_DEBUG_OBSPTS_LAZY_LOAD =
+		mrpt::get_env<bool>("MRPT_DEBUG_OBSPTS_LAZY_LOAD", false);
+	if (MRPT_DEBUG_OBSPTS_LAZY_LOAD)
+		std::cout << "[CObservationPointCloud::load()] Called on this="
+				  << reinterpret_cast<const void*>(this) << std::endl;
 
 	// Already loaded?
 	if (!isExternallyStored() || (isExternallyStored() && pointcloud)) return;
@@ -200,49 +234,56 @@ void CObservationPointCloud::load() const
 void CObservationPointCloud::unload() const
 {
 	MRPT_START
-	if (isExternallyStored() && pointcloud)
+
+	const thread_local bool MRPT_DEBUG_OBSPTS_LAZY_LOAD =
+		mrpt::get_env<bool>("MRPT_DEBUG_OBSPTS_LAZY_LOAD", false);
+	if (MRPT_DEBUG_OBSPTS_LAZY_LOAD)
+		std::cout << "[CObservationPointCloud::unload()] Called on this="
+				  << reinterpret_cast<const void*>(this) << std::endl;
+
+	if (!isExternallyStored() || !pointcloud) return;
+
+	// Free memory, saving to the file if it doesn't exist:
+	const auto abs_filename =
+		mrpt::io::lazy_load_absolute_path(m_external_file);
+
+	if (!mrpt::system::fileExists(abs_filename))
 	{
-		// Free memory, saving to the file if it doesn't exist:
-		const auto abs_filename =
-			mrpt::io::lazy_load_absolute_path(m_external_file);
-
-		if (!mrpt::system::fileExists(abs_filename))
+		switch (m_externally_stored)
 		{
-			switch (m_externally_stored)
+			case ExternalStorageFormat::None: break;
+			case ExternalStorageFormat::KittiBinFile:
 			{
-				case ExternalStorageFormat::None: break;
-				case ExternalStorageFormat::KittiBinFile:
+				THROW_EXCEPTION("Saving to kitti format not supported.");
+			}
+			case ExternalStorageFormat::PlainTextFile:
+			{
+				std::ofstream f(abs_filename);
+				ASSERT_(f.is_open());
+				std::vector<float> row;
+				for (size_t i = 0; i < pointcloud->size(); i++)
 				{
-					THROW_EXCEPTION("Saving to kitti format not supported.");
+					pointcloud->getPointAllFieldsFast(i, row);
+					for (const float v : row)
+						f << v << " ";
+					f << "\n";
 				}
-				case ExternalStorageFormat::PlainTextFile:
-				{
-					std::ofstream f(abs_filename);
-					ASSERT_(f.is_open());
-					std::vector<float> row;
-					for (size_t i = 0; i < pointcloud->size(); i++)
-					{
-						pointcloud->getPointAllFieldsFast(i, row);
-						for (const float v : row)
-							f << v << " ";
-						f << "\n";
-					}
-				}
-				break;
-				case ExternalStorageFormat::MRPT_Serialization:
-				{
-					mrpt::io::CFileGZOutputStream f(abs_filename);
-					auto ar = mrpt::serialization::archiveFrom(f);
-					ar << *pointcloud;
-				}
-				break;
-			};
-		}
-
-		// Now we can safely free the mem:
-		auto& me = const_cast<CObservationPointCloud&>(*this);
-		me.pointcloud.reset();
+			}
+			break;
+			case ExternalStorageFormat::MRPT_Serialization:
+			{
+				mrpt::io::CFileGZOutputStream f(abs_filename);
+				auto ar = mrpt::serialization::archiveFrom(f);
+				ar << *pointcloud;
+			}
+			break;
+		};
 	}
+
+	// Now we can safely free the mem:
+	auto& me = const_cast<CObservationPointCloud&>(*this);
+	me.pointcloud.reset();
+
 	MRPT_END
 }
 

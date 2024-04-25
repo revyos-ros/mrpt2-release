@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -60,7 +60,8 @@ int TestOffscreenRender(int argc, char* argv[])
 
 	// render the scene
 	render.render_RGB(scene, frame);
-	frame.saveToFile(sOut);
+	bool savedOk = frame.saveToFile(sOut);
+	ASSERT_(savedOk);
 
 	return 0;
 }

@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -106,7 +106,7 @@ class Clock
 	/** Returns the number of nanoseconds that are added to the output of the
 	 * POSIX `CLOCK_MONOTONIC` to make timestamps match the epoch of POSIX
 	 * `CLOCK_REALTIME`. */
-	static uint64_t getMonotonicToRealtimeOffset();
+	[[nodiscard]] static uint64_t getMonotonicToRealtimeOffset();
 
 	/** When setActiveClock() is set to `Simulated`, sets the simulated time
 	 * that will be returned in subsequent calls to now().

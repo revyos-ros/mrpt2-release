@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -339,14 +339,18 @@ std::string mrpt::system::filePathSeparatorsToNative(
 	return p2s(fs::path(ret).native());
 }
 
-time_t mrpt::system::getFileModificationTime(const std::string& filename)
+mrpt::Clock::time_point mrpt::system::getFileModificationTime(
+	const std::string& filename)
 {
 	struct stat fS
 	{
 	};
-	if (0 != stat(filename.c_str(), &fS)) return 0;
+	if (0 != stat(filename.c_str(), &fS))
+		THROW_EXCEPTION_FMT(
+			"Could not access modification time of file '%s'",
+			filename.c_str());
 	else
-		return fS.st_mtime;
+		return mrpt::Clock::fromDouble(static_cast<double>(fS.st_mtime));
 }
 
 #include <mrpt/version.h>

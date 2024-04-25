@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -125,54 +125,6 @@ gnss_message* gnss_message::readAndBuildFromStream(
 	msg->internal_readFromStream(in);
 	// internal_readFromStream() already calls fixEndianness().
 	return msg;
-}
-
-// Ctor (default: nullptr pointer)
-gnss_message_ptr::gnss_message_ptr() = default;
-// Ctor:Makes a copy of the pointee
-gnss_message_ptr::gnss_message_ptr(const gnss_message_ptr& o)
-{
-	if (!o.ptr) { ptr = nullptr; }
-	else
-	{
-		mrpt::io::CMemoryStream buf;
-		auto arch = mrpt::serialization::archiveFrom(buf);
-		o->writeToStream(arch);
-		buf.Seek(0);
-		ptr = gnss_message::readAndBuildFromStream(arch);
-	}
-}
-/** Assigns a pointer */
-gnss_message_ptr::gnss_message_ptr(const gnss_message* p)
-	: ptr(const_cast<gnss_message*>(p))
-{
-}
-void gnss_message_ptr::set(gnss_message* p)
-{
-	if (ptr)
-	{
-		delete ptr;
-		ptr = nullptr;
-	}
-	ptr = p;
-}
-// Makes a copy of the pointee
-gnss_message_ptr& gnss_message_ptr::operator=(const gnss_message_ptr& o)
-{
-	mrpt::io::CMemoryStream buf;
-	auto arch = mrpt::serialization::archiveFrom(buf);
-	o->writeToStream(arch);
-	buf.Seek(0);
-	ptr = gnss_message::readAndBuildFromStream(arch);
-	return *this;
-}
-gnss_message_ptr::~gnss_message_ptr()
-{
-	if (ptr)
-	{
-		delete ptr;
-		ptr = nullptr;
-	}
 }
 
 // ---------------------------------------

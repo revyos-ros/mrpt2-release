@@ -2,18 +2,16 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
 #pragma once
 
 #include <mrpt/maps/CPointsMap.h>
-#include <mrpt/math/CMatrixF.h>
-#include <mrpt/obs/CObservationImage.h>
 #include <mrpt/obs/obs_frwds.h>
+#include <mrpt/opengl/pointcloud_adapters.h>
 #include <mrpt/serialization/CSerializable.h>
-#include <mrpt/typemeta/TEnumType.h>
 
 namespace mrpt
 {
@@ -169,14 +167,6 @@ class CPointsMapXYZI : public CPointsMap
 		return m_intensity[index];
 	}
 
-	/** Provides a direct access to a read-only reference of the internal
-	 * intensity point buffer. \sa getPointsBufferRef_x() */
-	auto getPointsBufferRef_intensity() const
-		-> const mrpt::aligned_std_vector<float>&
-	{
-		return m_intensity;
-	}
-
 	/** Returns true if the point map has a color field for each point */
 	bool hasColorPoints() const override { return true; }
 
@@ -185,6 +175,19 @@ class CPointsMapXYZI : public CPointsMap
 	 */
 	void getVisualizationInto(
 		mrpt::opengl::CSetOfObjects& outObj) const override;
+
+	// clang-format off
+	auto getPointsBufferRef_intensity() const  -> const mrpt::aligned_std_vector<float>* override { return &m_intensity; }
+	auto getPointsBufferRef_intensity()        -> mrpt::aligned_std_vector<float>* override { return &m_intensity; }
+	void insertPointField_Intensity(float i) override { m_intensity.push_back(i); }
+	/// clang-format on
+
+	void saveMetricMapRepresentationToFile(
+		const std::string& filNamePrefix) const override
+	{
+		std::string fil(filNamePrefix + std::string(".txt"));
+		saveXYZI_to_text_file(fil);
+	}
 
 	/** @name PCL library support
 		@{ */
@@ -271,6 +274,14 @@ class CPointsMapXYZI : public CPointsMap
 		const mrpt::img::TColorf* pt_color = nullptr) override;
 
 	void PLY_import_set_vertex_count(size_t N) override;
+
+	void PLY_import_set_vertex_timestamp(
+		[[maybe_unused]] size_t idx,
+		[[maybe_unused]] const double unixTimestamp) override
+	{
+		// do nothing, this class ignores timestamps
+	}
+
 	/** @} */
 
 	/** @name Redefinition of PLY Export virtual methods from CPointsMap
@@ -289,7 +300,6 @@ class CPointsMapXYZI : public CPointsMap
 
 }  // namespace maps
 
-#include <mrpt/opengl/pointcloud_adapters.h>
 namespace opengl
 {
 /** Specialization

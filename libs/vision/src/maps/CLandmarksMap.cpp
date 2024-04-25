@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -99,12 +99,12 @@ void CLandmarksMap::TMapDefinition::dumpToTextStream_map_specific(
 	this->likelihoodOpts.dumpToTextStream(out);
 }
 
-mrpt::maps::CMetricMap* CLandmarksMap::internal_CreateFromMapDefinition(
+mrpt::maps::CMetricMap::Ptr CLandmarksMap::internal_CreateFromMapDefinition(
 	const mrpt::maps::TMetricMapInitializer& _def)
 {
 	const CLandmarksMap::TMapDefinition& def =
 		*dynamic_cast<const CLandmarksMap::TMapDefinition*>(&_def);
-	auto* obj = new CLandmarksMap();
+	auto obj = CLandmarksMap::Create();
 
 	for (const auto& initialBeacon : def.initialBeacons)
 	{
@@ -2358,7 +2358,7 @@ void CLandmarksMap::simulateBeaconReadings(
 
 	// Clear output data:
 	out_Observations.sensedData.clear();
-	out_Observations.timestamp = mrpt::system::getCurrentTime();
+	out_Observations.timestamp = mrpt::Clock::now();
 
 	// For each BEACON landmark in the map:
 	for (it = landmarks.begin(); it != landmarks.end(); it++)
@@ -2668,7 +2668,7 @@ void CLandmarksMap::simulateRangeBearingReadings(
 	out_Observations.sensor_std_pitch = in_stdPitch;
 
 	out_Observations.sensedData.clear();
-	out_Observations.timestamp = mrpt::system::getCurrentTime();
+	out_Observations.timestamp = mrpt::Clock::now();
 	out_Observations.sensorLocationOnRobot = in_sensorLocationOnRobot;
 
 	// For each BEACON landmark in the map:

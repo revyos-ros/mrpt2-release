@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -82,7 +82,8 @@ cv::Mat Tracker::trackThemAll(
 
 	long current_num = tracking_image_counter % files_fullpath_tracking.size();
 	CImage theImg;	// The grabbed image:
-	theImg.loadFromFile(files_fullpath_tracking.at(current_num));
+	bool loadOk = theImg.loadFromFile(files_fullpath_tracking.at(current_num));
+	ASSERT_(loadOk);
 
 	// Take the resolution upon first valid frame.
 	if (!hasResolution)

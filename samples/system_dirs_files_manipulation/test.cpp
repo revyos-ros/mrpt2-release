@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -84,7 +84,7 @@ void renameDirContents()
 	stringstream ss_tmp;
 
 	// get the current datetime as a string - add it to the renamed fnames
-	TTimeStamp cur_time(getCurrentTime());
+	TTimeStamp cur_time(mrpt::Clock::now());
 	string cur_time_str = dateTimeToString(cur_time);
 	string cur_time_validstr(fileNameStripInvalidChars(cur_time_str));
 	string string_to_add = "_renamed_" + cur_time_validstr;

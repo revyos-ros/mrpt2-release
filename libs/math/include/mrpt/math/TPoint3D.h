@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -30,6 +30,9 @@ namespace mrpt::math
 template <typename T>
 struct TPoint3D_data
 {
+	constexpr TPoint3D_data() = default;
+	constexpr TPoint3D_data(T X, T Y, T Z) : x(X), y(Y), z(Z) {}
+
 	/** X,Y,Z coordinates */
 	T x, y, z;
 };
@@ -64,7 +67,7 @@ struct TPoint3D_ : public TPoseOrPoint,
 
 	/** Constructor from column vector. */
 	template <typename U>
-	TPoint3D_(const mrpt::math::CMatrixFixed<U, 3, 1>& m)
+	explicit TPoint3D_(const mrpt::math::CMatrixFixed<U, 3, 1>& m)
 	{
 		TPoint3D_data<T>::x = static_cast<T>(m[0]);
 		TPoint3D_data<T>::y = static_cast<T>(m[1]);
@@ -74,7 +77,7 @@ struct TPoint3D_ : public TPoseOrPoint,
 	/** Implicit constructor from TPoint2D. Zeroes the z.
 	 * \sa TPoint2D
 	 */
-	TPoint3D_(const TPoint2D_<T>& p);
+	explicit TPoint3D_(const TPoint2D_<T>& p);
 	/**
 	 * Constructor from TPose2D, losing information. Zeroes the z.
 	 * \sa TPose2D
@@ -100,11 +103,11 @@ struct TPoint3D_ : public TPoseOrPoint,
 	 * \tparam Vector It can be std::vector<double>, Eigen::VectorXd, etc.
 	 */
 	template <typename Vector>
-	static TPoint3D FromVector(const Vector& v)
+	[[nodiscard]] static TPoint3D_<T> FromVector(const Vector& v)
 	{
 		TPoint3D o;
 		for (int i = 0; i < 3; i++)
-			o[i] = v[i];
+			o[i] = v.at(i);
 		return o;
 	}
 

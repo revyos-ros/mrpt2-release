@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -1082,7 +1082,8 @@ void CFormPlayVideo::saveCamImage(int n)
 
 		string fil = string(dialog.GetPath().mb_str());
 
-		o->image.saveToFile(fil);
+		bool savedOk = o->image.saveToFile(fil);
+		ASSERT_(savedOk);
 	}
 	else if (IS_CLASS(*displayedImgs[n], CObservationStereoImages))
 	{
@@ -1124,7 +1125,8 @@ void CFormPlayVideo::saveCamImage(int n)
 		CImage& im =
 			(n == 2 ? o->imageDisparity
 					: (n == 1 ? o->imageRight : o->imageLeft));
-		im.saveToFile(fil);
+		bool savedOk = im.saveToFile(fil);
+		ASSERT_(savedOk);
 	}
 
 	WX_END_TRY

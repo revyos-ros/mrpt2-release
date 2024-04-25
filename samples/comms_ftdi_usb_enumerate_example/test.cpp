@@ -2,7 +2,7 @@
    |                     Mobile Robot Programming Toolkit (MRPT)            |
    |                          https://www.mrpt.org/                         |
    |                                                                        |
-   | Copyright (c) 2005-2023, Individual contributors, see AUTHORS file     |
+   | Copyright (c) 2005-2024, Individual contributors, see AUTHORS file     |
    | See: https://www.mrpt.org/Authors - All rights reserved.               |
    | Released under BSD License. See: https://www.mrpt.org/License          |
    +------------------------------------------------------------------------+ */
@@ -39,8 +39,7 @@ void Test_EnumerateDevices()
 		nConectedDevices = (unsigned long)lstDevs.size();
 
 		cout << "There are " << nConectedDevices << " USB devices - "
-			 << mrpt::system::dateTimeToString(mrpt::system::getCurrentTime())
-			 << endl;
+			 << mrpt::system::dateTimeToString(mrpt::Clock::now()) << endl;
 
 		for (size_t i = 0; i < nConectedDevices; i++)
 			cout << lstDevs[i] << endl;
