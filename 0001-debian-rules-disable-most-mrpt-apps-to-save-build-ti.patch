@@ -1,4 +1,4 @@
-From e0988b2d54449c0c6850843e1b66239b6fb984eb Mon Sep 17 00:00:00 2001
+From aa4517718b1c241046d9c04407d852d3aef1202c Mon Sep 17 00:00:00 2001
 From: Jose Luis Blanco-Claraco <joseluisblancoc@gmail.com>
 Date: Thu, 8 Jun 2023 23:07:08 +0200
 Subject: [PATCH] debian/rules: disable most mrpt apps to save build time
@@ -44,5 +44,5 @@ index 284a0714..268ef67d 100755
  
  override_dh_auto_build:
 -- 
-2.34.1
+2.41.0
 
