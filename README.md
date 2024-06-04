@@ -1,3 +1,26 @@
+## mrpt2 (humble) - 2.13.0-1
+
+The packages in the `mrpt2` repository were released into the `humble` distro by running `/home/z572/gits/revyos-ros/venv/bin/bloom-release -r humble mrpt2` on `Tue, 04 Jun 2024 06:47:08 -0000`
+
+The `mrpt2` package was released.
+
+Version of package(s) in repository `mrpt2`:
+
+- upstream repository: https://github.com/MRPT/mrpt.git
+- release repository: https://github.com/revyos-ros/mrpt2-release.git
+- rosdistro version: `2.13.0-1`
+- old version: `2.12.2-3`
+- new version: `2.13.0-1`
+
+Versions of tools used:
+
+- bloom version: `0.12.0`
+- catkin_pkg version: `1.0.0`
+- rosdep version: `0.22.2`
+- rosdistro version: `0.9.0`
+- vcstools version: `0.1.42`
+
+
 ## mrpt2 (humble) - 2.12.2-3
 
 The packages in the `mrpt2` repository were released into the `humble` distro by running `/home/z572/gits/revyos-ros/venv/bin/bloom-release -r humble mrpt2` on `Fri, 10 May 2024 02:59:42 -0000`
